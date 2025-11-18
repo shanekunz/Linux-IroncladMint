@@ -37,8 +37,8 @@ exec --no-startup-id dunst
 # Accountable2You (if it's not already in startup apps)
 exec --no-startup-id accountable2you
 
-# Keybinds reference window
-exec --no-startup-id ghostty --title="i3-keybinds-help" -e less ~/.config/i3/keybinds.md
+# Keybinds reference window (rendered markdown)
+exec --no-startup-id ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
 
 # Set default browser
 exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
@@ -236,8 +236,8 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
 # Backtick - Screenshot (GUI selector)
 bindsym $mod+grave exec flameshot gui
 
-# Help - Show keybinds reference
-bindsym $mod+Shift+slash exec ghostty -e less ~/.config/i3/keybinds.md
+# Help - Show keybinds reference (rendered markdown)
+bindsym $mod+Shift+slash exec ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
 
 # Delete - Media & Nightlight
 bindsym $mod+Delete exec playerctl play-pause
@@ -306,8 +306,8 @@ for_window [window_role="task_dialog"] floating enable
 # Edge sets all windows as class="Microsoft-edge" regardless of --class flag
 for_window [class="Microsoft-edge"] floating disable
 
-# Keybinds help window - thin and tall, floating on right side
-for_window [title="i3-keybinds-help"] floating enable, resize set 500 1800, move position 1420 0
+# Keybinds help window - wide, tall, centered (no text wrap, minimal scroll)
+for_window [title="i3-keybinds-help"] floating enable, resize set 1100 2000, move position center
 
 # Deadlock - force fullscreen
 for_window [class="deadlock"] fullscreen enable

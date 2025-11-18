@@ -40,18 +40,31 @@ DPI=$(printf "%.0f" $(echo "$SCALE * 96" | bc))           # 1.5 * 96 = 144
 CURSOR_SIZE=$(printf "%.0f" $(echo "$SCALE * 16" | bc))   # 1.5 * 16 = 24
 
 # GTK3/GTK4 scaling strategy:
-# We use GDK_SCALE=2 (render at 200%) then GDK_DPI_SCALE to fine-tune
-# For 150%: GDK_SCALE=2, GDK_DPI_SCALE=0.75 (2.0 * 0.75 = 1.5)
-if (( $(echo "$SCALE >= 1.5" | bc -l) )); then
+# For fractional scaling (1.25, 1.5, 1.75), rely on X11 DPI only
+# For integer scaling (2.0+), use GDK_SCALE
+# This prevents compounding/multiplication issues
+if [ "$SCALE" == "2" ] || [ "$SCALE" == "2.0" ] || [ "$SCALE" == "2.00" ]; then
+    # Exactly 2.0 - use integer scaling
     GDK_SCALE=2
-    GDK_DPI_SCALE=$(echo "scale=2; $SCALE / 2" | bc)
+    GDK_DPI_SCALE=1.00
+elif (( $(echo "$SCALE > 2" | bc -l) )); then
+    # Greater than 2.0 - use GDK_SCALE with fine-tuning
+    GDK_SCALE=2
+    GDK_DPI_SCALE=$(printf "%.2f" $(echo "$SCALE / 2" | bc -l))
 else
-    GDK_SCALE=1
-    GDK_DPI_SCALE=$SCALE
+    # Fractional scaling (1.0, 1.25, 1.5, 1.75) - rely on X11 DPI
+    # Don't set GDK_SCALE to avoid compounding with X11 DPI
+    unset GDK_SCALE
+    unset GDK_DPI_SCALE
 fi
 
-# Qt applications
-QT_SCALE_FACTOR=$SCALE
+# Qt applications - rely on X11 DPI for fractional, use scale for integer
+if [ "$SCALE" == "2" ] || [ "$SCALE" == "2.0" ] || [ "$SCALE" == "2.00" ] || (( $(echo "$SCALE > 2" | bc -l) )); then
+    QT_SCALE_FACTOR=$(printf "%.2f" $SCALE)
+else
+    # For fractional scaling, let Qt use X11 DPI
+    unset QT_SCALE_FACTOR
+fi
 QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 # Electron apps (VSCode, Discord, Obsidian, etc.)
@@ -63,35 +76,49 @@ ELECTRON_FORCE_IS_PACKAGED=1
 
 calculate_values() {
     # Recalculate all derived values from SCALE
-    DPI=$(printf "%.0f" $(echo "$SCALE * 96" | bc))
-    CURSOR_SIZE=$(printf "%.0f" $(echo "$SCALE * 16" | bc))
+    DPI=$(printf "%.0f" $(echo "$SCALE * 96" | bc -l))
+    CURSOR_SIZE=$(printf "%.0f" $(echo "$SCALE * 16" | bc -l))
 
-    if (( $(echo "$SCALE >= 1.5" | bc -l) )); then
+    # Use same logic as main config
+    if [ "$SCALE" == "2" ] || [ "$SCALE" == "2.0" ] || [ "$SCALE" == "2.00" ]; then
         GDK_SCALE=2
-        GDK_DPI_SCALE=$(echo "scale=2; $SCALE / 2" | bc)
+        GDK_DPI_SCALE=1.00
+    elif (( $(echo "$SCALE > 2" | bc -l) )); then
+        GDK_SCALE=2
+        GDK_DPI_SCALE=$(printf "%.2f" $(echo "$SCALE / 2" | bc -l))
     else
-        GDK_SCALE=1
-        GDK_DPI_SCALE=$SCALE
+        # Fractional scaling - rely on X11 DPI only
+        unset GDK_SCALE
+        unset GDK_DPI_SCALE
     fi
 
-    QT_SCALE_FACTOR=$SCALE
+    # Qt scaling
+    if [ "$SCALE" == "2" ] || [ "$SCALE" == "2.0" ] || [ "$SCALE" == "2.00" ] || (( $(echo "$SCALE > 2" | bc -l) )); then
+        QT_SCALE_FACTOR=$(printf "%.2f" $SCALE)
+    else
+        unset QT_SCALE_FACTOR
+    fi
 }
 
 export_environment() {
-    # Export all scaling variables to current shell session
-    export GDK_SCALE
-    export GDK_DPI_SCALE
-    export QT_SCALE_FACTOR
+    # Export scaling variables to current shell session (only if set)
+    [ -n "${GDK_SCALE+x}" ] && export GDK_SCALE
+    [ -n "${GDK_DPI_SCALE+x}" ] && export GDK_DPI_SCALE
+    [ -n "${QT_SCALE_FACTOR+x}" ] && export QT_SCALE_FACTOR
     export QT_AUTO_SCREEN_SCALE_FACTOR
     export ELECTRON_FORCE_IS_PACKAGED
 }
 
 apply_to_systemd() {
     # Make environment variables available to systemd user services
-    systemctl --user import-environment GDK_SCALE GDK_DPI_SCALE QT_SCALE_FACTOR QT_AUTO_SCREEN_SCALE_FACTOR ELECTRON_FORCE_IS_PACKAGED 2>/dev/null || true
+    # Build list of variables that are actually set
+    local vars="QT_AUTO_SCREEN_SCALE_FACTOR ELECTRON_FORCE_IS_PACKAGED"
+    [ -n "${GDK_SCALE+x}" ] && vars="$vars GDK_SCALE"
+    [ -n "${GDK_DPI_SCALE+x}" ] && vars="$vars GDK_DPI_SCALE"
+    [ -n "${QT_SCALE_FACTOR+x}" ] && vars="$vars QT_SCALE_FACTOR"
 
-    # Also update dbus activation environment (for apps launched via dbus)
-    dbus-update-activation-environment --systemd GDK_SCALE GDK_DPI_SCALE QT_SCALE_FACTOR QT_AUTO_SCREEN_SCALE_FACTOR ELECTRON_FORCE_IS_PACKAGED 2>/dev/null || true
+    systemctl --user import-environment $vars 2>/dev/null || true
+    dbus-update-activation-environment --systemd $vars 2>/dev/null || true
 }
 
 apply_to_gsettings() {

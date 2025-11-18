@@ -100,5 +100,5 @@
 
 - Mouse auto-centers on focused window
 - Custom keyboard layout: Engrammer variant
-- Mouse buttons swapped: left/right buttons are swapped (primary on middle finger)
+- Mouse buttons swapped: left/right buttons are swapped
 - Streaming mode uses LED monitor to protect OLED from burn-in
