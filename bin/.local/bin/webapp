@@ -3,8 +3,11 @@
 
 NAME="$1"
 URL="$2"
-SIZE="${3:-1200,800}"
+SIZE="${3:-1200x800}"
 ICON="${4:-applications-internet}"
+
+# Convert 'x' format to ',' format for Edge
+SIZE="${SIZE/x/,}"
 
 # Check for Edge
 if ! command -v microsoft-edge &> /dev/null; then

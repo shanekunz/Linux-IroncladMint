@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install Sunsama from AppImage
+# Install Sunsama desktop app (AppImage)
 
 set -e
 
@@ -7,32 +7,27 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+INSTALL_DIR="$HOME/.local/bin"
+APP_NAME="sunsama"
+
 echo -e "${YELLOW}[install-sunsama]${NC} Checking for Sunsama..."
 
-if [ -f "$HOME/.local/bin/sunsama" ]; then
+if [ -f "$INSTALL_DIR/$APP_NAME" ]; then
     echo -e "${GREEN}[install-sunsama]${NC} Sunsama is already installed"
     exit 0
 fi
 
-echo -e "${YELLOW}[install-sunsama]${NC} Installing Sunsama from AppImage..."
+echo -e "${YELLOW}[install-sunsama]${NC} Installing Sunsama AppImage..."
 
-# Create directories
-mkdir -p ~/.local/bin
-
-# Download latest Sunsama AppImage
+# Download AppImage
 cd /tmp
-wget -O sunsama.AppImage "https://desktop-downloads.sunsama.com/linux/latest"
+curl -L -o sunsama.AppImage "https://desktop.sunsama.com/linux/appImage/x64"
 
-# Extract the binary (AppImages can be used directly or extracted)
+# Make executable
 chmod +x sunsama.AppImage
-./sunsama.AppImage --appimage-extract > /dev/null
 
-# Move the extracted files to a more permanent location
-mv squashfs-root/sunsama ~/.local/bin/
-chmod +x ~/.local/bin/sunsama
-
-# Cleanup
-rm -rf squashfs-root sunsama.AppImage
+# Move to install directory
+mkdir -p "$INSTALL_DIR"
+mv sunsama.AppImage "$INSTALL_DIR/$APP_NAME"
 
 echo -e "${GREEN}[install-sunsama]${NC} Sunsama installed successfully!"
-echo -e "${YELLOW}Note:${NC} You may want to create a desktop file for easier launching"

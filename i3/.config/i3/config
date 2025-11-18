@@ -269,32 +269,35 @@ bindsym $mod+a exec pavucontrol
 # Development
 bindsym $mod+n exec ghostty -e nvim
 bindsym $mod+v exec code
-bindsym $mod+d exec discord
+bindsym $mod+d exec flatpak run com.discordapp.Discord
 
 # AI / Productivity
-bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200,900"
-bindsym $mod+o exec ~/.local/bin/webapp "Outlook" "https://outlook.com" "1400,900"
-bindsym $mod+Shift+s exec ~/.local/bin/webapp "Sunsama" "https://app.sunsama.com" "1400,900"
-bindsym $mod+Shift+o exec flatpak run md.obsidian.Obsidian
+bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200x900"
+bindsym $mod+o exec flatpak run md.obsidian.Obsidian
+bindsym $mod+Shift+s exec ~/.local/bin/sunsama
+bindsym $mod+Shift+o exec ~/.local/bin/webapp "Outlook" "https://outlook.office.com/mail/" "1400x900"
 
 # Work tools
-bindsym $mod+Control+j exec ~/.local/bin/webapp "Jira" "https://upstreamimpact.atlassian.net" "1400,900"
-bindsym $mod+Control+l exec ~/.local/bin/webapp "Linear" "https://linear.app" "1400,900"
-bindsym $mod+Shift+c exec ~/.local/bin/webapp "Confluence" "https://upstreamimpact.atlassian.net/wiki" "1400,900"
+bindsym $mod+Control+j exec ~/.local/bin/webapp "Jira" "https://upstreamimpact.atlassian.net" "1400x900"
+bindsym $mod+Control+l exec ~/.local/bin/webapp "Linear" "https://linear.app" "1400x900"
+bindsym $mod+Shift+c exec ~/.local/bin/webapp "Confluence" "https://upstreamimpact.atlassian.net/wiki" "1400x900"
 
 # Communication
 bindsym $mod+Control+Mod1+s exec signal-desktop
 bindsym $mod+Shift+w exec flatpak run com.ktechpit.whatsie
 bindsym $mod+Shift+t exec flatpak run com.github.IsmaelMartinez.teams_for_linux
-bindsym $mod+Shift+d exec flatpak run org.localsend.localsend_app
+bindsym $mod+Control+s exec flatpak run org.localsend.localsend_app
 
 # Media / Games
-bindsym $mod+Shift+a exec ~/.local/bin/webapp "Apple-Music" "https://music.apple.com" "1400,800"
+bindsym $mod+Shift+a exec ~/.local/bin/webapp "Apple-Music" "https://music.apple.com" "1400x800"
 bindsym $mod+Shift+g exec steam
 
 #####################
 # WINDOW RULES
 #####################
+
+# Center mouse on new windows
+for_window [class=".*"] exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
 
 # Float specific windows
 for_window [class="Pavucontrol"] floating enable

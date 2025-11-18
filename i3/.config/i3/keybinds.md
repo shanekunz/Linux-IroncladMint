@@ -19,9 +19,9 @@
 
 **AI / Productivity:**
 - `Mod+c` - Claude
-- `Mod+o` - Outlook
+- `Mod+o` - Obsidian
 - `Mod+Shift+s` - Sunsama
-- `Mod+Shift+o` - Obsidian
+- `Mod+Shift+o` - Outlook
 
 **Work Tools:**
 - `Mod+Control+j` - Jira
@@ -29,10 +29,10 @@
 - `Mod+Shift+c` - Confluence
 
 **Communication:**
+- `Mod+Control+s` - LocalSend
 - `Mod+Control+Alt+s` - Signal
 - `Mod+Shift+w` - Whatsie (WhatsApp)
 - `Mod+Shift+t` - Teams
-- `Mod+Shift+d` - LocalSend
 
 **Media / Games:**
 - `Mod+Shift+a` - Apple Music
