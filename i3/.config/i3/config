@@ -276,6 +276,7 @@ bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200x900"
 bindsym $mod+o exec flatpak run md.obsidian.Obsidian
 bindsym $mod+Shift+s exec ~/.local/bin/sunsama
 bindsym $mod+Shift+o exec ~/.local/bin/webapp "Outlook" "https://outlook.office.com/mail/" "1400x900"
+bindsym $mod+Shift+g exec ~/.local/bin/webapp "Gmail" "https://mail.google.com/mail/u/0/" "1400x900"
 
 # Work tools
 bindsym $mod+Control+j exec ~/.local/bin/webapp "Jira" "https://upstreamimpact.atlassian.net" "1400x900"
@@ -290,7 +291,7 @@ bindsym $mod+Control+Mod1+s exec flatpak run org.localsend.localsend_app
 
 # Media / Games
 bindsym $mod+Shift+a exec ~/.local/bin/webapp "Apple-Music" "https://music.apple.com" "1400x800"
-bindsym $mod+Shift+g exec steam
+bindsym $mod+Control+g exec steam
 
 #####################
 # WINDOW RULES

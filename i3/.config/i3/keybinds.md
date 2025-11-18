@@ -22,6 +22,7 @@
 - `Mod+o` - Obsidian
 - `Mod+Shift+s` - Sunsama
 - `Mod+Shift+o` - Outlook
+- `Mod+Shift+g` - Gmail
 
 **Work Tools:**
 - `Mod+Control+j` - Jira
@@ -36,7 +37,7 @@
 
 **Media / Games:**
 - `Mod+Shift+a` - Apple Music
-- `Mod+Shift+g` - Steam
+- `Mod+Control+g` - Steam
 
 ## Window Controls
 
