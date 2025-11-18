@@ -1,0 +1,47 @@
+# System files
+.DS_Store
+*~
+*.swp
+*.swo
+.*.swp
+
+# Vim temporary files
+*.un~
+.netrwhist
+
+# Directory-specific ignores
+.cache/
+.local/share/recently-used.xbel
+
+# Compiled binaries (except the ones we want to keep)
+*.o
+*.so
+*.a
+
+# Logs
+*.log
+
+# Sensitive data
+*secret*
+*password*
+*token*
+*.pem
+*.key
+
+# Application data (not config files - contains sensitive user data)
+signal/
+sunshine/
+retroarch/
+
+# Large binaries (installed by scripts, not tracked)
+bin/.local/bin/lazygit
+bin/.local/bin/sunsama
+
+# Build artifacts
+target/
+*.o
+*.a
+*.so
+
+# Obsbot is cloned/built by install script, don't track source
+obsbot/.local/src/

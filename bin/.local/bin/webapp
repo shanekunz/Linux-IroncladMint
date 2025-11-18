@@ -1,0 +1,20 @@
+#!/bin/bash
+# Usage: webapp "App Name" "https://url.com" [window-size] [icon-name]
+
+NAME="$1"
+URL="$2"
+SIZE="${3:-1200,800}"
+ICON="${4:-applications-internet}"
+
+# Check for Edge
+if ! command -v microsoft-edge &> /dev/null; then
+    echo "Microsoft Edge not found. Please install it first."
+    exit 1
+fi
+
+microsoft-edge \
+  --app="$URL" \
+  --class="$NAME" \
+  --name="$NAME" \
+  --window-size="$SIZE" \
+  &> /dev/null &

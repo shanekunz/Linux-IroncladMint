@@ -1,0 +1,337 @@
+# i3 config file (v4)
+# Mod key = Windows key
+set $mod Mod4
+
+# Font for window titles
+font pango:monospace 10
+
+# Start with no borders
+default_border pixel 2
+default_floating_border pixel 2
+
+# Gaps between windows (optional, comment out if you don't want gaps)
+gaps inner 8
+gaps outer 4
+
+# Use Mod key for dragging/resizing floating windows
+floating_modifier $mod
+
+#####################
+# AUTOSTART PROGRAMS
+#####################
+
+# Compositor for smoothness/transparency
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
+
+# Wallpaper (set one with nitrogen first: nitrogen /path/to/wallpapers)
+exec_always --no-startup-id nitrogen --restore
+
+# System tray apps
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
+exec --no-startup-id dunst
+
+# Accountable2You (if it's not already in startup apps)
+exec --no-startup-id accountable2you
+
+# Keybinds reference window
+exec --no-startup-id ghostty --title="i3-keybinds-help" -e less ~/.config/i3/keybinds.md
+
+# Set default browser
+exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
+
+# Load Xresources and set cursor theme/size
+exec_always --no-startup-id xrdb -merge ~/.Xresources
+exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-size 16
+exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-theme 'Breeze'
+exec_always --no-startup-id xsetroot -cursor_name left_ptr
+
+#####################
+# KEYBINDINGS - CORE
+#####################
+
+# Terminal (change to 'alacritty' if ghostty didn't install)
+bindsym $mod+Return exec ghostty
+
+# App launcher
+bindsym $mod+space exec rofi -show drun -show-icons -no-show-mode
+
+# Window switcher
+bindsym $mod+Tab exec rofi -show window
+
+# Kill focused window (both q and w work)
+bindsym $mod+q kill
+bindsym $mod+w kill
+
+# Reload i3 config
+bindsym $mod+Shift+c reload
+
+# Restart i3 (preserves your session)
+bindsym $mod+Shift+r restart
+
+# Exit i3 (logout)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
+
+# Shutdown
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Shutdown computer?' -B 'Yes' 'systemctl poweroff'"
+
+# Lock screen
+bindsym $mod+Shift+x exec i3lock -c 000000
+
+#####################
+# WINDOW NAVIGATION
+#####################
+
+# Change focus (vim keys) with mouse centering
+bindsym $mod+h focus left; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+j focus down; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+k focus up; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+l focus right; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+# Arrow keys too
+bindsym $mod+Left focus left; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Down focus down; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Up focus up; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Right focus right; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+# Move windows (vim keys) with mouse centering
+bindsym $mod+Shift+h move left; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+j move down; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+k move up; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+l move right; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+# Alternative: arrow keys
+bindsym $mod+Shift+Left move left; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+Down move down; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+Up move up; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Shift+Right move right; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+#####################
+# WINDOW MANIPULATION
+#####################
+
+# Split horizontally (left/right)
+bindsym $mod+backslash split h
+
+# Split vertically (top/bottom)
+bindsym $mod+minus split v
+
+# Fullscreen toggle
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+g layout toggle split
+
+# Toggle floating
+bindsym $mod+Shift+f floating toggle
+
+# Change focus between tiling/floating
+bindsym $mod+Control+f focus mode_toggle
+
+# Focus parent container (disabled - mod+a used for audio)
+# bindsym $mod+a focus parent
+
+# Pin window (make it sticky - follows you across workspaces)
+bindsym $mod+p sticky toggle
+
+#####################
+# WORKSPACES
+#####################
+
+# Define workspace names
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move window to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# Move to workspace and follow (with mouse centering)
+bindsym $mod+Control+1 move container to workspace $ws1; workspace $ws1; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+2 move container to workspace $ws2; workspace $ws2; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+3 move container to workspace $ws3; workspace $ws3; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+4 move container to workspace $ws4; workspace $ws4; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+5 move container to workspace $ws5; workspace $ws5; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+6 move container to workspace $ws6; workspace $ws6; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+7 move container to workspace $ws7; workspace $ws7; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+8 move container to workspace $ws8; workspace $ws8; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+9 move container to workspace $ws9; workspace $ws9; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Control+0 move container to workspace $ws10; workspace $ws10; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+#####################
+# RESIZE MODE
+#####################
+
+# Enter resize mode
+bindsym $mod+r mode "resize"
+
+mode "resize" {
+    # Vim keys
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    # Arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # Exit resize mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+
+#####################
+# MEDIA & HARDWARE
+#####################
+
+# Volume controls (using pactl)
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Media controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Brightness controls (won't work on desktop monitors)
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+# Custom keyboard mappings for rightmost keys (`, Del, PgDn, PgUp)
+# Backtick - Screenshot (GUI selector)
+bindsym $mod+grave exec flameshot gui
+
+# Help - Show keybinds reference
+bindsym $mod+Shift+slash exec ghostty -e less ~/.config/i3/keybinds.md
+
+# Delete - Media & Nightlight
+bindsym $mod+Delete exec playerctl play-pause
+bindsym $mod+Shift+Delete exec --no-startup-id pkill -USR1 redshift || redshift -O 3500K
+bindsym $mod+Control+Delete exec --no-startup-id redshift -x
+
+# Page Up/Down - Volume
+bindsym $mod+Prior exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym $mod+Next exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+# Mod+Shift+Page Up/Down - Monitor brightness (both displays)
+bindsym $mod+Shift+Prior exec --no-startup-id ddcutil --bus 5 setvcp 10 + 10 && ddcutil --bus 7 setvcp 10 + 10
+bindsym $mod+Shift+Next exec --no-startup-id ddcutil --bus 5 setvcp 10 - 10 && ddcutil --bus 7 setvcp 10 - 10
+
+#####################
+# QUICK APP LAUNCHES
+#####################
+
+# Browser Firefox
+bindsym $mod+Shift+b exec firefox
+# Browser Microsoft Edge
+bindsym $mod+b exec microsoft-edge
+
+# File manager (explorer)
+bindsym $mod+e exec nemo
+
+# Audio mixer GUI
+bindsym $mod+a exec pavucontrol
+
+#####################
+# WINDOW RULES
+#####################
+
+# Float specific windows
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Nitrogen"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+# Force Edge windows to tile (override pop-up rule above)
+# Edge sets all windows as class="Microsoft-edge" regardless of --class flag
+for_window [class="Microsoft-edge"] floating disable
+
+# Keybinds help window - thin and tall, floating on right side
+for_window [title="i3-keybinds-help"] floating enable, resize set 500 1800, move position 1420 0
+
+# Deadlock - force fullscreen
+for_window [class="deadlock"] fullscreen enable
+
+#####################
+# STATUS BAR
+#####################
+
+bar {
+    status_command i3blocks -c ~/.config/i3blocks/config
+    position top
+
+    colors {
+        background #1e1e1e
+        statusline #ffffff
+        separator  #666666
+
+        # State             Border  Background Text
+        focused_workspace   #4c7899 #285577    #ffffff
+        active_workspace    #333333 #222222    #ffffff
+        inactive_workspace  #333333 #222222    #888888
+        urgent_workspace    #2f343a #900000    #ffffff
+    }
+}
+
+#####################
+# COLORS
+#####################
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+
+
+# keyboard layout and mouse click swap
+exec_always --no-startup-id xinput set-button-map 14 3 2 1
+exec_always --no-startup-id setxkbmap -layout us -variant engrammer
+
+# Monitor setup (explicit no scaling)
+exec_always --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --output DP-4 --off
+
+# Monitor modes (complete states, usable from any current state)
+# Mod+m: Main monitor only at 4K 165Hz with 150% DPI
+bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/monitor-main-only.sh
+# Mod+Shift+m: Both monitors at full resolution with 150% DPI (bottoms aligned)
+bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/scripts/monitor-both.sh
+# Mod+Ctrl+m: Streaming mode - LED monitor at 1080p, no scaling (protects OLED)
+bindsym $mod+Control+m exec --no-startup-id ~/.config/i3/scripts/monitor-streaming.sh
+exec --no-startup-id sunshine

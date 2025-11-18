@@ -1,0 +1,39 @@
+# i3blocks config
+
+separator_block_width=15
+markup=pango
+
+[timer]
+command=~/.config/i3blocks/scripts/timer.sh
+interval=1
+color=#EBA0AC
+
+[weather]
+command=~/.config/i3blocks/scripts/weather.sh
+interval=1800
+color=#89B4FA
+
+[network]
+command=~/.config/i3blocks/scripts/network.sh
+interval=2
+color=#94E2D5
+
+[cpu]
+command=echo "CPU $(top -bn1 | grep 'Cpu(s)' | awk '{print int($2+$4)}')%"
+interval=2
+color=#F38BA8
+
+[memory]
+command=echo "RAM $(free -h | awk '/^Mem:/ {print $3"/"$2}')"
+interval=5
+color=#FAB387
+
+[disk]
+command=echo "DISK $(df -h / | awk 'NR==2 {print $3"/"$2}')"
+interval=30
+color=#A6E3A1
+
+[time]
+command=date '+%a %I:%M %p'
+interval=5
+color=#B4BEFE

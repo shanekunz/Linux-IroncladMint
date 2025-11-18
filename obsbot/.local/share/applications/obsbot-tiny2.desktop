@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Obsbot Tiny 2 Controller
+Comment=Linux GUI controller for Obsbot Tiny 2 webcam (requires sudo)
+Exec=ghostty -e bash -c "echo 'Launching Obsbot Tiny 2 Controller (requires sudo)...' && sudo /home/shane/.local/src/obsbot-tiny2/target/release/obsbot-gui; echo 'Press Enter to close...'; read"
+Icon=camera-web
+Categories=AudioVideo;Video;
+Terminal=false
+StartupWMClass=obsbot-gui
