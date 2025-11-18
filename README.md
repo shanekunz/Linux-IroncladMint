@@ -25,28 +25,40 @@ Inspired by the "You installed Omarchy, Now What?" approach, adapted for Linux M
 
 ## Quick Start
 
-### Fresh Linux Mint Install
+### Fresh Linux Mint Install (Recommended)
 
 ```bash
 # Clone the repository
 git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 
-# Run the bootstrap script (installs everything + deploys dotfiles)
-cd ~/dotfiles/scripts
+# Run the bootstrap script (installs core packages + deploys dotfiles)
+chmod +x bootstrap.sh
 ./bootstrap.sh
 ```
 
-### Existing System
+The bootstrap script will:
+1. Install essential prerequisites (git, stow, flatpak)
+2. Install core packages (i3, neovim, terminal tools, dev tools)
+3. Install common applications (browsers, discord, obsidian, vscode)
+4. Deploy all dotfiles using GNU Stow
+5. Backup any existing configs to `~/.config-backup-TIMESTAMP/`
+
+### Existing System (Selective Install)
 
 ```bash
-# Install only programs
-./scripts/master-install.sh
+# Install individual packages as needed
+./scripts/install-PACKAGE.sh
 
-# Deploy dotfiles with stow
-./scripts/stow-dotfiles.sh
+# Example: Install only neovim and i3
+./scripts/install-neovim.sh
+./scripts/install-i3.sh
 
-# Install web apps
-./scripts/install-webapps.sh
+# Deploy dotfiles with stow (from the dotfiles directory)
+cd ~/dotfiles
+stow nvim    # Just neovim config
+stow i3      # Just i3 config
+stow */      # All configs (skip scripts and .git)
 ```
 
 ## What Gets Installed
@@ -310,21 +322,47 @@ This setup prioritizes **latest versions** over Ubuntu's stable (often outdated)
 
 ## Troubleshooting
 
+### Bootstrap Script Issues
+
+**PPA not available for your version:**
+- Edit the script to use a different PPA or install from apt
+- Or skip that package (scripts are modular)
+
+**Package not found:**
+- Check if the package name changed
+- Update the script with the new package name
+
+**Permission denied:**
+```bash
+chmod +x bootstrap.sh
+chmod +x scripts/*.sh
+```
+
+**Script fails partway through:**
+- Check the error message for the specific package
+- Fix that individual install script
+- Re-run bootstrap (scripts are idempotent, safe to re-run)
+
 ### Stow Conflicts
 
 If stow reports conflicts:
 
 ```bash
-# Move the conflicting file
-mv ~/.bashrc ~/.bashrc.backup
+# Backup existing configs are automatically created at:
+~/.config-backup-TIMESTAMP/
 
-# Try stowing again
+# Or manually move conflicting files:
+mv ~/.bashrc ~/.bashrc.backup
 cd ~/dotfiles && stow bash
 ```
 
 ### Flatpak Apps Not Appearing
 
-Log out and log back in after installing Flatpak apps.
+Log out and log back in after installing Flatpak apps, or update desktop database:
+
+```bash
+sudo update-desktop-database
+```
 
 ### Web Apps Not Working
 
@@ -333,6 +371,18 @@ Ensure Microsoft Edge is installed and the webapp script is executable:
 ```bash
 which microsoft-edge
 chmod +x ~/.local/bin/webapp
+```
+
+### Individual Script Failures
+
+All scripts are independent. If one fails:
+
+```bash
+# Check what went wrong
+cat scripts/install-PACKAGE.sh
+
+# Fix the issue and re-run just that script
+./scripts/install-PACKAGE.sh
 ```
 
 ## System Requirements
