@@ -29,7 +29,7 @@ Inspired by the "You installed Omarchy, Now What?" approach, adapted for Linux M
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/shanekunz/Linux-IroncladMint.git ~/dotfiles
 cd ~/dotfiles
 
 # Run the bootstrap script (installs core packages + deploys dotfiles)
