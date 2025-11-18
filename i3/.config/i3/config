@@ -72,8 +72,8 @@ bindsym $mod+Shift+r restart
 # Exit i3 (logout)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
 
-# Shutdown
-bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Shutdown computer?' -B 'Yes' 'systemctl poweroff'"
+# Shutdown (delayed with cancel option)
+bindsym $mod+Shift+q exec --no-startup-id ~/.config/i3/scripts/shutdown-delayed.sh
 
 # Lock screen
 bindsym $mod+Shift+x exec i3lock -c 000000
