@@ -95,16 +95,17 @@ stow */      # All configs (skip scripts and .git)
 - Microsoft Edge
 
 ### Communication
-- Discord
+- Discord (Flatpak)
 - Zoom
 - Signal (official repo)
-- WhatSie (WhatsApp client)
+- Whatsie (WhatsApp client, Flatpak)
+- Teams for Linux (Flatpak)
+- LocalSend (Flatpak)
 
 ### Productivity
 - Obsidian (Flatpak)
 - Todoist (Flatpak)
-- Teams for Linux (Flatpak)
-- Sunsama
+- Sunsama (AppImage)
 - Emote (emoji picker)
 
 ### Media & Gaming
@@ -115,7 +116,7 @@ stow */      # All configs (skip scripts and .git)
 
 ### Utilities
 - accountable2you (snap)
-- LocalSend (Flatpak)
+- glow (markdown renderer)
 - Flatpak + Flathub
 
 ### Custom Builds
@@ -125,13 +126,12 @@ stow */      # All configs (skip scripts and .git)
 Created using custom webapp script:
 - ChatGPT
 - Claude
-- Linear
-- Limitless
-- Apple Music
-- Brain.fm
+- Gmail
 - Outlook
+- Linear
 - Jira
 - Confluence
+- Apple Music
 
 ## Dotfiles Structure
 
@@ -257,6 +257,7 @@ The custom `webapp` script creates Progressive Web Apps using Microsoft Edge in 
 
 ```bash
 webapp "App Name" "https://example.com" "1400x900"
+# Note: Use 'x' format for dimensions, not comma
 ```
 
 ### Customize Jira/Confluence URLs
@@ -282,10 +283,11 @@ The `.local.conf` file is gitignored and won't be committed to your repository.
   - Automatic cursor scaling
   - Environment variables managed via .xprofile
 - **Custom scripts** in `~/.config/i3/scripts/`:
-  - Mouse centering on focus
+  - Mouse auto-centering (on focus and new windows)
   - DPI management with xrandr
   - Monitor management (main-only, dual, streaming modes)
   - Environment scaling setup
+  - Scaling diagnostics tool
 
 ### Key Bindings
 
