@@ -92,8 +92,12 @@ log_step "Phase 3: Installing terminal and CLI tools..."
 run_script "install-vim.sh"
 run_script "install-nerd-font.sh"
 
-# Phase 4: Development tools
-log_step "Phase 4: Installing development tools..."
+# Phase 4: Networking tools
+log_step "Phase 4: Installing networking tools..."
+run_script "install-tailscale.sh"
+
+# Phase 5: Development tools
+log_step "Phase 5: Installing development tools..."
 run_script "install-node.sh"
 run_script "install-nvm.sh"
 run_script "install-pnpm.sh"
@@ -102,8 +106,8 @@ run_script "install-python-tools.sh"
 run_script "install-lazygit.sh"
 run_script "install-gh.sh"
 
-# Phase 5: Applications via Flatpak
-log_step "Phase 5: Installing Flatpak applications..."
+# Phase 6: Applications via Flatpak
+log_step "Phase 6: Installing Flatpak applications..."
 run_script "install-obsidian.sh"
 run_script "install-firefox.sh"
 run_script "install-discord.sh"
@@ -111,15 +115,15 @@ run_script "install-signal.sh"
 run_script "install-vscode.sh"
 run_script "install-chromium.sh"
 
-# Phase 6: Custom/external apps
-log_step "Phase 6: Installing custom applications..."
+# Phase 7: Custom/external apps
+log_step "Phase 7: Installing custom applications..."
 run_script "install-obsbot.sh"
 run_script "install-sunshine.sh"
 run_script "install-retroarch.sh"
 run_script "install-localsend.sh"
 
-# Phase 7: Deploy dotfiles with Stow
-log_step "Phase 7: Deploying dotfiles with GNU Stow..."
+# Phase 8: Deploy dotfiles with Stow
+log_step "Phase 8: Deploying dotfiles with GNU Stow..."
 cd "$DOTFILES_DIR"
 
 # Backup existing configs
@@ -160,8 +164,8 @@ for package in */; do
     stow -t "$HOME" "$package_name" 2>/dev/null || log_warn "Issues stowing $package_name (may already be linked)"
 done
 
-# Phase 8: Post-install setup
-log_step "Phase 8: Post-install configuration..."
+# Phase 9: Post-install setup
+log_step "Phase 9: Post-install configuration..."
 
 # Setup Neovim plugins
 if command -v nvim &> /dev/null; then
