@@ -123,7 +123,7 @@ stow */      # All configs (skip scripts and .git)
 - Obsbot Tiny 2 controller (Rust)
 
 ### Web Applications (PWAs)
-Created using custom webapp script:
+Created using custom webapp script (via install-webapps.sh):
 - ChatGPT
 - Claude
 - Gmail
@@ -131,7 +131,9 @@ Created using custom webapp script:
 - Linear
 - Jira
 - Confluence
+- Limitless
 - Apple Music
+- Brain.fm
 
 ## Dotfiles Structure
 

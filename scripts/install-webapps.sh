@@ -62,15 +62,16 @@ EOF
 }
 
 # Create all web apps
-create_webapp "ChatGPT" "https://chatgpt.com" "1200,900" "OpenAI ChatGPT" "applications-science" "Office;Utility;"
-create_webapp "Claude" "https://claude.ai" "1200,900" "Anthropic Claude AI" "applications-science" "Office;Utility;"
-create_webapp "Linear" "https://linear.app" "1400,900" "Linear issue tracker" "applications-development" "Office;Development;"
-create_webapp "Limitless" "https://app.limitless.ai" "1200,800" "Limitless AI meetings" "applications-office" "Office;AudioVideo;"
-create_webapp "Apple-Music" "https://music.apple.com" "1400,800" "Apple Music streaming" "applications-multimedia" "AudioVideo;Audio;"
-create_webapp "BrainFM" "https://brain.fm" "1000,700" "Brain.fm focus music" "applications-multimedia" "AudioVideo;Audio;"
-create_webapp "Outlook" "https://outlook.com" "1400,900" "Microsoft Outlook email" "applications-mail" "Office;Email;"
-create_webapp "Jira" "$JIRA_URL" "1400,900" "Jira issue tracker" "applications-development" "Office;Development;"
-create_webapp "Confluence" "$CONFLUENCE_URL" "1400,900" "Confluence wiki" "applications-office" "Office;Documentation;"
+create_webapp "ChatGPT" "https://chatgpt.com" "1200x900" "OpenAI ChatGPT" "applications-science" "Office;Utility;"
+create_webapp "Claude" "https://claude.ai" "1200x900" "Anthropic Claude AI" "applications-science" "Office;Utility;"
+create_webapp "Gmail" "https://mail.google.com/mail/u/0/" "1400x900" "Gmail email" "applications-mail" "Office;Email;"
+create_webapp "Outlook" "https://outlook.office.com/mail/" "1400x900" "Microsoft Outlook email" "applications-mail" "Office;Email;"
+create_webapp "Linear" "https://linear.app" "1400x900" "Linear issue tracker" "applications-development" "Office;Development;"
+create_webapp "Jira" "$JIRA_URL" "1400x900" "Jira issue tracker" "applications-development" "Office;Development;"
+create_webapp "Confluence" "$CONFLUENCE_URL" "1400x900" "Confluence wiki" "applications-office" "Office;Documentation;"
+create_webapp "Limitless" "https://app.limitless.ai" "1200x800" "Limitless AI meetings" "applications-office" "Office;AudioVideo;"
+create_webapp "Apple-Music" "https://music.apple.com" "1400x800" "Apple Music streaming" "applications-multimedia" "AudioVideo;Audio;"
+create_webapp "BrainFM" "https://brain.fm" "1000x700" "Brain.fm focus music" "applications-multimedia" "AudioVideo;Audio;"
 
 echo -e "${GREEN}[install-webapps]${NC} All web applications installed successfully!"
 echo -e "${YELLOW}Note:${NC} To customize Jira/Confluence URLs, create webapp-urls.local.conf (see webapp-urls.conf for instructions)"
