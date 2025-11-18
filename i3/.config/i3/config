@@ -283,10 +283,10 @@ bindsym $mod+Control+l exec ~/.local/bin/webapp "Linear" "https://linear.app" "1
 bindsym $mod+Shift+c exec ~/.local/bin/webapp "Confluence" "https://upstreamimpact.atlassian.net/wiki" "1400x900"
 
 # Communication
-bindsym $mod+Control+Mod1+s exec signal-desktop
+bindsym $mod+Control+s exec signal-desktop
 bindsym $mod+Shift+w exec flatpak run com.ktechpit.whatsie
 bindsym $mod+Shift+t exec flatpak run com.github.IsmaelMartinez.teams_for_linux
-bindsym $mod+Control+s exec flatpak run org.localsend.localsend_app
+bindsym $mod+Control+Mod1+s exec flatpak run org.localsend.localsend_app
 
 # Media / Games
 bindsym $mod+Shift+a exec ~/.local/bin/webapp "Apple-Music" "https://music.apple.com" "1400x800"

@@ -29,8 +29,8 @@
 - `Mod+Shift+c` - Confluence
 
 **Communication:**
-- `Mod+Control+s` - LocalSend
-- `Mod+Control+Alt+s` - Signal
+- `Mod+Control+s` - Signal
+- `Mod+Control+Alt+s` - LocalSend
 - `Mod+Shift+w` - Whatsie (WhatsApp)
 - `Mod+Shift+t` - Teams
 
