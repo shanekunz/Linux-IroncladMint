@@ -28,6 +28,9 @@
 *.pem
 *.key
 
+# Local configuration overrides (personal URLs, settings)
+*.local.conf
+
 # Application data (not config files - contains sensitive user data)
 signal/
 sunshine/

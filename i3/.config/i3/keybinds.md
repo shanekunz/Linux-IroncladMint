@@ -4,17 +4,45 @@
 
 ## Apps
 
+**Essentials:**
 - `Mod+Return` - Terminal (Ghostty)
 - `Mod+space` - App launcher (Rofi)
 - `Mod+e` - File manager (Nemo)
-- `Mod+b` - Browser (Edge)
+- `Mod+b` - Microsoft Edge
 - `Mod+Shift+b` - Firefox
 - `Mod+a` - Audio mixer
+
+**Development:**
+- `Mod+n` - Neovim (terminal editor)
+- `Mod+v` - VS Code
+- `Mod+d` - Discord
+
+**AI / Productivity:**
+- `Mod+c` - Claude
+- `Mod+o` - Outlook
+- `Mod+Shift+s` - Sunsama
+- `Mod+Shift+o` - Obsidian
+
+**Work Tools:**
+- `Mod+Control+j` - Jira
+- `Mod+Control+l` - Linear
+- `Mod+Shift+c` - Confluence
+
+**Communication:**
+- `Mod+Shift+w` - Whatsie (WhatsApp)
+- `Mod+Shift+t` - Teams
+- `Mod+Shift+d` - LocalSend
+
+**Media / Games:**
+- `Mod+Shift+a` - Apple Music
+- `Mod+Shift+g` - Steam
 
 ## Window Controls
 
 - `Mod+q` / `Mod+w` - Close window
+- `Mod+Escape` - Focus parent container (select groups of windows)
 - `Mod+p` - Pin window (follows across workspaces)
+- `Mod+Shift+p` - Toggle sticky
 - `Mod+Shift+f` - Toggle floating
 - `Mod+Control+f` - Toggle focus between tiling/floating
 - `Mod+r` - Resize mode
@@ -58,8 +86,7 @@
 
 ## System
 
-- `Mod+Shift+c` - Reload i3 config
-- `Mod+Shift+r` - Restart i3
+- `Mod+Shift+r` - Restart i3 (also reloads config)
 - `Mod+Shift+e` - Exit i3 (logout)
 - `Mod+Shift+q` - Shutdown computer
 - `Mod+Shift+/` - Show this help file

@@ -2,6 +2,9 @@
 # Mod key = Windows key
 set $mod Mod4
 
+# Load HiDPI scaling environment variables
+exec_always --no-startup-id ~/.config/i3/scripts/env-scaling.sh
+
 # Font for window titles
 font pango:monospace 10
 
@@ -63,10 +66,7 @@ bindsym $mod+Tab exec rofi -show window
 bindsym $mod+q kill
 bindsym $mod+w kill
 
-# Reload i3 config
-bindsym $mod+Shift+c reload
-
-# Restart i3 (preserves your session)
+# Restart i3 (preserves your session, also reloads config)
 bindsym $mod+Shift+r restart
 
 # Exit i3 (logout)
@@ -130,8 +130,8 @@ bindsym $mod+Shift+f floating toggle
 # Change focus between tiling/floating
 bindsym $mod+Control+f focus mode_toggle
 
-# Focus parent container (disabled - mod+a used for audio)
-# bindsym $mod+a focus parent
+# Focus parent container (move up the container tree)
+bindsym $mod+Escape focus parent
 
 # Pin window (make it sticky - follows you across workspaces)
 bindsym $mod+p sticky toggle
@@ -256,16 +256,40 @@ bindsym $mod+Shift+Next exec --no-startup-id ddcutil --bus 5 setvcp 10 - 10 && d
 # QUICK APP LAUNCHES
 #####################
 
-# Browser Firefox
-bindsym $mod+Shift+b exec firefox
-# Browser Microsoft Edge
+# Browsers
 bindsym $mod+b exec microsoft-edge
+bindsym $mod+Shift+b exec firefox
 
-# File manager (explorer)
+# File manager
 bindsym $mod+e exec nemo
 
-# Audio mixer GUI
+# Audio mixer
 bindsym $mod+a exec pavucontrol
+
+# Development
+bindsym $mod+n exec ghostty -e nvim
+bindsym $mod+v exec code
+bindsym $mod+d exec discord
+
+# AI / Productivity
+bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200,900"
+bindsym $mod+o exec ~/.local/bin/webapp "Outlook" "https://outlook.com" "1400,900"
+bindsym $mod+Shift+s exec ~/.local/bin/webapp "Sunsama" "https://app.sunsama.com" "1400,900"
+bindsym $mod+Shift+o exec flatpak run md.obsidian.Obsidian
+
+# Work tools
+bindsym $mod+Control+j exec ~/.local/bin/webapp "Jira" "https://upstreamimpact.atlassian.net" "1400,900"
+bindsym $mod+Control+l exec ~/.local/bin/webapp "Linear" "https://linear.app" "1400,900"
+bindsym $mod+Shift+c exec ~/.local/bin/webapp "Confluence" "https://upstreamimpact.atlassian.net/wiki" "1400,900"
+
+# Communication
+bindsym $mod+Shift+w exec flatpak run com.ktechpit.whatsie
+bindsym $mod+Shift+t exec flatpak run com.github.IsmaelMartinez.teams_for_linux
+bindsym $mod+Shift+d exec flatpak run org.localsend.localsend_app
+
+# Media / Games
+bindsym $mod+Shift+a exec ~/.local/bin/webapp "Apple-Music" "https://music.apple.com" "1400,800"
+bindsym $mod+Shift+g exec steam
 
 #####################
 # WINDOW RULES

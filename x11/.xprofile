@@ -1,0 +1,15 @@
+#!/bin/bash
+# .xprofile - runs before window manager starts
+# Sets environment variables for the entire X session
+
+# Source master scaling system and export all variables
+if [ -f ~/.config/i3/scripts/scaling.sh ]; then
+    source ~/.config/i3/scripts/scaling.sh
+else
+    # Fallback if scaling.sh doesn't exist
+    export GDK_SCALE=2
+    export GDK_DPI_SCALE=0.75
+    export QT_SCALE_FACTOR=1.5
+    export QT_AUTO_SCREEN_SCALE_FACTOR=0
+    export ELECTRON_FORCE_IS_PACKAGED=1
+fi

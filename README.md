@@ -86,10 +86,7 @@ stow */      # All configs (skip scripts and .git)
 - Neovim (latest via PPA)
 - Visual Studio Code
 - Ghostty terminal
-- NVM + Node.js (LTS + latest)
-- pnpm
-- Rust via rustup
-- Python tools
+- **mise** - Universal version manager (Node.js, .NET, Rust, Python, Go, and 100+ tools)
 - Claude CLI
 
 ### Browsers
@@ -264,7 +261,15 @@ webapp "App Name" "https://example.com" "1400x900"
 
 ### Customize Jira/Confluence URLs
 
-Edit `~/.local/share/applications/jira.desktop` and `confluence.desktop` to point to your organization's URLs.
+Create `webapp-urls.local.conf` in the dotfiles directory to override URLs:
+
+```bash
+cp webapp-urls.conf webapp-urls.local.conf
+nano webapp-urls.local.conf  # Edit your organization's URLs
+./scripts/install-webapps.sh  # Re-run to apply changes
+```
+
+The `.local.conf` file is gitignored and won't be committed to your repository.
 
 ## i3 Configuration
 
@@ -272,14 +277,27 @@ Edit `~/.local/share/applications/jira.desktop` and `confluence.desktop` to poin
 
 - **Mod key**: Windows key (Mod4)
 - **Gaps**: 8px inner, 4px outer
+- **HiDPI Scaling**: Comprehensive 150% scaling for 4K displays
+  - Xft.dpi, GTK, Qt, and Electron apps all configured
+  - Automatic cursor scaling
+  - Environment variables managed via .xprofile
 - **Custom scripts** in `~/.config/i3/scripts/`:
   - Mouse centering on focus
-  - DPI management
-  - Monitor management
+  - DPI management with xrandr
+  - Monitor management (main-only, dual, streaming modes)
+  - Environment scaling setup
 
 ### Key Bindings
 
-See `~/.config/i3/keybinds.md` for complete reference.
+**App Launchers** (Mod+letter for quick access):
+- 20+ app hotkeys for instant launching
+- Organized by category: Development, Productivity, Work Tools, Communication
+- See `~/.config/i3/keybinds.md` for complete reference or press **Mod+Shift+?**
+
+**Window Management**:
+- Mod+Escape - Focus parent container (manipulate groups of windows)
+- Vim-style navigation (hjkl)
+- Split controls for 2x2 grids and complex layouts
 
 ## Backup
 
@@ -303,11 +321,14 @@ snap refresh
 
 See the [Neovim Configuration](#neovim-configuration) section above for instructions on pulling LazyVim upstream updates.
 
-### Update Node.js
+### Update Development Tools with mise
 
 ```bash
-nvm install node  # Latest
-nvm install --lts  # LTS
+mise upgrade           # Upgrade mise itself
+mise up                # Update all installed tools
+mise use --global node@lts    # Update Node.js
+mise use --global dotnet@latest  # Update .NET
+mise use --global rust@latest    # Update Rust
 ```
 
 ## Package Version Strategy
@@ -318,7 +339,7 @@ This setup prioritizes **latest versions** over Ubuntu's stable (often outdated)
 - **Flatpak** for Obsidian, Todoist, Teams (always latest)
 - **Official repos** for VS Code, Signal, Edge, GitHub CLI
 - **Direct downloads** for Discord, Zoom
-- **Version managers** for Node (NVM), Rust (rustup)
+- **mise** - Universal version manager for Node.js, .NET, Rust, Python, Go, and more
 
 ## Troubleshooting
 

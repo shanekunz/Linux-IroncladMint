@@ -59,6 +59,15 @@ echo ""
 bash "$SCRIPT_DIR/install-webapps.sh"
 
 echo ""
+echo -e "${BLUE}========================================${NC}"
+echo -e "${BLUE}   Step 4: Installing Development Tools${NC}"
+echo -e "${BLUE}========================================${NC}"
+echo ""
+
+# Install mise version manager
+bash "$SCRIPT_DIR/install-mise.sh"
+
+echo ""
 echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}   Bootstrap Complete!${NC}"
 echo -e "${GREEN}========================================${NC}"
