@@ -91,6 +91,7 @@
 - `Mod+Shift+r` - Restart i3 (also reloads config)
 - `Mod+Shift+e` - Exit i3 (logout)
 - `Mod+Shift+q` - Shutdown computer
+- `Mod+Shift+Control+Alt+s` - Sleep/suspend
 - `Mod+Shift+/` - Show this help file
 
 ## Resize Mode (Mod+r to enter)

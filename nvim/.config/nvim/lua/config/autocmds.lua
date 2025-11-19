@@ -34,14 +34,28 @@ vim.api.nvim_create_user_command('EditSecrets', function()
       return
     end
 
-    local appdata = os.getenv("APPDATA")
-    if not appdata then
-      vim.notify("APPDATA environment variable not set", vim.log.levels.ERROR)
-      return
+    -- Determine secrets path based on platform
+    local secrets_path
+    local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+
+    if is_windows then
+      local appdata = os.getenv("APPDATA")
+      if not appdata then
+        vim.notify("APPDATA environment variable not set", vim.log.levels.ERROR)
+        return
+      end
+      secrets_path = appdata .. "\\Microsoft\\UserSecrets\\" .. secrets_id .. "\\secrets.json"
+    else
+      -- Linux/macOS: ~/.microsoft/usersecrets/
+      local home = os.getenv("HOME")
+      if not home then
+        vim.notify("HOME environment variable not set", vim.log.levels.ERROR)
+        return
+      end
+      secrets_path = home .. "/.microsoft/usersecrets/" .. secrets_id .. "/secrets.json"
     end
 
-    local secrets_path = appdata .. "\\Microsoft\\UserSecrets\\" .. secrets_id .. "\\secrets.json"
-    vim.cmd("edit " .. secrets_path)
+    vim.cmd("edit " .. vim.fn.fnameescape(secrets_path))
   end
 
   if #csprojs == 1 then

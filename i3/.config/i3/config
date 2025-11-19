@@ -78,6 +78,9 @@ bindsym $mod+Shift+q exec --no-startup-id ~/.config/i3/scripts/shutdown-delayed.
 # Lock screen
 bindsym $mod+Shift+x exec i3lock -c 000000
 
+# Sleep/suspend
+bindsym $mod+Shift+Control+Mod1+s exec systemctl suspend
+
 #####################
 # WINDOW NAVIGATION
 #####################
@@ -308,8 +311,11 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
 # Force Edge windows to tile (override pop-up rule above)
-# Edge sets all windows as class="Microsoft-edge" regardless of --class flag
 for_window [class="Microsoft-edge"] floating disable
+
+# Force Edge app windows to tile (override pop-up rule above)
+# Edge app windows have instance=domain (e.g., "claude.ai", "gmail.com")
+for_window [instance=".*\..*" window_role="pop-up"] floating disable
 
 # Keybinds help window - wide, tall, centered (no text wrap, minimal scroll)
 for_window [title="i3-keybinds-help"] floating enable, resize set 1100 2000, move position center

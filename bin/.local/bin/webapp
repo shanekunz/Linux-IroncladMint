@@ -17,7 +17,5 @@ fi
 
 microsoft-edge \
   --app="$URL" \
-  --class="$NAME" \
-  --name="$NAME" \
   --window-size="$SIZE" \
   &> /dev/null &
