@@ -73,6 +73,7 @@
 ## Media & Hardware
 
 - `Mod+grave` (`) - Screenshot tool (Flameshot)
+- `Mod+Shift+grave` (`) - Screen recorder (VokoscreenNG)
 - `Mod+Delete` - Play/pause media
 - `Mod+PgUp/PgDn` - Volume up/down
 - `Mod+Shift+PgUp/PgDn` - Monitor brightness (both displays)

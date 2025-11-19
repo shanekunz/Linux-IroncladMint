@@ -238,6 +238,8 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
 # Custom keyboard mappings for rightmost keys (`, Del, PgDn, PgUp)
 # Backtick - Screenshot (GUI selector)
 bindsym $mod+grave exec flameshot gui
+# Backtick+Shift - Screen recorder
+bindsym $mod+Shift+grave exec vokoscreenNG
 
 # Help - Show keybinds reference (rendered markdown)
 bindsym $mod+Shift+slash exec ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
@@ -307,6 +309,7 @@ for_window [class=".*"] exec --no-startup-id ~/.config/i3/scripts/center-mouse.s
 for_window [class="Pavucontrol"] floating enable
 for_window [class="Nitrogen"] floating enable
 for_window [class="Lxappearance"] floating enable
+for_window [class="vokoscreenNG"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
