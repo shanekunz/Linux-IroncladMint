@@ -177,8 +177,8 @@ set_scaling() {
     apply_to_gsettings
     persist_config
 
-    # Restart i3bar to apply changes (don't restart all of i3)
-    i3-msg restart 2>/dev/null || true
+    # Don't auto-restart i3 - let caller handle it to avoid race conditions
+    # (Monitor scripts need to restart i3 AFTER both xrandr and scaling are set)
 
     # Notify user
     notify-send "Display Scaling" "Scale: ${SCALE}x (${DPI} DPI)\nCursor: ${CURSOR_SIZE}px" -t 3000 2>/dev/null || true

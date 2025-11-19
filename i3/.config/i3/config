@@ -359,8 +359,8 @@ client.urgent           #2f343a #900000 #ffffff #900000   #900000
 exec_always --no-startup-id xinput set-button-map 14 3 2 1
 exec_always --no-startup-id setxkbmap -layout us -variant engrammer
 
-# Monitor setup (explicit no scaling)
-exec_always --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --output DP-4 --off
+# Monitor setup (explicit no scaling) - only on initial startup, not on restart
+exec --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --output DP-4 --off
 
 # Monitor modes (complete states, usable from any current state)
 # Mod+m: Main monitor only at 4K 165Hz with 150% DPI
