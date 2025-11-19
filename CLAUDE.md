@@ -6,6 +6,18 @@ This file provides context for Claude Code when working with this dotfiles repos
 
 This repository contains configuration files and automated installation scripts for setting up a complete Linux desktop environment based on i3 window manager. It uses GNU Stow for symlink management to deploy configs from this repo to the home directory.
 
+**Note**: i3 keybinds are optimized for the Engrammer keyboard layout.
+
+## Quick Reference
+
+Essential commands and files:
+- **Deploy configs**: `./scripts/stow-dotfiles.sh`
+- **Full install**: `./scripts/master-install.sh`
+- **Main i3 config**: `i3/.config/i3/config`
+- **Reload i3**: `Mod+Shift+R` (in i3) or `i3-msg reload`
+- **View keybinds**: `Mod+Shift+/` (in i3)
+- **⚠️ Always sync**: `keybinds.md` ↔ `i3/config` when changing keybinds
+
 ## Structure
 
 ```
@@ -93,6 +105,18 @@ When adding/changing i3 keybinds or features:
 
 The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 
+### Testing Configuration Changes
+
+**i3 changes:**
+- Reload config: `Mod+Shift+R` or `i3-msg reload`
+- Restart i3: `Mod+Shift+E` then select restart
+- Check syntax: `i3-msg -t get_config` (returns current config if valid)
+
+**Stow deployments:**
+- Verify symlinks: `ls -la ~/<target>` to check if it points to dotfiles repo
+- Re-stow: `cd ~/dotfiles && stow -R <package>` (restow to fix conflicts)
+- Unstow: `cd ~/dotfiles && stow -D <package>` (remove symlinks)
+
 ## Technology Stack
 
 - **OS**: Linux Mint / Ubuntu-based
@@ -110,7 +134,6 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 
 - All install scripts check for existing installations before installing
 - The dotfiles use **Stow** for deployment (symlinks from repo to home)
-- i3 uses custom keybinds optimized for Engrammer keyboard layout
 - Mod key = Windows key (Mod4)
 - The system is designed for HiDPI displays (150% scaling)
 
