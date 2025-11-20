@@ -10,6 +10,7 @@
 - `Mod+e` - File manager (Nemo)
 - `Mod+b` - Microsoft Edge
 - `Mod+Shift+b` - Firefox
+- `Mod+Control+t` - Convert headerless webapp to tabbed browser
 - `Mod+a` - Audio mixer
 
 **Development:**

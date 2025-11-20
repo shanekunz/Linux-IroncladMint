@@ -49,6 +49,10 @@ exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-siz
 exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-theme 'Breeze'
 exec_always --no-startup-id xsetroot -cursor_name left_ptr
 
+# Dark mode preferences for apps
+exec_always --no-startup-id gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+exec_always --no-startup-id gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
 #####################
 # KEYBINDINGS - CORE
 #####################
@@ -264,6 +268,7 @@ bindsym $mod+Shift+Next exec --no-startup-id ddcutil --bus 5 setvcp 10 - 10 && d
 # Browsers
 bindsym $mod+b exec microsoft-edge
 bindsym $mod+Shift+b exec firefox
+bindsym $mod+Control+t exec ~/.local/bin/webapp-to-tabbed
 
 # File manager
 bindsym $mod+e exec nemo

@@ -137,6 +137,13 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 - Mod key = Windows key (Mod4)
 - The system is designed for HiDPI displays (150% scaling)
 
+### Working with Claude Code
+
+**Sudo Commands**: Claude Code cannot execute sudo commands via tool calls. When sudo is required:
+1. Claude should stop and provide the command in plain text
+2. User will run the command manually
+3. Claude can continue after user confirms execution
+
 ## Maintenance Reminders
 
 ⚠️ **When making changes:**

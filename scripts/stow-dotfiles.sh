@@ -47,6 +47,8 @@ declare -a to_backup=(
     ".config/Signal"
     ".config/sunshine"
     ".config/retroarch"
+    ".config/gtk-3.0"
+    ".config/gtk-4.0"
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
@@ -88,6 +90,8 @@ declare -a packages=(
     "retroarch"
     "bin"
     "obsbot"
+    "gtk-3.0"
+    "gtk-4.0"
 )
 
 for package in "${packages[@]}"; do
