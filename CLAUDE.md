@@ -35,7 +35,59 @@ dotfiles/
 └── [other config dirs]/
 ```
 
-## Installation System
+## Installation System Architecture
+
+The installation system uses a **layered architecture** to avoid redundancy:
+
+```
+┌─────────────────────────────────────────────┐
+│ bootstrap.sh (Fresh Install Orchestrator)   │
+│  1. Check git prerequisite                  │
+│  2. Call master-install.sh                  │
+│  3. Deploy dotfiles with stow               │
+│  4. Run install-webapps.sh                  │
+│  5. Post-install notes                      │
+└─────────────────────────────────────────────┘
+                    │
+                    ├─ calls ─────────────────┐
+                    │                          │
+                    ▼                          ▼
+┌──────────────────────────────┐   ┌──────────────────────┐
+│ master-install.sh            │   │ stow-dotfiles.sh     │
+│ (Package Installation Only)  │   │ (Config Deployment)  │
+│  • Core System               │   └──────────────────────┘
+│  • Window Manager Stack      │              │
+│  • Development Tools         │              └─ deploys ─┐
+│  • Browsers                  │                           │
+│  • Communication             │                           ▼
+│  • Productivity              │              ┌──────────────────────┐
+│  • Media & Gaming            │              │ install-webapps.sh   │
+│  • Networking                │              │ (Needs webapp script │
+│  • Utilities                 │              │  from stow first)    │
+│  • Custom Builds             │              └──────────────────────┘
+└──────────────────────────────┘
+                    │
+                    └─ calls ───────┐
+                                    │
+                                    ▼
+                    ┌─────────────────────────────┐
+                    │ install-*.sh (52 scripts)   │
+                    │ • Idempotent                │
+                    │ • Check before install      │
+                    │ • Self-contained            │
+                    └─────────────────────────────┘
+```
+
+### Key Principles
+
+1. **No Duplication**: bootstrap.sh calls master-install.sh rather than duplicating package lists
+2. **Separation of Concerns**:
+   - `install-*.sh` = Individual package installation
+   - `master-install.sh` = Orchestrates all package installations
+   - `bootstrap.sh` = Complete system setup (packages + dotfiles)
+   - `stow-dotfiles.sh` = Dotfiles deployment only
+3. **Idempotency**: All scripts safe to run multiple times
+4. **Modularity**: Can run individual install scripts, master-install.sh, or full bootstrap
 
 ### Individual Install Scripts (`install-*.sh`)
 
@@ -44,21 +96,34 @@ Each script follows a consistent pattern:
 2. Install via package manager (apt, flatpak, git clone, etc.)
 3. Perform any post-install setup (symlinks, config, etc.)
 
-All scripts are **idempotent** - safe to run multiple times.
+All 52 scripts are **idempotent** - safe to run multiple times.
 
 ### Master Install Script
 
-`scripts/master-install.sh` orchestrates installation in logical groups:
-- Core System
-- Window Manager Stack
-- Development Tools
-- Browsers
-- Communication
-- Productivity
-- Media & Gaming
-- Utilities
+`scripts/master-install.sh` installs ALL packages in logical groups:
+- Core System (essentials, stow, flatpak)
+- Window Manager Stack (i3, rofi, picom, etc.)
+- Development Tools (git, neovim, vscode, mise, etc.)
+- Browsers (firefox, chromium, edge)
+- Communication (discord, zoom, signal, whatsie)
+- Productivity (obsidian, todoist, teams, etc.)
+- Media & Gaming (obs, steam, retroarch, sunshine)
+- Networking (tailscale)
+- Utilities (nerd-font, localsend, webapp-script)
+- Custom Builds (obsbot)
 
-It calls individual install scripts via the `run_script()` function.
+**Does NOT**: Deploy dotfiles or run install-webapps.sh (see notes below)
+
+### Bootstrap Script
+
+`bootstrap.sh` is the **orchestrator** for fresh installations:
+1. Checks git is installed (prerequisite)
+2. **Calls master-install.sh** to install all packages
+3. Deploys dotfiles via stow (with automatic backup)
+4. Runs install-webapps.sh (now that webapp script is deployed)
+5. Shows post-install instructions
+
+**Usage**: `./bootstrap.sh` (one command for complete setup)
 
 ## Key Configuration Files
 
@@ -76,6 +141,39 @@ When adding/changing i3 keybinds or features:
 - **Main README**: `README.md` - General overview and setup instructions
 - **This File**: `CLAUDE.md` - Claude-specific context
 
+## Important Notes
+
+### Script Architecture Rules
+
+⚠️ **CRITICAL - Avoid Redundancy:**
+- **NEVER** duplicate the list of install scripts between bootstrap.sh and master-install.sh
+- bootstrap.sh should **CALL** master-install.sh, not replicate its functionality
+- Only maintain the package list in ONE place: master-install.sh
+- bootstrap.sh is an orchestrator, not a package installer
+
+### Why This Matters
+
+Previously, bootstrap.sh and master-install.sh both contained duplicate lists of all 52 install scripts. This caused:
+- Maintenance burden (updating two files for every new package)
+- Sync issues (scripts could get out of sync)
+- Confusion about which file is the "source of truth"
+
+**Current Architecture** (correct):
+- `master-install.sh` = Source of truth for all package installations
+- `bootstrap.sh` = Calls master-install.sh + adds dotfiles deployment
+- No duplication, clear separation of concerns
+
+### Package Installation Dependency Order
+
+**Important**: `install-webapps.sh` requires the webapp script to be deployed first:
+1. master-install.sh runs `install-webapp-script.sh` (deploys to ~/.local/bin via stow)
+2. Dotfiles must be stowed for the script to be available
+3. Then `install-webapps.sh` can use the webapp command
+
+This is why:
+- master-install.sh mentions webapps but doesn't run it (user must stow first)
+- bootstrap.sh can run it automatically (stows in Phase 2, webapps in Phase 3)
+
 ## Common Tasks
 
 ### Adding a New Package
@@ -91,11 +189,19 @@ When adding/changing i3 keybinds or features:
 
 2. Make it executable: `chmod +x scripts/install-<package>.sh`
 
-3. Add to appropriate section in `scripts/master-install.sh`
+3. Add **ONLY** to appropriate section in `scripts/master-install.sh`
+   - **Do NOT** add to bootstrap.sh (it calls master-install.sh automatically)
+   - Choose the right category: Core System, Window Manager, Development Tools, etc.
+   - Use `run_script "install-<package>.sh"`
 
 4. If it has keybinds, update both:
    - `i3/.config/i3/config`
    - `i3/.config/i3/keybinds.md`
+
+5. Test both paths:
+   - `./scripts/install-<package>.sh` (individual install)
+   - `./scripts/master-install.sh` (includes your new script)
+   - `./bootstrap.sh` (full system setup - automatically includes via master-install.sh)
 
 ### Modifying i3 Keybinds
 
@@ -128,6 +234,7 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 - **Launcher**: Rofi
 - **Screenshots**: Flameshot
 - **Screen Recording**: VokoscreenNG
+- **Voice Input**: OpenWhispr (local or cloud Whisper transcription)
 - **Config Management**: GNU Stow
 
 ## Important Notes

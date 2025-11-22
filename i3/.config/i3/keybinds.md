@@ -21,6 +21,7 @@
 **AI / Productivity:**
 - `Mod+c` - Claude
 - `Mod+o` - Obsidian
+- `Mod+i` - Voice input (OpenWhispr)
 - `Mod+Shift+s` - Sunsama
 - `Mod+Shift+o` - Outlook
 - `Mod+Shift+g` - Gmail
@@ -107,3 +108,4 @@
 - Custom keyboard layout: Engrammer variant
 - Mouse buttons swapped: left/right buttons are swapped
 - Streaming mode uses LED monitor to protect OLED from burn-in
+- **Voice input**: OpenWhispr uses its own global hotkey (default: backtick, configurable in app) to start/stop dictation. `Mod+i` just opens the settings panel.

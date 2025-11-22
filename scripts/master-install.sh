@@ -60,12 +60,10 @@ run_script "install-fzf.sh"
 run_script "install-vim.sh"
 run_script "install-vscode.sh"
 run_script "install-ghostty.sh"
-run_script "install-nvm.sh"
-run_script "install-node.sh"
-run_script "install-pnpm.sh"
-run_script "install-rustup.sh"
+run_script "install-mise.sh"
 run_script "install-python-tools.sh"
 run_script "install-claude-cli.sh"
+run_script "install-glow.sh"
 
 # Browsers
 echo -e "${BLUE}=== Browsers ===${NC}"
@@ -87,6 +85,7 @@ run_script "install-todoist.sh"
 run_script "install-teams.sh"
 run_script "install-sunsama.sh"
 run_script "install-emote.sh"
+run_script "install-open-whispr.sh"
 
 # Media & Gaming
 echo -e "${BLUE}=== Media & Gaming ===${NC}"
@@ -95,19 +94,25 @@ run_script "install-steam.sh"
 run_script "install-retroarch.sh"
 run_script "install-sunshine.sh"
 
+# Networking
+echo -e "${BLUE}=== Networking ===${NC}"
+run_script "install-tailscale.sh"
+
 # Utilities
 echo -e "${BLUE}=== Utilities ===${NC}"
 run_script "install-accountable2you.sh"
 run_script "install-localsend.sh"
 run_script "install-nerd-font.sh"
+run_script "install-webapp-script.sh"
 
 # Custom Builds
 echo -e "${BLUE}=== Custom Builds ===${NC}"
 run_script "install-obsbot.sh"
 
-# Web Apps (run last, after webapp script is deployed)
+# Web Apps (requires dotfiles to be deployed first)
 echo -e "${BLUE}=== Web Applications ===${NC}"
-echo -e "${YELLOW}Note:${NC} Web apps will be installed after dotfiles are deployed (run install-webapps.sh manually)"
+echo -e "${YELLOW}Note:${NC} Web apps require the webapp script to be deployed via stow first."
+echo -e "       Run ${BLUE}./stow-dotfiles.sh${NC} first, then run ${BLUE}./install-webapps.sh${NC} manually."
 
 echo ""
 echo -e "${GREEN}========================================${NC}"

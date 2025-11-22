@@ -2,19 +2,21 @@
 #
 # Bootstrap Script for Dotfiles
 # ==============================
-# Automated setup for Linux Mint + i3 window manager
+# Orchestrates complete system setup for fresh Linux Mint + i3 installations
 #
 # Usage:
 #   ./bootstrap.sh              # Full install (recommended for fresh systems)
 #   ./scripts/install-*.sh      # Individual package install
+#   ./scripts/master-install.sh # Just install packages (no dotfiles deployment)
 #
 # What this does:
-#   1. Installs essential tools (git, stow, flatpak)
-#   2. Installs core packages (i3, neovim, dev tools)
-#   3. Installs applications (browsers, discord, obsidian, etc.)
-#   4. Deploys dotfiles with GNU Stow (backs up existing configs)
+#   1. Checks prerequisites (git)
+#   2. Runs master-install.sh to install all packages
+#   3. Deploys dotfiles with GNU Stow (backs up existing configs)
+#   4. Creates web application shortcuts
+#   5. Post-install configuration
 #
-# Safe to run multiple times (idempotent scripts)
+# Safe to run multiple times (idempotent)
 #
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -59,71 +61,20 @@ echo ""
 # Check prerequisites
 log_info "Checking prerequisites..."
 if ! command -v git &> /dev/null; then
-    log_error "git is not installed. Installing git first..."
-    run_script "install-git.sh"
+    log_error "git is not installed. Please install git first:"
+    log_error "  sudo apt update && sudo apt install -y git"
+    exit 1
 fi
 
-# Install basic tools needed for everything else
-log_info "Installing basic prerequisites..."
-sudo apt update
-run_script "install-essentials.sh"
-run_script "install-stow.sh"
-run_script "install-flatpak.sh"
+# Phase 1: Install all packages
+log_step "Phase 1: Installing all packages..."
+log_info "Running master-install.sh to install all system packages..."
+echo ""
+bash "$SCRIPTS_DIR/master-install.sh"
+echo ""
 
-# Phase 1: Core system tools with PPAs
-log_step "Phase 1: Installing core system packages..."
-run_script "install-neovim.sh"
-run_script "install-git.sh"
-
-# Phase 2: Window manager and desktop environment
-log_step "Phase 2: Installing i3 window manager and tools..."
-run_script "install-i3.sh"
-run_script "install-rofi.sh"
-run_script "install-picom.sh"
-run_script "install-dunst.sh"
-run_script "install-nitrogen.sh"
-run_script "install-nm-applet.sh"
-run_script "install-blueman.sh"
-run_script "install-arandr.sh"
-run_script "install-flameshot.sh"
-
-# Phase 3: Terminal and shell tools
-log_step "Phase 3: Installing terminal and CLI tools..."
-run_script "install-vim.sh"
-run_script "install-nerd-font.sh"
-
-# Phase 4: Networking tools
-log_step "Phase 4: Installing networking tools..."
-run_script "install-tailscale.sh"
-
-# Phase 5: Development tools
-log_step "Phase 5: Installing development tools..."
-run_script "install-node.sh"
-run_script "install-nvm.sh"
-run_script "install-pnpm.sh"
-run_script "install-rustup.sh"
-run_script "install-python-tools.sh"
-run_script "install-lazygit.sh"
-run_script "install-gh.sh"
-
-# Phase 6: Applications via Flatpak
-log_step "Phase 6: Installing Flatpak applications..."
-run_script "install-obsidian.sh"
-run_script "install-firefox.sh"
-run_script "install-discord.sh"
-run_script "install-signal.sh"
-run_script "install-vscode.sh"
-run_script "install-chromium.sh"
-
-# Phase 7: Custom/external apps
-log_step "Phase 7: Installing custom applications..."
-run_script "install-obsbot.sh"
-run_script "install-sunshine.sh"
-run_script "install-retroarch.sh"
-run_script "install-localsend.sh"
-
-# Phase 8: Deploy dotfiles with Stow
-log_step "Phase 8: Deploying dotfiles with GNU Stow..."
+# Phase 2: Deploy dotfiles with Stow
+log_step "Phase 2: Deploying dotfiles with GNU Stow..."
 cd "$DOTFILES_DIR"
 
 # Backup existing configs
@@ -164,8 +115,12 @@ for package in */; do
     stow -t "$HOME" "$package_name" 2>/dev/null || log_warn "Issues stowing $package_name (may already be linked)"
 done
 
-# Phase 9: Post-install setup
-log_step "Phase 9: Post-install configuration..."
+# Phase 3: Web Applications
+log_step "Phase 3: Creating web application shortcuts..."
+run_script "install-webapps.sh"
+
+# Phase 4: Post-install setup
+log_step "Phase 4: Post-install configuration..."
 
 # Setup Neovim plugins
 if command -v nvim &> /dev/null; then
