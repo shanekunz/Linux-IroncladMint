@@ -285,6 +285,7 @@ bindsym $mod+d exec flatpak run com.discordapp.Discord
 bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200x900"
 bindsym $mod+o exec flatpak run md.obsidian.Obsidian
 bindsym $mod+i exec --no-startup-id "pkill -x open-whispr; open-whispr"
+bindsym $mod+Shift+i exec --no-startup-id pkill -x open-whispr
 bindsym $mod+Shift+s exec ~/.local/bin/sunsama
 bindsym $mod+Shift+o exec ~/.local/bin/webapp "Outlook" "https://outlook.office.com/mail/" "1400x900"
 bindsym $mod+Shift+g exec ~/.local/bin/webapp "Gmail" "https://mail.google.com/mail/u/0/" "1400x900"

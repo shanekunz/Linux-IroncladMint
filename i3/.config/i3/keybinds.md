@@ -22,6 +22,7 @@
 - `Mod+c` - Claude
 - `Mod+o` - Obsidian
 - `Mod+i` - Voice input (OpenWhispr)
+- `Mod+Shift+i` - Kill OpenWhispr
 - `Mod+Shift+s` - Sunsama
 - `Mod+Shift+o` - Outlook
 - `Mod+Shift+g` - Gmail
