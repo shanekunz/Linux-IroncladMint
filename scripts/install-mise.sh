@@ -19,7 +19,8 @@ MISE_SHELL_CONFIG="$HOME/.bashrc"
 
 if ! grep -q 'mise activate' "$MISE_SHELL_CONFIG" 2>/dev/null; then
     echo "" >> "$MISE_SHELL_CONFIG"
-    echo '# mise version manager' >> "$MISE_SHELL_CONFIG"
+    echo '# mise version manager - add shims to PATH for editor LSPs' >> "$MISE_SHELL_CONFIG"
+    echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> "$MISE_SHELL_CONFIG"
     echo 'eval "$(~/.local/bin/mise activate bash)"' >> "$MISE_SHELL_CONFIG"
     echo -e "${GREEN}[install-mise]${NC} Added mise to $MISE_SHELL_CONFIG"
 fi
@@ -39,6 +40,11 @@ if command -v mise &> /dev/null; then
     # Install Node.js LTS
     mise use --global node@lts
     echo -e "${GREEN}[install-mise]${NC} Node.js LTS installed"
+
+    # Generate shims so Node/npm are available to all programs (not just shells)
+    # This fixes editor LSP issues (e.g., Neovim's Vue/TypeScript language servers)
+    mise reshim
+    echo -e "${GREEN}[install-mise]${NC} Shims generated for editor LSPs"
 
     # Install Rust
     mise use --global rust@latest

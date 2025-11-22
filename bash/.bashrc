@@ -116,5 +116,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# mise version manager
+# mise version manager - add shims to PATH for editor LSPs
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 eval "$(~/.local/bin/mise activate bash)"

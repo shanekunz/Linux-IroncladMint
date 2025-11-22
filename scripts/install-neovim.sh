@@ -24,4 +24,7 @@ sudo apt install -y neovim
 # Install Python support
 sudo apt install -y python3-neovim
 
+# Install xsel for clipboard support (required for clipboard = "unnamedplus")
+sudo apt install -y xsel
+
 echo -e "${GREEN}[install-neovim]${NC} Neovim installed successfully!"

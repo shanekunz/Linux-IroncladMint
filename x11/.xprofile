@@ -2,6 +2,9 @@
 # .xprofile - runs before window manager starts
 # Sets environment variables for the entire X session
 
+# Add mise shims to PATH for all GUI applications (editors, terminals, etc.)
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
 # Source master scaling system and export all variables
 if [ -f ~/.config/i3/scripts/scaling.sh ]; then
     source ~/.config/i3/scripts/scaling.sh
