@@ -14,7 +14,7 @@
 - `Mod+a` - Audio mixer
 
 **Development:**
-- `Mod+n` - Neovim (terminal editor)
+- `Mod+n` - Neovim (project selector: ~/projects/* or ~/)
 - `Mod+v` - VS Code
 - `Mod+d` - Discord
 
