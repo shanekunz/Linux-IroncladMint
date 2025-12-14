@@ -42,3 +42,11 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 keybind = shift+enter=text:\x1b\r
+
+# Vim-style scrolling keybinds
+# Line scrolling (5 lines at a time)
+keybind = ctrl+shift+n=scroll_page_lines:5
+keybind = ctrl+shift+p=scroll_page_lines:-5
+# Half-page scrolling
+keybind = alt+shift+n=scroll_page_fractional:0.5
+keybind = alt+shift+p=scroll_page_fractional:-0.5

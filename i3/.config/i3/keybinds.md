@@ -16,6 +16,7 @@
 **Development:**
 - `Mod+n` - Neovim (project selector: ~/projects/* or ~/)
 - `Mod+v` - VS Code
+- `Mod+Shift+v` - Clipboard history (CopyQ)
 - `Mod+d` - Discord
 
 **AI / Productivity:**
@@ -23,6 +24,7 @@
 - `Mod+o` - Obsidian
 - `Mod+i` - Voice input (OpenWhispr)
 - `Mod+Shift+i` - Kill OpenWhispr
+- `Mod+Control+i` - iCloud Drive
 - `Mod+Shift+s` - Sunsama
 - `Mod+Shift+o` - Outlook
 - `Mod+Shift+g` - Gmail
@@ -88,7 +90,7 @@
 
 - `Mod+m` - Main monitor only (4K OLED @ 165Hz, 150% DPI)
 - `Mod+Shift+m` - Both monitors (4K @ 165Hz/144Hz, 150% DPI)
-- `Mod+Control+m` - Streaming mode (1080p LED @ 60Hz, no scaling)
+- `Mod+Control+m` - Streaming mode (1680x1050 LED @ 60Hz, no scaling, 16:10 ratio)
 
 ## System
 
@@ -96,12 +98,19 @@
 - `Mod+Shift+e` - Exit i3 (logout)
 - `Mod+Shift+q` - Shutdown computer
 - `Mod+Shift+Control+Alt+s` - Sleep/suspend
+- `Mod+Control+r` - Boot menu (select OS to reboot into: one-time or set as default)
 - `Mod+Shift+/` - Show this help file
 
 ## Resize Mode (Mod+r to enter)
 
 - `h/j/k/l` or arrow keys - Resize window
 - `Escape` or `Enter` - Exit resize mode
+
+## Ghostty Terminal
+
+- `Shift+Enter` - Literal newline (useful in REPLs)
+- `Ctrl+Shift+n/p` - Scroll down/up 5 lines
+- `Alt+Shift+n/p` - Scroll down/up half page
 
 ## Notes
 

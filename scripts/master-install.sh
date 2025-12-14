@@ -33,6 +33,7 @@ echo -e "${BLUE}=== Core System ===${NC}"
 run_script "install-essentials.sh"
 run_script "install-stow.sh"
 run_script "install-flatpak.sh"
+run_script "install-grub.sh"
 
 # i3 Window Manager Stack
 echo -e "${BLUE}=== Window Manager ===${NC}"
@@ -91,6 +92,7 @@ run_script "install-open-whispr.sh"
 echo -e "${BLUE}=== Media & Gaming ===${NC}"
 run_script "install-obs.sh"
 run_script "install-steam.sh"
+run_script "install-gamescope.sh"
 run_script "install-retroarch.sh"
 run_script "install-sunshine.sh"
 
@@ -101,6 +103,7 @@ run_script "install-tailscale.sh"
 # Utilities
 echo -e "${BLUE}=== Utilities ===${NC}"
 run_script "install-accountable2you.sh"
+run_script "install-copyq.sh"
 run_script "install-localsend.sh"
 run_script "install-nerd-font.sh"
 run_script "install-webapp-script.sh"

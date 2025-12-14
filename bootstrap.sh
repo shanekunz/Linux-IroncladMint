@@ -85,8 +85,8 @@ if [ -d "$HOME/.config" ]; then
 
     for package in */; do
         package_name=${package%/}
-        # Skip non-stow directories
-        if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]]; then
+        # Skip non-stow directories and system directories (handled separately)
+        if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]] || [[ "$package_name" == "grub" ]]; then
             continue
         fi
 
@@ -106,14 +106,17 @@ fi
 # Stow all packages
 for package in */; do
     package_name=${package%/}
-    # Skip non-stow directories
-    if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]]; then
+    # Skip non-stow directories and system directories (handled separately)
+    if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]] || [[ "$package_name" == "grub" ]]; then
         continue
     fi
 
     log_info "Stowing $package_name..."
     stow -t "$HOME" "$package_name" 2>/dev/null || log_warn "Issues stowing $package_name (may already be linked)"
 done
+
+# GRUB is handled separately by install-grub.sh (already ran in Phase 1)
+# It requires sudo stow -t / instead of stow -t $HOME
 
 # Phase 3: Web Applications
 log_step "Phase 3: Creating web application shortcuts..."

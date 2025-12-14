@@ -247,9 +247,10 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 ### Working with Claude Code
 
 **Sudo Commands**: Claude Code cannot execute sudo commands via tool calls. When sudo is required:
-1. Claude should stop and provide the command in plain text
-2. User will run the command manually
-3. Claude can continue after user confirms execution
+1. Claude must stop and ask the user to run the command manually
+2. Claude should provide the exact command in plain text for the user to copy
+3. User will run the command in their terminal
+4. Claude can continue after user confirms execution
 
 ## Maintenance Reminders
 

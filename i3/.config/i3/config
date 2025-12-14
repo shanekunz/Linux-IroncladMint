@@ -33,9 +33,13 @@ exec_always --no-startup-id nitrogen --restore
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id dunst
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 
 # Accountable2You (if it's not already in startup apps)
 exec --no-startup-id accountable2you
+
+# Clipboard manager
+exec --no-startup-id copyq
 
 # Keybinds reference window (rendered markdown)
 exec --no-startup-id ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
@@ -84,6 +88,9 @@ bindsym $mod+Shift+x exec i3lock -c 000000
 
 # Sleep/suspend
 bindsym $mod+Shift+Control+Mod1+s exec systemctl suspend
+
+# Boot menu (select OS to reboot into)
+bindsym $mod+Control+r exec --no-startup-id ~/dotfiles/scripts/boot-menu.sh
 
 #####################
 # WINDOW NAVIGATION
@@ -279,6 +286,7 @@ bindsym $mod+a exec pavucontrol
 # Development
 bindsym $mod+n exec --no-startup-id ~/.config/i3/scripts/nvim-project-launcher.sh
 bindsym $mod+v exec code
+bindsym $mod+Shift+v exec copyq toggle
 bindsym $mod+d exec flatpak run com.discordapp.Discord
 
 # AI / Productivity
@@ -286,6 +294,7 @@ bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200x900"
 bindsym $mod+o exec flatpak run md.obsidian.Obsidian
 bindsym $mod+i exec --no-startup-id "pkill -x open-whispr; open-whispr"
 bindsym $mod+Shift+i exec --no-startup-id pkill -x open-whispr
+bindsym $mod+Control+i exec ~/.local/bin/webapp "iCloud-Drive" "https://www.icloud.com/iclouddrive/" "1400x900"
 bindsym $mod+Shift+s exec ~/.local/bin/sunsama
 bindsym $mod+Shift+o exec ~/.local/bin/webapp "Outlook" "https://outlook.office.com/mail/" "1400x900"
 bindsym $mod+Shift+g exec ~/.local/bin/webapp "Gmail" "https://mail.google.com/mail/u/0/" "1400x900"
@@ -366,8 +375,8 @@ client.urgent           #2f343a #900000 #ffffff #900000   #900000
 
 
 # keyboard layout and mouse click swap
-exec_always --no-startup-id xinput set-button-map 14 3 2 1
-exec_always --no-startup-id setxkbmap -layout us -variant engrammer
+exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
+exec_always --no-startup-id setxkbmap -layout us -variant engrammer -option caps:escape
 
 # Monitor setup (explicit no scaling) - only on initial startup, not on restart
 exec --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --output DP-4 --off
