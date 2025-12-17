@@ -65,6 +65,7 @@ run_script "install-mise.sh"
 run_script "install-python-tools.sh"
 run_script "install-claude-cli.sh"
 run_script "install-glow.sh"
+run_script "install-commitizen.sh"
 
 # Browsers
 echo -e "${BLUE}=== Browsers ===${NC}"
