@@ -19,6 +19,7 @@ sudo apt install -y \
     curl \
     wget \
     git \
+    jq \
     ca-certificates \
     gnupg \
     lsb-release

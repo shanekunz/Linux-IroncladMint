@@ -178,6 +178,10 @@ bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
 
+# Switch to next/previous workspace
+bindsym $mod+Control+Right workspace next
+bindsym $mod+Control+Left workspace prev
+
 # Move window to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
@@ -326,6 +330,7 @@ for_window [class="Pavucontrol"] floating enable
 for_window [class="Nitrogen"] floating enable
 for_window [class="Lxappearance"] floating enable
 for_window [class="vokoscreenNG"] floating enable
+for_window [class="copyq"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 
@@ -388,4 +393,6 @@ bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/monitor-main-only.sh
 bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/scripts/monitor-both.sh
 # Mod+Ctrl+m: Streaming mode - LED monitor at 1080p, no scaling (protects OLED)
 bindsym $mod+Control+m exec --no-startup-id ~/.config/i3/scripts/monitor-streaming.sh
+# Mod+Ctrl+Shift+m: Toggle Mac microphone streaming
+bindsym $mod+Control+Shift+m exec --no-startup-id ~/scripts/mac-mic-toggle.sh
 exec --no-startup-id sunshine

@@ -72,6 +72,7 @@
 ## Workspaces
 
 - `Mod+1-0` - Switch to workspace
+- `Mod+Control+Left/Right` - Switch to previous/next workspace
 - `Mod+Shift+1-0` - Move window to workspace
 - `Mod+Control+1-0` - Move window to workspace and follow
 
@@ -85,6 +86,7 @@
 - `Mod+Shift+Delete` - Nightlight on (3500K)
 - `Mod+Control+Delete` - Nightlight off
 - `Mod+Shift+x` - Lock screen
+- `Mod+Control+Shift+m` - Toggle Mac microphone (stream Mac mic over network)
 
 ## Monitor Modes
 

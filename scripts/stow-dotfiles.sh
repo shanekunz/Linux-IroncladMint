@@ -52,6 +52,8 @@ declare -a to_backup=(
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
+    ".claude"
+    "scripts"
 )
 
 for item in "${to_backup[@]}"; do
@@ -92,6 +94,8 @@ declare -a packages=(
     "obsbot"
     "gtk-3.0"
     "gtk-4.0"
+    "home-scripts"
+    "claude"
 )
 
 for package in "${packages[@]}"; do
