@@ -181,6 +181,12 @@ bindsym $mod+0 workspace $ws10
 # Switch to next/previous workspace
 bindsym $mod+Control+Right workspace next
 bindsym $mod+Control+Left workspace prev
+bindsym $mod+Mod1+l workspace next
+bindsym $mod+Mod1+h workspace prev
+
+# Move window to next/previous workspace and follow
+bindsym $mod+Mod1+Control+l move container to workspace next; workspace next; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+bindsym $mod+Mod1+Control+h move container to workspace prev; workspace prev; exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
 
 # Move window to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1

@@ -73,8 +73,10 @@
 
 - `Mod+1-0` - Switch to workspace
 - `Mod+Control+Left/Right` - Switch to previous/next workspace
+- `Mod+Alt+h/l` - Switch to previous/next workspace (vim-style)
 - `Mod+Shift+1-0` - Move window to workspace
 - `Mod+Control+1-0` - Move window to workspace and follow
+- `Mod+Alt+Ctrl+h/l` - Move window to previous/next workspace and follow
 
 ## Media & Hardware
 
