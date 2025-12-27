@@ -6,6 +6,7 @@
 
 **Essentials:**
 - `Mod+Return` - Terminal (Ghostty)
+- `Mod+Shift+Return` - Terminal in project (selector: ~/projects/* or ~/)
 - `Mod+space` - App launcher (Rofi)
 - `Mod+e` - File manager (Nemo)
 - `Mod+b` - Microsoft Edge
@@ -49,6 +50,8 @@
 - `Mod+q` / `Mod+w` - Close window
 - `Mod+Escape` - Focus parent container (select groups of windows)
 - `Mod+p` - Pin window (follows across workspaces)
+- `Mod+x` - Show scratchpad (hidden windows)
+- `Mod+Alt+x` - Hide window to scratchpad
 - `Mod+Shift+p` - Toggle sticky
 - `Mod+Shift+f` - Toggle floating
 - `Mod+Control+f` - Toggle focus between tiling/floating

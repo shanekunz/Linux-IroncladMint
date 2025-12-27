@@ -41,8 +41,8 @@ exec --no-startup-id accountable2you
 # Clipboard manager
 exec --no-startup-id copyq
 
-# Keybinds reference window (rendered markdown)
-exec --no-startup-id ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
+# Keybinds reference window (rendered markdown, auto-sized)
+exec --no-startup-id ~/.config/i3/scripts/show-keybinds.sh
 
 # Set default browser
 exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
@@ -63,6 +63,7 @@ exec_always --no-startup-id gsettings set org.gnome.desktop.interface color-sche
 
 # Terminal (change to 'alacritty' if ghostty didn't install)
 bindsym $mod+Return exec ghostty
+bindsym $mod+Shift+Return exec --no-startup-id ~/.config/i3/scripts/terminal-project-launcher.sh
 
 # App launcher
 bindsym $mod+space exec rofi -show drun -show-icons -no-show-mode
@@ -149,6 +150,10 @@ bindsym $mod+Escape focus parent
 
 # Pin window (make it sticky - follows you across workspaces)
 bindsym $mod+p sticky toggle
+
+# Scratchpad (hide/show windows)
+bindsym $mod+Mod1+x move scratchpad
+bindsym $mod+x scratchpad show
 
 #####################
 # WORKSPACES
@@ -262,8 +267,8 @@ bindsym $mod+grave exec flameshot gui
 # Backtick+Shift - Screen recorder
 bindsym $mod+Shift+grave exec vokoscreenNG
 
-# Help - Show keybinds reference (rendered markdown)
-bindsym $mod+Shift+slash exec ghostty --title="i3-keybinds-help" --confirm-close-surface=false -e glow -p ~/.config/i3/keybinds.md
+# Help - Show keybinds reference (rendered markdown, auto-sized to monitor)
+bindsym $mod+Shift+slash exec --no-startup-id ~/.config/i3/scripts/show-keybinds.sh
 
 # Delete - Media & Nightlight
 bindsym $mod+Delete exec playerctl play-pause
@@ -347,8 +352,8 @@ for_window [class="Microsoft-edge"] floating disable
 # Edge app windows have instance=domain (e.g., "claude.ai", "gmail.com")
 for_window [instance=".*\..*" window_role="pop-up"] floating disable
 
-# Keybinds help window - wide, tall, centered (no text wrap, minimal scroll)
-for_window [title="i3-keybinds-help"] floating enable, resize set 1100 2000, move position center
+# Keybinds help window - floating (sizing handled by show-keybinds.sh)
+for_window [title="i3-keybinds-help"] floating enable
 
 # Deadlock - force fullscreen
 for_window [class="deadlock"] fullscreen enable
