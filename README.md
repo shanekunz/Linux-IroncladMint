@@ -6,7 +6,7 @@ Comprehensive, modular, and idempotent dotfiles system for Linux Mint with i3 wi
 
 This repository contains my complete Linux Mint system configuration, including:
 
-- **50+ modular installation scripts** for automated setup
+- **52+ modular installation scripts** for automated setup
 - **i3 window manager** configuration with custom keybindings and scripts
 - **Neovim** setup with LazyVim and custom plugins
 - **Development environment** (Git, Node.js, Rust, Python, VS Code)
@@ -118,6 +118,7 @@ stow */      # All configs (skip scripts and .git)
 - accountable2you (snap)
 - glow (markdown renderer)
 - Flatpak + Flathub
+- Kanata (keyboard remapper with Enthium v13 layout)
 
 ### Custom Builds
 - Obsbot Tiny 2 controller (Rust)
@@ -150,13 +151,14 @@ Created using custom webapp script (via install-webapps.sh):
 ├── i3blocks/.config/i3blocks/
 ├── lazygit/.config/lazygit/
 ├── flameshot/.config/flameshot/
+├── kanata/.config/kanata/  # Enthium v13 keyboard layout
 ├── nitrogen/.config/nitrogen/
 ├── signal/.config/Signal/
 ├── sunshine/.config/sunshine/
 ├── retroarch/.config/retroarch/
 ├── bin/.local/bin/         # webapp script, lazygit, sunsama
 ├── obsbot/.local/          # Obsbot source and binary
-└── scripts/                # 51 installation scripts
+└── scripts/                # 52+ installation scripts
 ```
 
 ## Neovim Configuration

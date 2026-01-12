@@ -355,6 +355,9 @@ for_window [instance=".*\..*" window_role="pop-up"] floating disable
 # Keybinds help window - floating (sizing handled by show-keybinds.sh)
 for_window [title="i3-keybinds-help"] floating enable
 
+# Keyboard layout reference image - floating
+for_window [title="Keyboard Layout"] floating enable
+
 # Deadlock - force fullscreen
 for_window [class="deadlock"] fullscreen enable
 
@@ -392,7 +395,20 @@ client.urgent           #2f343a #900000 #ffffff #900000   #900000
 
 # keyboard layout and mouse click swap
 exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
-exec_always --no-startup-id setxkbmap -layout us -variant engrammer -option caps:escape
+# Enthium v13 via Kanata is the default layout
+exec_always --no-startup-id "setxkbmap -layout us -option ''; pkill -x kanata; kanata -c ~/.config/kanata/kanata.kbd &"
+
+# Keyboard layout reference image (floating)
+bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/Pictures/docs/enthium-keyboard-layout-with-layers.png
+
+# Keyboard layout switching
+# Mod+Control+e: Switch to Engrammer (XKB fallback)
+bindsym $mod+Control+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -variant engrammer -option caps:escape; notify-send 'Keyboard' 'Engrammer (XKB)'"
+# Mod+Alt+e: Switch to QWERTY + thumb keys (for typefu Enthium practice)
+# CapsLock (66) → b, Scroll Lock (78) → r, clear Lock modifier
+bindsym $mod+Mod1+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -option ''; xmodmap -e 'clear Lock' -e 'keycode 66 = b B b B' -e 'keycode 78 = r R r R'; notify-send 'Keyboard' 'QWERTY + thumb (typefu)'"
+# Mod+Control+Shift+e: Switch to Enthium (Kanata) - full layout with symbol layers
+bindsym $mod+Control+Shift+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -option ''; kanata -c ~/.config/kanata/kanata.kbd & notify-send 'Keyboard' 'Enthium (Kanata)'"
 
 # Monitor setup (explicit no scaling) - only on initial startup, not on restart
 exec --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --output DP-4 --off

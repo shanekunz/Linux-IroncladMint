@@ -45,6 +45,9 @@ font-size = 10
 
 keybind = shift+enter=text:\x1b\r
 
+# Fix Shift+Space printing "space" in Claude Code
+keybind = shift+space=text:\x20
+
 # Vim-style scrolling keybinds
 # Line scrolling (5 lines at a time)
 keybind = ctrl+shift+n=scroll_page_lines:5

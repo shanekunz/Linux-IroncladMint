@@ -1,0 +1,207 @@
+;; ============================================================================
+;; Kanata Configuration: Enthium v13 Layout
+;; ============================================================================
+;;
+;; This config implements the Enthium v13 keyboard layout with 4 layers:
+;;   - Base:   Enthium v13 alphas (R on right-space tap)
+;;   - Symbol: Programming symbols (hold right space)
+;;   - Nav:    Navigation + clipboard (hold left space)
+;;   - Num:    Numpad (hold BOTH spaces)
+;;
+;; PREREQUISITE (Linux): Right spacebar must be pre-remapped to Scroll Lock at
+;; keyboard firmware level (RK S70 supports this) since Kanata can't distinguish
+;; left/right spacebar natively.
+;;
+;; macOS: Right Command (rmet) is remapped to Scroll Lock behavior in this
+;; config, so no firmware changes needed. Use Right Cmd as your "right space".
+;;
+;; Emergency exit: Ctrl+Space+Escape (works on raw input before remapping)
+;; ============================================================================
+
+;; ----------------------------------------------------------------------------
+;; Global Configuration
+;; ----------------------------------------------------------------------------
+(defcfg
+  ;; Process keys not in defsrc - required for tap-hold-release to work
+  ;; on keys outside our explicit mapping
+  process-unmapped-keys yes
+
+  ;; Required for defchordsv2 to work properly
+  concurrent-tap-hold yes
+)
+
+;; ----------------------------------------------------------------------------
+;; Source Layout (Physical ANSI keyboard)
+;; ----------------------------------------------------------------------------
+;; This maps the physical keys we want to intercept.
+;; The order here determines the order in all deflayer definitions.
+;;
+;; Note: slck (Scroll Lock) = right spacebar (pre-remapped at keyboard firmware)
+;;       caps = CapsLock position (becomes 'w' in Enthium)
+;;
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            slck ralt rmet rctl
+)
+
+;; ----------------------------------------------------------------------------
+;; Aliases (Named Actions)
+;; ----------------------------------------------------------------------------
+;; Define complex behaviors once, reference with @name in layers
+;;
+(defalias
+  ;; Space bars with tap-hold behavior
+  ;; tap-hold-release params: (tap-timeout hold-timeout tap-action hold-action)
+  ;; 200ms is a good starting point - adjust based on your typing speed
+
+  ;; Left space: tap=space, hold=nav layer
+  lspc (tap-hold-release 200 200 spc (layer-while-held nav))
+
+  ;; Right space (F13): tap=r, hold=symbol layer
+  rspc (tap-hold-release 200 200 r (layer-while-held symbol))
+
+  ;; Right space behavior when already in nav layer (left space held):
+  ;; tap=r, hold=num layer (both spaces held = numpad)
+  rsnv (tap-hold-release 200 200 r (layer-while-held num))
+
+  ;; Modifier shortcuts for nav layer
+  undo C-z
+  cut  C-x
+  copy C-c
+  pste C-v
+
+  ;; Shifted symbols that need explicit shift
+  excl S-1     ;; !
+  at   S-2     ;; @
+  hash S-3     ;; #
+  dolr S-4     ;; $
+  perc S-5     ;; %
+  cart S-6     ;; ^ (caret)
+  amp  S-7     ;; &
+  astr S-8     ;; *
+  lprn S-9     ;; (
+  rprn S-0     ;; )
+  unds S-min   ;; _
+  plus S-=     ;; +
+  tild S-grv   ;; ~
+  pipe S-\     ;; |
+  lcbr S-[    ;; {
+  rcbr S-]    ;; }
+  labk S-,     ;; <
+  rabk S-.     ;; >
+  ques S-/     ;; ?
+  coln S-;     ;; :
+  dquo S-'     ;; "
+)
+
+;; ----------------------------------------------------------------------------
+;; Base Layer: Enthium v13
+;; ----------------------------------------------------------------------------
+;; Layout reference (Enthium v13):
+;;   q  y  o  u  =    x  l  d  p  z
+;;   b  c  i  a  e    -  k  h  t  n  s  w
+;;      '  ,  .  /  ;    j  m  g  f  v
+;;                 R (right space tap)
+;;
+;; Physical QWERTY -> Enthium mapping:
+;;   caps -> b (home row pinky lateral)
+;;   QWERTY ' -> w (right pinky extension)
+;;   Right space tap -> r
+;;
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
+  b    c    i    a    e    -    k    h    t    n    s    w    ret
+  lsft '    ,    .    /    ;    j    m    g    f    v    rsft
+  ;; rmet mapped to @rspc for macOS (Right Cmd = right space behavior)
+  lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
+)
+
+;; ----------------------------------------------------------------------------
+;; Symbol Layer (Right Space Hold)
+;; ----------------------------------------------------------------------------
+;; Design based on Sunaku's "Glorious Engrammer" philosophy:
+;;   - Inward rolls for common programming sequences
+;;   - Spacegrams solution: space/backspace/enter on right hand
+;;   - Brackets grouped logically
+;;
+;; Layout:
+;;   `  ~  [  ]  \     ^  <  >  $  @
+;;  esc !  (  )  #     |  {  }  +  *  &
+;;      %  "  '  ?  :    spc bspc ret tab _
+;;
+(deflayer symbol
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    grv  @tild [   ]    \    @cart @labk @rabk @dolr @at  _    _    _
+  esc  @excl @lprn @rprn @hash @pipe @lcbr @rcbr @plus @astr @amp  _    _
+  _    @perc @dquo '    @ques @coln spc  bspc ret  tab  @unds _
+  _    _    _              _              _    _    _    _
+)
+
+;; ----------------------------------------------------------------------------
+;; Nav Layer (Left Space Hold)
+;; ----------------------------------------------------------------------------
+;; Vim-style navigation on right hand home positions
+;; Clipboard shortcuts on left hand
+;;
+;; Layout:
+;;   _  _  _  _  _    home pgup up   pgdn end
+;;  esc undo cut copy paste _ left down rght _  _
+;;      _  _  _  _  _    _    _    _    _    _
+;;
+;; Note: Arrow positions match Enthium's KHTNS -> vim's HJKL concept
+;;   k (Enthium) -> left  (vim h)
+;;   h (Enthium) -> down  (vim j)
+;;   t (Enthium) -> right (vim l)
+;;   Above h    -> up    (vim k)
+;;
+(deflayer nav
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    home pgup up   pgdn end  _    _    _
+  esc  @undo @cut @copy @pste _  left down rght _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              @rsnv _    _    _
+)
+
+;; ----------------------------------------------------------------------------
+;; Num Layer (Both Spaces Held)
+;; ----------------------------------------------------------------------------
+;; Standard numpad layout on right hand (789 on top)
+;; Arithmetic operators accessible
+;;
+;; Layout:
+;;   _  _  _  _  _     =  7  8  9  /
+;;   _  _  _  _  _     .  4  5  6  *  -
+;;      _  _  _  _  _     0  1  2  3  +
+;;
+;; Activation: Hold left space first (enters nav), then hold right space
+;; The nav layer's @rsnv alias activates num instead of symbol
+;;
+(deflayer num
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    =    7    8    9    /    _    _    _
+  _    _    _    _    _    _    .    4    5    6    @astr -    _
+  _    _    _    _    _    _    0    1    2    3    @plus _
+  _    _    _              _              _    _    _    _
+)
+
+;; ----------------------------------------------------------------------------
+;; Chords (Key Combos)
+;; ----------------------------------------------------------------------------
+;; jk pressed together -> Escape
+;; This is a vim-style escape that doesn't require reaching for the Esc key
+;;
+;; In Enthium: j is on physical 'n', k is on physical 'h'
+;; So we use (n h) to detect when user types "jk" in Enthium
+;;
+;; Format: (keys) action timeout release-behavior (disabled-layers)
+;; - 50ms timeout: fast enough to not interfere with typing "jk" in text
+;; - all-released: chord fires when all keys are released
+;; - (): no disabled layers (chord works everywhere)
+;;
+(defchordsv2
+  (n h) esc 50 all-released ()
+)

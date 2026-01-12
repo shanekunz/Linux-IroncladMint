@@ -99,6 +99,14 @@
 - `Mod+Shift+m` - Both monitors (4K @ 165Hz/144Hz, 150% DPI)
 - `Mod+Control+m` - Streaming mode (1680x1050 LED @ 60Hz, no scaling, 16:10 ratio)
 
+## Keyboard Layout
+
+- `Mod+Control+k` - Show keyboard layout image (floating)
+- `Mod+Control+e` - Switch to Engrammer (XKB fallback)
+- `Mod+Alt+e` - Switch to QWERTY + thumb keys (for typefu Enthium practice)
+- `Mod+Control+Shift+e` - Switch to Enthium (Kanata, with symbol layers)
+- `Ctrl+Space+Escape` - Emergency exit Kanata (physical keys, always works)
+
 ## System
 
 - `Mod+Shift+r` - Restart i3 (also reloads config)

@@ -1,3 +1,12 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+if [ -d "/home/shane/.local/share/bash-completion/completions" ]; then
+  for f in "/home/shane/.local/share/bash-completion/completions"/*; do
+    [ -f "$f" ] && . "$f"
+  done
+fi
+# OPENSPEC:END
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -119,3 +128,10 @@ fi
 # mise version manager - add shims to PATH for editor LSPs
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 eval "$(~/.local/bin/mise activate bash)"
+
+# opencode
+export PATH=/home/shane/.opencode/bin:$PATH
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

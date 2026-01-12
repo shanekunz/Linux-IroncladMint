@@ -49,6 +49,7 @@ declare -a to_backup=(
     ".config/retroarch"
     ".config/gtk-3.0"
     ".config/gtk-4.0"
+    ".config/kanata"
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
@@ -95,6 +96,7 @@ declare -a packages=(
     "gtk-3.0"
     "gtk-4.0"
     "home-scripts"
+    "kanata"
     "claude"
 )
 
