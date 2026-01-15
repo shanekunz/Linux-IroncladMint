@@ -1,12 +1,29 @@
 ;; ============================================================================
-;; Kanata Configuration: Enthium v13 Layout
+;; Kanata Configuration: Enthium v13 Layout with Home Row Mods
 ;; ============================================================================
 ;;
 ;; This config implements the Enthium v13 keyboard layout with 4 layers:
-;;   - Base:   Enthium v13 alphas (R on right-space tap)
+;;   - Base:   Enthium v13 alphas (R on right-space tap) + HOME ROW MODS
 ;;   - Symbol: Programming symbols (hold right space)
 ;;   - Nav:    Navigation + clipboard (hold left space)
 ;;   - Num:    Numpad (hold BOTH spaces)
+;;
+;; HOME ROW MODS (Miryoku-style):
+;;   Your home row keys now do double duty - tap for letter, hold for modifier:
+;;
+;;   Left hand:   C=Win  I=Alt  A=Ctrl  E=Shift
+;;   Right hand:  H=Shift  T=Ctrl  N=Alt  S=Win
+;;
+;;   Usage: Use OPPOSITE hand for shortcuts. Examples:
+;;     - Ctrl+C (copy): Hold A (left Ctrl) + tap C (just tap, don't hold)
+;;     - Ctrl+S (save): Hold T (right Ctrl) + tap S (just tap, don't hold)
+;;     - Alt+Tab: Hold I (left Alt) + tap Tab
+;;     - Win+E (file explorer): Hold C (left Win) or S (right Win) + tap E
+;;
+;;   Timing: 200ms tap-hold threshold. If you get misfires:
+;;     - Slower/more forgiving: increase to 250ms
+;;     - Faster/more responsive: decrease to 150-175ms
+;;     - Search config for "tap-hold-release 200 200" to adjust
 ;;
 ;; PREREQUISITE (Linux): Right spacebar must be pre-remapped to Scroll Lock at
 ;; keyboard firmware level (RK S70 supports this) since Kanata can't distinguish
@@ -67,11 +84,44 @@
   ;; tap=r, hold=num layer (both spaces held = numpad)
   rsnv (tap-hold-release 200 200 r (layer-while-held num))
 
+  ;; -------------------------------------------------------------------------
+  ;; Home Row Mods (Miryoku-style)
+  ;; -------------------------------------------------------------------------
+  ;; Each home row key does double duty: tap=letter, hold=modifier
+  ;; Use OPPOSITE hand modifier + letter for shortcuts (e.g., hold right H
+  ;; for Shift, tap left C for Shift+C)
+  ;;
+  ;; Timing: 200ms is a starting point. Adjust if you get misfires:
+  ;;   - Faster typists: try 150-175ms
+  ;;   - More forgiving: try 250ms
+  ;;   - Sunaku spent 6+ months tuning his - be patient!
+  ;;
+  ;; Left hand (pinky→index): Win, Alt, Ctrl, Shift
+  c_hr (tap-hold-release 200 200 c lmet)    ;; C → tap=c, hold=Win
+  i_hr (tap-hold-release 200 200 i lalt)    ;; I → tap=i, hold=Alt
+  a_hr (tap-hold-release 200 200 a lctl)    ;; A → tap=a, hold=Ctrl
+  e_hr (tap-hold-release 200 200 e lsft)    ;; E → tap=e, hold=Shift
+
+  ;; Right hand (index→pinky): Shift, Ctrl, Alt, Win (mirrored)
+  h_hr (tap-hold-release 200 200 h rsft)    ;; H → tap=h, hold=Shift
+  t_hr (tap-hold-release 200 200 t rctl)    ;; T → tap=t, hold=Ctrl
+  n_hr (tap-hold-release 200 200 n ralt)    ;; N → tap=n, hold=Alt
+  s_hr (tap-hold-release 200 200 s rmet)    ;; S → tap=s, hold=Win
+
   ;; Modifier shortcuts for nav layer
   undo C-z
   cut  C-x
   copy C-c
   pste C-v
+  redo C-y
+  stab S-tab
+
+  ;; One-shot (sticky) modifiers
+  ;; tap = mod for next key only, hold = normal mod behavior
+  ssft (one-shot 2000 lsft)
+  sctl (one-shot 2000 lctl)
+  salt (one-shot 2000 lalt)
+  smet (one-shot 2000 lmet)
 
   ;; Shifted symbols that need explicit shift
   excl S-1     ;; !
@@ -114,7 +164,7 @@
 (deflayer base
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
-  b    c    i    a    e    -    k    h    t    n    s    w    ret
+  b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
   lsft '    ,    .    /    ;    j    m    g    f    v    rsft
   ;; rmet mapped to @rspc for macOS (Right Cmd = right space behavior)
   lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
@@ -123,47 +173,38 @@
 ;; ----------------------------------------------------------------------------
 ;; Symbol Layer (Right Space Hold)
 ;; ----------------------------------------------------------------------------
-;; Design based on Sunaku's "Glorious Engrammer" philosophy:
-;;   - Inward rolls for common programming sequences
-;;   - Spacegrams solution: space/backspace/enter on right hand
-;;   - Brackets grouped logically
+;; Glove80-aligned Symbol Layer (mapped to 5-row keyboard)
 ;;
-;; Layout:
-;;   `  ~  [  ]  \     ^  <  >  $  @
-;;  esc !  (  )  #     |  {  }  +  *  &
-;;      %  "  '  ?  :    spc bspc ret tab _
+;; Row 1: Left bracket cluster   | Right sticky mods
+;; Row 2: Top row symbols        | Arrows + Home
+;; Row 3: Number row symbols     | Spacegrams + End
+;; Row 4: Bottom row symbols     | Delete + Select
+;; Row 5: & + \ on modifiers     | -
 ;;
 (deflayer symbol
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    grv  @tild [   ]    \    @cart @labk @rabk @dolr @at  _    _    _
-  esc  @excl @lprn @rprn @hash @pipe @lcbr @rcbr @plus @astr @amp  _    _
-  _    @perc @dquo '    @ques @coln spc  bspc ret  tab  @unds _
-  _    _    _              _              _    _    _    _
+  _    grv  [    @lprn @rprn ]    .    @ssft @sctl @salt @smet _    _    _
+  @excl ,    @lcbr @rcbr ;    @ques grv   left  up    down right home _    _
+  @hash @cart =    @unds @dolr @astr @dquo bspc  tab  spc   ret  end  _
+  @tild @labk @pipe -    @rabk /    '    del   @stab _    _    rsft
+  @amp @plus \              _              _    _    _    _
 )
 
 ;; ----------------------------------------------------------------------------
-;; Nav Layer (Left Space Hold)
+;; Nav Layer (Left Space Hold) - "Cursor Layer"
 ;; ----------------------------------------------------------------------------
-;; Vim-style navigation on right hand home positions
-;; Clipboard shortcuts on left hand
+;; Glove80-aligned Cursor Layer + requested mods
 ;;
-;; Layout:
-;;   _  _  _  _  _    home pgup up   pgdn end
-;;  esc undo cut copy paste _ left down rght _  _
-;;      _  _  _  _  _    _    _    _    _    _
-;;
-;; Note: Arrow positions match Enthium's KHTNS -> vim's HJKL concept
-;;   k (Enthium) -> left  (vim h)
-;;   h (Enthium) -> down  (vim j)
-;;   t (Enthium) -> right (vim l)
-;;   Above h    -> up    (vim k)
+;; Row 1: Editing keys           | Editing keys
+;; Row 2: Sticky shift + edit    | Edit + Sticky shift
+;; Row 3: Home row mods          | Arrow keys
+;; Row 4: Paste                  | Nav block
 ;;
 (deflayer nav
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    home pgup up   pgdn end  _    _    _
-  esc  @undo @cut @copy @pste _  left down rght _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              @rsnv _    _    _
+  esc  ret  spc  tab  del  ins  ins  del  tab  spc  ret  esc  _    _
+  tab  @ssft @redo @undo bspc @cut @cut bspc @undo @redo @ssft _    _    _
+  esc  lmet lalt lctl lsft @copy @copy left up   down right _    _
+  lsft _    _    _    _    @pste @pste home pgup pgdn end  rsft
+  lctl lmet lalt           _              @rsnv ralt rmet rctl
 )
 
 ;; ----------------------------------------------------------------------------

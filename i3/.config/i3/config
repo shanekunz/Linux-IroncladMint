@@ -44,6 +44,9 @@ exec --no-startup-id copyq
 # Keybinds reference window (rendered markdown, auto-sized)
 exec --no-startup-id ~/.config/i3/scripts/show-keybinds.sh
 
+# Keyboard layout reference window
+exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/layers.png
+
 # Set default browser
 exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
 
@@ -399,7 +402,7 @@ exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
 exec_always --no-startup-id "setxkbmap -layout us -option ''; pkill -x kanata; kanata -c ~/.config/kanata/kanata.kbd &"
 
 # Keyboard layout reference image (floating)
-bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/Pictures/docs/enthium-keyboard-layout-with-layers.png
+bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/layers.png
 
 # Keyboard layout switching
 # Mod+Control+e: Switch to Engrammer (XKB fallback)
