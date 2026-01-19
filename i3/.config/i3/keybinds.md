@@ -16,6 +16,8 @@
 
 **Development:**
 - `Mod+n` - Neovim (project selector: ~/projects/* or ~/)
+- `Mod+Shift+n` - OpenCode (project selector: ~/projects/* or ~/)
+- `Mod+Alt+g` - LazyGit (project selector: ~/projects/* or ~/)
 - `Mod+v` - VS Code
 - `Mod+Shift+v` - Clipboard history (CopyQ)
 - `Mod+d` - Discord

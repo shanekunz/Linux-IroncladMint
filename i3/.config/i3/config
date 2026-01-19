@@ -8,9 +8,9 @@ exec_always --no-startup-id ~/.config/i3/scripts/env-scaling.sh
 # Font for window titles
 font pango:monospace 10
 
-# Start with no borders
-default_border pixel 2
-default_floating_border pixel 2
+# Window borders (neon orange for focused, dark for unfocused)
+default_border pixel 3
+default_floating_border pixel 3
 
 # Gaps between windows (optional, comment out if you don't want gaps)
 gaps inner 8
@@ -45,7 +45,7 @@ exec --no-startup-id copyq
 exec --no-startup-id ~/.config/i3/scripts/show-keybinds.sh
 
 # Keyboard layout reference window
-exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/layers.png
+exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
 
 # Set default browser
 exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
@@ -303,6 +303,8 @@ bindsym $mod+a exec pavucontrol
 
 # Development
 bindsym $mod+n exec --no-startup-id ~/.config/i3/scripts/nvim-project-launcher.sh
+bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/scripts/opencode-project-launcher.sh
+bindsym $mod+Mod1+g exec --no-startup-id ~/.config/i3/scripts/lazygit-project-launcher.sh
 bindsym $mod+v exec code
 bindsym $mod+Shift+v exec copyq toggle
 bindsym $mod+d exec flatpak run com.discordapp.Discord
@@ -338,6 +340,9 @@ bindsym $mod+Control+g exec steam
 
 # Center mouse on new windows
 for_window [class=".*"] exec --no-startup-id ~/.config/i3/scripts/center-mouse.sh
+
+# Force borders on ALL windows (some apps like Ghostty request no decorations)
+for_window [class=".*"] border pixel 3
 
 # Float specific windows
 for_window [class="Pavucontrol"] floating enable
@@ -390,10 +395,10 @@ bar {
 #####################
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
-client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
-client.unfocused        #333333 #222222 #888888 #292d2e   #222222
-client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.focused          #ff6600 #1a1a2e #ffffff #ff6600   #ff6600
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #333333
+client.unfocused        #222222 #1a1a2e #888888 #292d2e   #222222
+client.urgent           #ff5555 #900000 #ffffff #ff5555   #ff5555
 
 
 # keyboard layout and mouse click swap
@@ -402,7 +407,7 @@ exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
 exec_always --no-startup-id "setxkbmap -layout us -option ''; pkill -x kanata; kanata -c ~/.config/kanata/kanata.kbd &"
 
 # Keyboard layout reference image (floating)
-bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/layers.png
+bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
 
 # Keyboard layout switching
 # Mod+Control+e: Switch to Engrammer (XKB fallback)

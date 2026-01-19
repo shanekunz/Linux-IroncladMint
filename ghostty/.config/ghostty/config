@@ -43,6 +43,10 @@
 # resize-overlay-duration = 4s 200ms
 font-size = 10
 
+# Use server-side decorations (let i3 handle borders)
+window-decoration = server
+gtk-adwaita = false
+
 keybind = shift+enter=text:\x1b\r
 
 # Fix Shift+Space printing "space" in Claude Code
