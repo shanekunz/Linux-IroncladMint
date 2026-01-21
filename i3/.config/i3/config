@@ -344,6 +344,9 @@ for_window [class=".*"] exec --no-startup-id ~/.config/i3/scripts/center-mouse.s
 # Force borders on ALL windows (some apps like Ghostty request no decorations)
 for_window [class=".*"] border pixel 3
 
+# No border for open-whispr floating indicator (Voice Recorder window only)
+for_window [class="open-whispr" title="Voice Recorder"] border none
+
 # Float specific windows
 for_window [class="Pavucontrol"] floating enable
 for_window [class="Nitrogen"] floating enable
