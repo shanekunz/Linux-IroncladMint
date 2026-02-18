@@ -1,0 +1,188 @@
+;; ============================================================================
+;; Kanata Configuration: Enthium v13 Layout with Home Row Mods - WINDOWS VERSION
+;; ============================================================================
+;;
+;; This is the WINDOWS version. Key difference from Linux:
+;;   Left hand home row: C=Alt, I=Win (swapped so physical 'c' works for GlazeWM)
+;;   Right hand home row: N=Win, S=Alt (swapped for symmetry)
+;;
+;; This config implements the Enthium v13 keyboard layout with 4 layers:
+;;   - Base:   Enthium v13 alphas (R on right-space tap) + HOME ROW MODS
+;;   - Symbol: Programming symbols (hold right space)
+;;   - Nav:    Navigation + clipboard (hold left space)
+;;   - Num:    Numpad (hold BOTH spaces)
+;;
+;; HOME ROW MODS - WINDOWS VERSION (swapped for GlazeWM):
+;;   Your home row keys now do double duty - tap for letter, hold for modifier:
+;;
+;;   Left hand:   C=Alt  I=Win  A=Ctrl  E=Shift  (C/I swapped from Linux!)
+;;   Right hand:  H=Shift  T=Ctrl  N=Win  S=Alt   (N/S swapped for symmetry)
+;;
+;;   WHY SWAPPED: GlazeWM uses Alt instead of i3's Win. Swapping makes the same
+;;   PHYSICAL KEYS work for WM on both systems:
+;;     Linux (i3): Hold C (Win) for window management
+;;     Windows (GlazeWM): Hold C (Alt) for window management <- Same finger!
+;;
+;;   Usage: Use OPPOSITE hand for shortcuts. Examples:
+;;     - Ctrl+C (copy): Hold A (left Ctrl) + tap C (just tap, don't hold)
+;;     - Ctrl+S (save): Hold T (right Ctrl) + tap S (just tap, don't hold)
+;;     - Alt+Tab: Hold C (left Alt) + tap Tab  <- Changed from I to C!
+;;     - Win+Tab: Hold I (left Win) + tap Tab  <- Changed from C to I!
+;;     - GlazeWM: Hold C (left Alt) + tap H/J/K/L for navigation
+;;
+;;   Timing: 200ms tap-hold threshold. If you get misfires:
+;;     - Slower/more forgiving: increase to 250ms
+;;     - Faster/more responsive: decrease to 150-175ms
+;;     - Search config for "tap-hold-release 200 200" to adjust
+;;
+;; PREREQUISITE: Right spacebar must be pre-remapped to Scroll Lock at
+;; keyboard firmware level (RK S70 supports this) since Kanata can't distinguish
+;; left/right spacebar natively.
+;;
+;; Emergency exit: Ctrl+Space+Escape (works on raw input before remapping)
+;; ============================================================================
+
+;; ----------------------------------------------------------------------------
+;; Global Configuration
+;; ----------------------------------------------------------------------------
+(defcfg
+  ;; Process keys not in defsrc - required for tap-hold-release to work
+  process-unmapped-keys yes
+
+  ;; Required for defchordsv2 to work properly
+  concurrent-tap-hold yes
+)
+
+;; ----------------------------------------------------------------------------
+;; Source Layout (Physical ANSI keyboard)
+;; ----------------------------------------------------------------------------
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            slck ralt rmet rctl
+)
+
+;; ----------------------------------------------------------------------------
+;; Aliases (Named Actions)
+;; ----------------------------------------------------------------------------
+(defalias
+  ;; Space bars with tap-hold behavior
+  ;; tap-hold-release params: (tap-timeout hold-timeout tap-action hold-action)
+
+  ;; Left space: tap=space, hold=nav layer
+  lspc (tap-hold-release 200 200 spc (layer-while-held nav))
+
+  ;; Right space: tap=r, hold=symbol layer
+  rspc (tap-hold-release 200 200 r (layer-while-held symbol))
+
+  ;; Right space behavior in nav layer: tap=r, hold=num layer
+  rsnv (tap-hold-release 200 200 r (layer-while-held num))
+
+  ;; -------------------------------------------------------------------------
+  ;; Home Row Mods - WINDOWS VERSION
+  ;; -------------------------------------------------------------------------
+  ;; Left hand (pinky→index): Alt, Win, Ctrl, Shift (SWAPPED for Windows!)
+  ;; On Windows: GlazeWM uses Alt instead of i3's Win, so we swap c/i
+  ;; This makes physical 'c' give Alt (for GlazeWM) and 'i' give Win
+  c_hr (tap-hold-release 200 200 c lalt)    ;; C → tap=c, hold=Alt (was Win on Linux)
+  i_hr (tap-hold-release 200 200 i lmet)    ;; I → tap=i, hold=Win (was Alt on Linux)
+  a_hr (tap-hold-release 200 200 a lctl)    ;; A → tap=a, hold=Ctrl
+  e_hr (tap-hold-release 200 200 e lsft)    ;; E → tap=e, hold=Shift
+
+  ;; Right hand (index→pinky): Shift, Ctrl, Win, Alt (SWAPPED for symmetry!)
+  ;; Swapped n/s so outer pinky keys (c/s) give WM mod, inner (i/n) give other mod
+  h_hr (tap-hold-release 200 200 h rsft)    ;; H → tap=h, hold=Shift
+  t_hr (tap-hold-release 200 200 t rctl)    ;; T → tap=t, hold=Ctrl
+  n_hr (tap-hold-release 200 200 n rmet)    ;; N → tap=n, hold=Win (was Alt)
+  s_hr (tap-hold-release 200 200 s ralt)    ;; S → tap=s, hold=Alt (was Win)
+
+  ;; Modifier shortcuts for nav layer
+  undo C-z
+  cut  C-x
+  copy C-c
+  pste C-v
+  redo C-y
+  stab S-tab
+
+  ;; One-shot (sticky) modifiers
+  ssft (one-shot 2000 lsft)
+  sctl (one-shot 2000 lctl)
+  salt (one-shot 2000 lalt)
+  smet (one-shot 2000 lmet)
+
+  ;; Shifted symbols
+  excl S-1
+  at   S-2
+  hash S-3
+  dolr S-4
+  perc S-5
+  cart S-6
+  amp  S-7
+  astr S-8
+  lprn S-9
+  rprn S-0
+  unds S-min
+  plus S-=
+  tild S-grv
+  pipe S-\
+  lcbr S-[
+  rcbr S-]
+  labk S-,
+  rabk S-.
+  ques S-/
+  coln S-;
+  dquo S-'
+)
+
+;; ----------------------------------------------------------------------------
+;; Base Layer: Enthium v13
+;; ----------------------------------------------------------------------------
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
+  b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
+  lsft '    ,    .    /    ;    j    m    g    f    v    rsft
+  lctl lmet lalt           @lspc          @rspc @rspc rmet rctl
+)
+
+;; ----------------------------------------------------------------------------
+;; Symbol Layer (Right Space Hold)
+;; ----------------------------------------------------------------------------
+(deflayer symbol
+  _    grv  [    @lprn @rprn ]    .    @ssft @sctl @salt @smet _    _    _
+  @excl ,    @lcbr @rcbr ;    @ques grv   left  up    down right home _    _
+  @hash @cart =    @unds @dolr @astr @dquo bspc  tab  spc   ret  end  _
+  @tild @labk @pipe -    @rabk /    '    del   @stab _    _    rsft
+  @amp @plus \              _    _    _    _    _
+)
+
+;; ----------------------------------------------------------------------------
+;; Nav Layer (Left Space Hold)
+;; ----------------------------------------------------------------------------
+(deflayer nav
+  esc  ret  spc  tab  del  ins  ins  del  tab  spc  ret  esc  _    _
+  tab  @ssft @redo @undo bspc @cut @cut bspc @undo @redo @ssft _    _    _
+  esc  lmet lalt lctl lsft @copy @copy left up   down right _    _
+  lsft _    _    _    _    @pste @pste home pgup pgdn end  rsft
+  lctl lmet lalt           @rsnv          _    @rsnv rmet rctl
+)
+
+;; ----------------------------------------------------------------------------
+;; Num Layer (Both Spaces Held)
+;; ----------------------------------------------------------------------------
+(deflayer num
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    7    8    9    _    _    _    _
+  _    _    _    _    _    _    _    4    5    6    _    _    _
+  _    _    _    _    _    _    0    1    2    3    _    _
+  _    _    _              _              _    _    _    _
+)
+
+;; ----------------------------------------------------------------------------
+;; Chords (Key Combos)
+;; ----------------------------------------------------------------------------
+(defchordsv2
+  (n h) esc 50 all-released ()
+)

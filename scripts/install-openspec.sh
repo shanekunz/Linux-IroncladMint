@@ -12,6 +12,9 @@ NC='\033[0m'
 
 echo -e "${YELLOW}[install-openspec]${NC} Checking for openspec..."
 
+# Ensure user-local bins and mise shims are available
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
 # Check if npm is available
 if ! command -v npm &> /dev/null; then
     echo -e "${RED}[install-openspec]${NC} npm not found. Please run install-mise.sh first to install Node.js"
@@ -28,6 +31,11 @@ fi
 echo -e "${YELLOW}[install-openspec]${NC} Installing openspec via npm..."
 
 npm install -g @fission-ai/openspec
+
+# Refresh shims for mise-managed Node installations
+if command -v mise &> /dev/null; then
+    mise reshim || true
+fi
 
 # Verify installation
 if command -v openspec &> /dev/null; then

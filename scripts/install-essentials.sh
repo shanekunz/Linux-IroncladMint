@@ -20,6 +20,7 @@ sudo apt install -y \
     wget \
     git \
     jq \
+    unzip \
     ca-certificates \
     gnupg \
     lsb-release

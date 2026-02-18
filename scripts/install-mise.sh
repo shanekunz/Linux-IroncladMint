@@ -50,8 +50,14 @@ if command -v mise &> /dev/null; then
     mise use --global rust@latest
     echo -e "${GREEN}[install-mise]${NC} Rust installed"
 
-    # Install .NET (already installed manually, but ensure it's in config)
-    echo -e "${GREEN}[install-mise]${NC} .NET SDK configured"
+    # Install .NET SDK (prefer LTS alias, fall back to current LTS major)
+    if mise use --global dotnet@lts; then
+        echo -e "${GREEN}[install-mise]${NC} .NET SDK LTS installed"
+    elif mise use --global dotnet@8; then
+        echo -e "${GREEN}[install-mise]${NC} .NET SDK 8 installed (fallback from dotnet@lts)"
+    else
+        echo -e "${YELLOW}[install-mise]${NC} .NET SDK install skipped (mise backend unavailable on this system)"
+    fi
 
     echo -e "\n${GREEN}[install-mise]${NC} Development environment ready!"
     echo -e "\n${YELLOW}Installed tools:${NC}"

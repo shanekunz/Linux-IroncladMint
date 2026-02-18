@@ -67,7 +67,6 @@ run_script "install-python-tools.sh"
 run_script "install-claude-cli.sh"
 run_script "install-opencode.sh"
 run_script "install-openspec.sh"
-run_script "install-ohmyopencode.sh"
 run_script "install-glow.sh"
 run_script "install-commitizen.sh"
 
