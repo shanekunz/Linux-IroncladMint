@@ -244,7 +244,7 @@ keybindings:
     bindings: ['alt+tab']
 
   # Quick apps
-  - commands: ['shell-exec "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"']
+  - commands: ['shell-exec cmd /c start "" "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"']
     bindings: ['alt+b']
   - commands: ['shell-exec firefox']
     bindings: ['alt+shift+b']
@@ -254,17 +254,17 @@ keybindings:
     bindings: ['alt+a']
   - commands: ['shell-exec code']
     bindings: ['alt+v']
-  - commands: ['shell-exec "C:\Users\skunz\AppData\Local\Programs\Sunsama\Sunsama.exe"']
+  - commands: ['shell-exec cmd /c start "" "C:\Users\skunz\AppData\Local\Programs\Sunsama\Sunsama.exe"']
     bindings: ['alt+shift+s']
-  - commands: ['shell-exec "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe --new-window https://claude.ai"']
+  - commands: ['shell-exec cmd /c start "" "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" "https://claude.ai"']
     bindings: ['alt+c']
   - commands: ['shell-exec cmd /c echo Windows clipboard: Win+V']
     bindings: ['alt+shift+v']
 
   # Microsoft/work apps (if installed)
-  - commands: ['shell-exec "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"']
+  - commands: ['shell-exec cmd /c start "" "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"']
     bindings: ['alt+shift+o']
-  - commands: ['shell-exec "C:\Users\skunz\AppData\Local\Microsoft\WindowsApps\ms-teams.exe"']
+  - commands: ['shell-exec ms-teams.exe']
     bindings: ['alt+shift+t']
 
   # System shortcuts
@@ -280,7 +280,7 @@ keybindings:
     bindings: ['alt+shift+x']
   - commands: ['shell-exec ms-screenclip:']
     bindings: ['alt+grave', 'alt+shift+period']
-  - commands: ['shell-exec notepad "C:\Users\skunz\projects\Linux-IroncladMint\windows\work\KEYBINDINGS.md"']
+  - commands: ['shell-exec cmd /c start "" notepad "C:\Users\skunz\projects\Linux-IroncladMint\windows\work\KEYBINDINGS.md"']
     bindings: ['alt+shift+slash']
-  - commands: ['shell-exec notepad "%USERPROFILE%\.glzr\glazewm\config.yaml"']
+  - commands: ['shell-exec cmd /c start "" notepad "%USERPROFILE%\.glzr\glazewm\config.yaml"']
     bindings: ['alt+ctrl+slash']

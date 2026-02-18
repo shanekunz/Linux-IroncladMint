@@ -18,7 +18,9 @@ New-Item -ItemType SymbolicLink -Path "C:\Users\skunz\Documents\kanata\kanata.kb
 
 Startup order matters.
 
-You need to experiment with whether Kanata or GlazeWM starts first on your machine. The goal is to get behavior where you can think in conceptual keys (for example `mod+b` means browser) without manually translating Enthium letters to physical key locations in GlazeWM.
+Recommended on this machine: start **GlazeWM first**, then **Kanata**.
+
+If things drift after updates, re-test startup order. The goal is conceptual bindings (for example `mod+b` means browser) without manually translating Enthium letters to physical key locations.
 
 ## Quick Test
 
@@ -34,7 +36,7 @@ You need to experiment with whether Kanata or GlazeWM starts first on your machi
 
 ## Kanata Auto Start
 
-Use Windows Task Scheduler so Kanata starts at login with highest privileges.
+Use Windows Task Scheduler so Kanata starts at login with highest privileges and a short delay (after GlazeWM is up).
 
 1. Open Task Scheduler -> Create Task.
 2. General:
@@ -43,6 +45,7 @@ Use Windows Task Scheduler so Kanata starts at login with highest privileges.
    - Configure for `Windows 10/11`
 3. Triggers:
    - `At log on` (your user)
+   - Check `Delay task for` and set `10 seconds` (or `15` if needed)
 4. Actions:
    - Program/script: path to your Kanata exe
    - Start in: `C:\Users\skunz\Documents\kanata`
