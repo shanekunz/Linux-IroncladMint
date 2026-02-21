@@ -101,6 +101,7 @@ stow */      # All configs (skip scripts and .git)
 - Whatsie (WhatsApp client, Flatpak)
 - Teams for Linux (Flatpak)
 - LocalSend (Flatpak)
+- Telegram (Flatpak)
 
 ### Productivity
 - Obsidian (Flatpak)
@@ -119,6 +120,11 @@ stow */      # All configs (skip scripts and .git)
 - glow (markdown renderer)
 - Flatpak + Flathub
 - Kanata (keyboard remapper with Enthium v13 layout)
+- CopyQ (clipboard manager)
+
+### Smart Home (Optional)
+- Home Assistant (Docker)
+- Matter Server (Docker) - for Apple Home / Matter device integration
 
 ### Custom Builds
 - Obsbot Tiny 2 controller (Rust)
@@ -140,10 +146,10 @@ Created using custom webapp script (via install-webapps.sh):
 
 ```
 ~/dotfiles/
-├── bash/                    # .bashrc, .profile
+├── bash/                    # .bashrc, .profile (sources ~/.secrets)
 ├── git/                     # .gitconfig
-├── x11/                     # .Xresources
-├── i3/.config/i3/          # Complete i3 setup
+├── x11/                     # .Xresources, .xprofile (HiDPI scaling)
+├── i3/.config/i3/          # Complete i3 setup + keybinds.md
 ├── nvim/.config/nvim/      # LazyVim configuration
 ├── ghostty/.config/ghostty/
 ├── rofi/.config/rofi/
@@ -152,14 +158,31 @@ Created using custom webapp script (via install-webapps.sh):
 ├── lazygit/.config/lazygit/
 ├── flameshot/.config/flameshot/
 ├── kanata/.config/kanata/  # Enthium v13 keyboard layout
+├── kanata/docs/             # Kanata layer diagrams + KLE JSON sources
 ├── nitrogen/.config/nitrogen/
 ├── signal/.config/Signal/
 ├── sunshine/.config/sunshine/
 ├── retroarch/.config/retroarch/
+├── copyq/.config/copyq/    # Clipboard manager commands
+├── environment.d/          # HiDPI env vars (GDK_SCALE, QT_SCALE_FACTOR)
+├── gh/.config/gh/          # GitHub CLI preferences
+├── mise/.config/mise/      # Tool version manager config
 ├── bin/.local/bin/         # webapp script, lazygit, sunsama
+├── home-scripts/           # .secrets.template for API keys
 ├── obsbot/.local/          # Obsbot source and binary
-└── scripts/                # 52+ installation scripts
+└── scripts/                # 55+ installation scripts
 ```
+
+## Kanata Layout Documentation
+
+Kanata keymap visuals and their editable sources are in `kanata/docs/`.
+
+- Config source of truth: `kanata/.config/kanata/kanata.kbd`
+- Diagram source of truth: `kanata/docs/*.json` (Keyboard Layout Editor format)
+- Rendered diagrams: `kanata/docs/*.png`
+
+When changing Kanata layers, keep config and diagrams in sync. See
+`kanata/docs/README.md` for the update workflow and KLE link.
 
 ## Neovim Configuration
 
@@ -305,7 +328,46 @@ The `.local.conf` file is gitignored and won't be committed to your repository.
 - Vim-style navigation (hjkl)
 - Split controls for 2x2 grids and complex layouts
 
-## Backup
+## Secrets Management
+
+API keys and tokens are stored in `~/.secrets` (not tracked in git):
+
+```bash
+# First time setup - copy template and fill in your keys
+cp ~/dotfiles/home-scripts/.secrets.template ~/.secrets
+chmod 600 ~/.secrets
+nano ~/.secrets
+```
+
+The `.bashrc` automatically sources this file. Keys included:
+- `JIRA_API_TOKEN` - Atlassian API token
+- `LINEAR_API_KEY` - Linear project management
+- `OPENAI_API_KEY` - OpenAI API
+- `BRAVE_API_KEY` - Brave Search API
+- Add your own as needed
+
+## System State Backup
+
+For data NOT in dotfiles (OpenClaw, HomeAssistant, etc.), use the backup script:
+
+```bash
+# Run manually
+./scripts/backup-system-state.sh
+
+# Or use hotkey: Mod+Control+b
+```
+
+This creates an **encrypted archive** in `~/system-backup/` containing:
+- OpenClaw (memory, credentials, agent auth, skills config)
+- HomeAssistant config and token
+- Matter server device pairings
+- `~/.secrets` file
+- GOG CLI, OpenCode, JIRA configs
+- Keyrings
+
+Upload the encrypted backup to your cloud storage (iCloud, Google Drive, etc.) for disaster recovery.
+
+## Dotfiles Backup
 
 The `stow-dotfiles.sh` script automatically backs up existing dotfiles before deployment:
 
@@ -412,6 +474,36 @@ cat scripts/install-PACKAGE.sh
 ./scripts/install-PACKAGE.sh
 ```
 
+### Keyring Password Prompts
+
+If you get password prompts for Edge, git, or GOG on startup, the GNOME keyring password doesn't match your login password:
+
+```bash
+./scripts/fix-keyring.sh
+```
+
+Choose option 1 to reset all keyrings, then log out/in and set the new keyring password to match your login password.
+
+### HomeAssistant / Matter Server Setup
+
+To set up Home Assistant with Matter support (for Apple Home devices):
+
+```bash
+# Install Docker first if needed
+sudo apt install docker.io
+sudo usermod -aG docker $USER
+# Log out and back in
+
+# Run the setup script
+./scripts/setup-homeassistant.sh
+```
+
+Access Home Assistant at http://localhost:8123
+
+Data is stored in:
+- `~/homeassistant/` - HA config, automations, database
+- `~/matter-server/` - Matter device pairings
+
 ## System Requirements
 
 - Linux Mint (tested on Linux Mint 21+)
@@ -432,4 +524,4 @@ MIT License - Feel free to use and modify for your own setup!
 
 **Author**: Shane Kunz
 **Email**: shanemkunz@gmail.com
-**Last Updated**: November 2025
+**Last Updated**: February 2026

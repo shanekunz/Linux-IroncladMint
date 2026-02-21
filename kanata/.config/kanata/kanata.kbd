@@ -1,9 +1,9 @@
 ;; ============================================================================
-;; Kanata Configuration: Enthium v13 Layout with Home Row Mods
+;; Kanata Configuration: Enthium Layout with Home Row Mods
 ;; ============================================================================
 ;;
 ;; This config implements the Enthium v13 keyboard layout with 4 layers:
-;;   - Base:   Enthium v13 alphas (R on right-space tap) + HOME ROW MODS
+;;   - Base:   Enthium alphas (R on right-space tap) + HOME ROW MODS
 ;;   - Symbol: Programming symbols (hold right space)
 ;;   - Nav:    Navigation + clipboard (hold left space)
 ;;   - Num:    Numpad (hold BOTH spaces)
@@ -148,12 +148,12 @@
 )
 
 ;; ----------------------------------------------------------------------------
-;; Base Layer: Enthium v13
+;; Base Layer: Enthium (v14 punctuation swap: ; and /)
 ;; ----------------------------------------------------------------------------
-;; Layout reference (Enthium v13):
+;; Layout reference (Enthium current):
 ;;   q  y  o  u  =    x  l  d  p  z
 ;;   b  c  i  a  e    -  k  h  t  n  s  w
-;;      '  ,  .  /  ;    j  m  g  f  v
+;;      '  ,  .  ;  /    j  m  g  f  v
 ;;                 R (right space tap)
 ;;
 ;; Physical QWERTY -> Enthium mapping:
@@ -165,7 +165,7 @@
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
   b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
-  lsft '    ,    .    /    ;    j    m    g    f    v    rsft
+  lsft '    ,    .    ;    /    j    m    g    f    v    rsft
   ;; rmet mapped to @rspc for macOS (Right Cmd = right space behavior)
   lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
 )
@@ -173,38 +173,37 @@
 ;; ----------------------------------------------------------------------------
 ;; Symbol Layer (Right Space Hold)
 ;; ----------------------------------------------------------------------------
-;; Glove80-aligned Symbol Layer (mapped to 5-row keyboard)
+;; JS/C#-focused symbol layer
 ;;
-;; Row 1: Left bracket cluster   | Right sticky mods
-;; Row 2: Top row symbols        | Arrows + Home
-;; Row 3: Number row symbols     | Spacegrams + End
-;; Row 4: Bottom row symbols     | Delete + Select
-;; Row 5: & + \ on modifiers     | -
+;; Focus only on rows 2-4 for reach comfort.
+;; Rows 1 and 5 are intentionally disabled (_).
+;; Bracket stack on left hand:
+;;   row above home:   {   }
+;;   home row:         (   )
+;;   row below home:   [   ]
 ;;
 (deflayer symbol
-  _    grv  [    @lprn @rprn ]    .    @ssft @sctl @salt @smet _    _    _
-  @excl ,    @lcbr @rcbr ;    @ques grv   left  up    down right home _    _
-  @hash @cart =    @unds @dolr @astr @dquo bspc  tab  spc   ret  end  _
-  @tild @labk @pipe -    @rabk /    '    del   @stab _    _    rsft
-  @amp @plus \              _              _    _    _    _
+  _    _     _     _     _     _     _    _     _     _     _     _    _    _
+  grv  @excl @lcbr @rcbr @at  @perc _     left  up    down  right home _    _
+  @hash @dolr @lprn @rprn @astr @tild _   bspc tab   spc   ret   end  _
+  @cart @amp [     ]     @pipe \    _    del  @stab _    _    rsft
+  _    _    _              _              _    _    _    _
 )
 
 ;; ----------------------------------------------------------------------------
 ;; Nav Layer (Left Space Hold) - "Cursor Layer"
 ;; ----------------------------------------------------------------------------
-;; Glove80-aligned Cursor Layer + requested mods
+;; Focused cursor/edit layer
 ;;
-;; Row 1: Editing keys           | Editing keys
-;; Row 2: Sticky shift + edit    | Edit + Sticky shift
-;; Row 3: Home row mods          | Arrow keys
-;; Row 4: Paste                  | Nav block
+;; Row 1 and row 5 are mostly disabled to reduce reach/noise.
+;; Nav actions are concentrated on rows 2-4.
 ;;
 (deflayer nav
-  esc  ret  spc  tab  del  ins  ins  del  tab  spc  ret  esc  _    _
-  tab  @ssft @redo @undo bspc @cut @cut bspc @undo @redo @ssft _    _    _
-  esc  lmet lalt lctl lsft @copy @copy left up   down right _    _
-  lsft _    _    _    _    @pste @pste home pgup pgdn end  rsft
-  lctl lmet lalt           _              @rsnv ralt rmet rctl
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @redo @undo bspc @cut @cut bspc @undo @redo _    _    _    _
+  esc  lmet lalt lctl _    @copy @copy left up   down right _    _
+  _    _    _    _    _    @pste @pste home pgup pgdn end  _
+  _    _    _              _              @rsnv _    _    _
 )
  
 ;; ----------------------------------------------------------------------------

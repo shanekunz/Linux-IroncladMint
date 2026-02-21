@@ -1,11 +1,12 @@
 ! Cursor size configuration
-Xcursor.size: 16
+! For 150% scaling: 16 * 1.5 = 24
+Xcursor.size: 24
 Xcursor.theme: Breeze
 
 ! DPI and font rendering
 ! For 125% scaling, use 120 (96 * 1.25)
 ! For 150% scaling, use 144 (96 * 1.5)
-Xft.dpi: 96
+Xft.dpi: 144
 Xft.antialias: true
 Xft.hinting: true
 Xft.hintstyle: hintfull

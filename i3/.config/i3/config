@@ -35,6 +35,10 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id dunst
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 
+# Keyring daemon for storing passwords (Edge, git credentials, etc.)
+# The eval exports SSH_AUTH_SOCK and GPG_AGENT_INFO for SSH/GPG integration
+exec --no-startup-id eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+
 # Accountable2You (if it's not already in startup apps)
 exec --no-startup-id accountable2you
 
@@ -45,14 +49,14 @@ exec --no-startup-id copyq
 exec --no-startup-id ~/.config/i3/scripts/show-keybinds.sh
 
 # Keyboard layout reference window
-exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
+exec --no-startup-id feh --title "Keyboard Layout" ~/projects/dotfiles/kanata/docs/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
 
 # Set default browser
 exec --no-startup-id xdg-settings set default-web-browser microsoft-edge.desktop
 
 # Load Xresources and set cursor theme/size
 exec_always --no-startup-id xrdb -merge ~/.Xresources
-exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-size 16
+# Cursor size set dynamically by scaling.sh (24px at 150% scale)
 exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-theme 'Breeze'
 exec_always --no-startup-id xsetroot -cursor_name left_ptr
 
@@ -94,7 +98,10 @@ bindsym $mod+Shift+x exec i3lock -c 000000
 bindsym $mod+Shift+Control+Mod1+s exec systemctl suspend
 
 # Boot menu (select OS to reboot into)
-bindsym $mod+Control+r exec --no-startup-id ~/dotfiles/scripts/boot-menu.sh
+bindsym $mod+Control+r exec --no-startup-id ~/projects/dotfiles/scripts/boot-menu.sh
+
+# System state backup (OpenClaw, HomeAssistant, secrets - encrypted to ~/system-backup/)
+bindsym $mod+Control+b exec --no-startup-id ghostty -e ~/projects/dotfiles/scripts/backup-system-state.sh
 
 #####################
 # WINDOW NAVIGATION
@@ -410,7 +417,7 @@ exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
 exec_always --no-startup-id "setxkbmap -layout us -option ''; pkill -x kanata; kanata -c ~/.config/kanata/kanata.kbd &"
 
 # Keyboard layout reference image (floating)
-bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/dotfiles/kanata/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
+bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/projects/dotfiles/kanata/docs/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
 
 # Keyboard layout switching
 # Mod+Control+e: Switch to Engrammer (XKB fallback)

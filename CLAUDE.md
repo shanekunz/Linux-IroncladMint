@@ -105,7 +105,7 @@ All 52 scripts are **idempotent** - safe to run multiple times.
 - Window Manager Stack (i3, rofi, picom, etc.)
 - Development Tools (git, neovim, vscode, mise, etc.)
 - Browsers (firefox, chromium, edge)
-- Communication (discord, zoom, signal, whatsie)
+- Communication (discord, zoom, signal, whatsie, telegram)
 - Productivity (obsidian, todoist, teams, etc.)
 - Media & Gaming (obs, steam, retroarch, sunshine)
 - Networking (tailscale)
@@ -140,6 +140,18 @@ When adding/changing i3 keybinds or features:
 ### Other Important Docs
 - **Main README**: `README.md` - General overview and setup instructions
 - **This File**: `CLAUDE.md` - Claude-specific context
+
+### Secrets Management
+- **Template**: `home-scripts/.secrets.template` - API keys template (tracked)
+- **User file**: `~/.secrets` - Actual API keys (NOT tracked, user creates from template)
+- **Bashrc**: Sources `~/.secrets` automatically
+- Keys: JIRA_API_TOKEN, LINEAR_API_KEY, OPENAI_API_KEY, BRAVE_API_KEY, etc.
+
+### Utility Scripts (not install scripts)
+These scripts are for system maintenance, not package installation:
+- `scripts/backup-system-state.sh` - Backup OpenClaw, HomeAssistant, secrets (encrypted)
+- `scripts/setup-homeassistant.sh` - Create HomeAssistant + Matter Docker containers
+- `scripts/fix-keyring.sh` - Fix GNOME keyring password prompts on i3
 
 ## Important Notes
 
@@ -256,6 +268,7 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 
 ⚠️ **When making changes:**
 - Keep `keybinds.md` in sync with `i3/config`
+- Keep `kanata/.config/kanata/kanata.kbd` in sync with `kanata/docs/` diagrams
 - Test install scripts for idempotency
 - Update `README.md` if adding major new features
 - Commit related changes together with clear messages

@@ -12,4 +12,6 @@ Based on sunaku's [Engrammer](https://github.com/sunaku/engrammer) family of lay
 
 Visual keymaps + Kanata config in my dotfiles.
 
+Docs and editable keymap JSON live in `kanata/docs/README.md`.
+
 [image]

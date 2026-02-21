@@ -1,0 +1,7 @@
+[tools]
+dotnet = "latest"
+node = "lts"
+rust = "latest"
+
+[settings]
+experimental = true

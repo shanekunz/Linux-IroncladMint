@@ -116,6 +116,7 @@
 - `Mod+Shift+q` - Shutdown computer
 - `Mod+Shift+Control+Alt+s` - Sleep/suspend
 - `Mod+Control+r` - Boot menu (select OS to reboot into: one-time or set as default)
+- `Mod+Control+b` - Backup system state (OpenClaw, HA, secrets → encrypted archive)
 - `Mod+Shift+/` - Show this help file
 
 ## Resize Mode (Mod+r to enter)

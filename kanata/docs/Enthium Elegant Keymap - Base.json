@@ -159,23 +159,28 @@
     {
       "c": "#ffd54f",
       "a": 5,
-      "f2": 1,
+      "fa": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
       "n": true
     },
     "\nShift\n\n\n\n\nH",
     {
-      "c": "#64b5f6",
-      "f2": 1
+      "c": "#64b5f6"
     },
     "\nCtrl\n\n\n\n\nT",
     {
-      "c": "#aed581",
-      "f2": 1
+      "c": "#aed581"
     },
     "\nAlt\n\n\n\n\nN",
     {
-      "c": "#ef9a9a",
-      "f2": 1
+      "c": "#ef9a9a"
     },
     "\nMod\n\n\n\n\nS",
     {
@@ -222,8 +227,8 @@
     },
     "<\n,",
     ">\n.",
-    "?\n/",
     ":\n;",
+    "?\n/",
     {
       "x": 5.5,
       "a": 7
@@ -285,7 +290,7 @@
     "\nHold for Navigation Layer\n\n\n\n\nSpace",
     {
       "x": 5.25,
-      "c": "#fff176",
+      "c": "#ffaf00",
       "w": 3.25
     },
     "\nHold for Symbol Layer\n\n\n\n\nR",

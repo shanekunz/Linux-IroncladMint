@@ -135,3 +135,12 @@ export PATH=/home/shane/.opencode/bin:$PATH
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# OpenClaw Completion
+source <(openclaw completion --shell bash)
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="$PATH:$HOME/go/bin"
+
+# Load secrets (API keys, tokens) from separate untracked file
+# To edit: nano ~/.secrets (or copy from ~/.secrets.template)
+[ -f ~/.secrets ] && source ~/.secrets

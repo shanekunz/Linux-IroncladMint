@@ -50,6 +50,10 @@ declare -a to_backup=(
     ".config/gtk-3.0"
     ".config/gtk-4.0"
     ".config/kanata"
+    ".config/environment.d"
+    ".config/mise"
+    ".config/gh"
+    ".config/copyq"
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
@@ -98,12 +102,16 @@ declare -a packages=(
     "home-scripts"
     "kanata"
     "claude"
+    "environment.d"
+    "mise"
+    "gh"
+    "copyq"
 )
 
 for package in "${packages[@]}"; do
     if [ -d "$package" ]; then
         echo -e "  Stowing: ${BLUE}$package${NC}"
-        stow -v 1 "$package" 2>&1 | grep -v "^BUG" || true
+        stow -v 1 -t "$HOME" "$package" 2>&1 | grep -v "^BUG" || true
     else
         echo -e "  ${YELLOW}Skipping:${NC} $package (directory not found)"
     fi
@@ -124,5 +132,5 @@ echo -e "  2. Source your bash config: ${BLUE}source ~/.bashrc${NC}"
 echo -e "  3. Log out and log back in for all changes to take effect"
 echo ""
 echo -e "${YELLOW}To undo:${NC}"
-echo -e "  Run: ${BLUE}cd $DOTFILES_DIR && stow -D bash git x11 i3 nvim ...${NC}"
+echo -e "  Run: ${BLUE}cd $DOTFILES_DIR && stow -D -t ~ bash git x11 i3 nvim ...${NC}"
 echo ""

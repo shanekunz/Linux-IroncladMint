@@ -1,13 +1,13 @@
 ;; ============================================================================
-;; Kanata Configuration: Enthium v13 Layout with Home Row Mods - WINDOWS VERSION
+;; Kanata Configuration: Enthium Layout with Home Row Mods - WINDOWS VERSION
 ;; ============================================================================
 ;;
 ;; This is the WINDOWS version. Key difference from Linux:
 ;;   Left hand home row: C=Alt, I=Win (swapped so physical 'c' works for GlazeWM)
 ;;   Right hand home row: N=Win, S=Alt (swapped for symmetry)
 ;;
-;; This config implements the Enthium v13 keyboard layout with 4 layers:
-;;   - Base:   Enthium v13 alphas (R on right-space tap) + HOME ROW MODS
+;; This config implements the Enthium keyboard layout with 4 layers:
+;;   - Base:   Enthium alphas (R on right-space tap) + HOME ROW MODS
 ;;   - Symbol: Programming symbols (hold right space)
 ;;   - Nav:    Navigation + clipboard (hold left space)
 ;;   - Num:    Numpad (hold BOTH spaces)
@@ -137,36 +137,36 @@
 )
 
 ;; ----------------------------------------------------------------------------
-;; Base Layer: Enthium v13
+;; Base Layer: Enthium (v14 punctuation swap: ; and /)
 ;; ----------------------------------------------------------------------------
 (deflayer base
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
   b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
-  lsft '    ,    .    /    ;    j    m    g    f    v    rsft
-  lctl lmet lalt           @lspc          @rspc @rspc rmet rctl
+  lsft '    ,    .    ;    /    j    m    g    f    v    rsft
+  lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
 )
 
 ;; ----------------------------------------------------------------------------
 ;; Symbol Layer (Right Space Hold)
 ;; ----------------------------------------------------------------------------
 (deflayer symbol
-  _    grv  [    @lprn @rprn ]    .    @ssft @sctl @salt @smet _    _    _
-  @excl ,    @lcbr @rcbr ;    @ques grv   left  up    down right home _    _
-  @hash @cart =    @unds @dolr @astr @dquo bspc  tab  spc   ret  end  _
-  @tild @labk @pipe -    @rabk /    '    del   @stab _    _    rsft
-  @amp @plus \              _    _    _    _    _
+  _    _     _     _     _     _     _    _     _     _     _     _    _    _
+  grv  @excl @lcbr @rcbr @at  @perc _     left  up    down  right home _    _
+  @hash @dolr @lprn @rprn @astr @tild _   bspc tab   spc   ret   end  _
+  @cart @amp [     ]     @pipe \    _    del  @stab _    _    rsft
+  _    _    _              _              _    _    _    _
 )
 
 ;; ----------------------------------------------------------------------------
 ;; Nav Layer (Left Space Hold)
 ;; ----------------------------------------------------------------------------
 (deflayer nav
-  esc  ret  spc  tab  del  ins  ins  del  tab  spc  ret  esc  _    _
-  tab  @ssft @redo @undo bspc @cut @cut bspc @undo @redo @ssft _    _    _
-  esc  lmet lalt lctl lsft @copy @copy left up   down right _    _
-  lsft _    _    _    _    @pste @pste home pgup pgdn end  rsft
-  lctl lmet lalt           @rsnv          _    @rsnv rmet rctl
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @redo @undo bspc @cut @cut bspc @undo @redo _    _    _    _
+  esc  lalt lmet lctl _    @copy @copy left up   down right _    _
+  _    _    _    _    _    @pste @pste home pgup pgdn end  _
+  _    _    _              _              @rsnv _    _    _
 )
 
 ;; ----------------------------------------------------------------------------
