@@ -319,6 +319,7 @@ bindsym $mod+d exec flatpak run com.discordapp.Discord
 # AI / Productivity
 bindsym $mod+c exec ~/.local/bin/webapp "Claude" "https://claude.ai" "1200x900"
 bindsym $mod+o exec flatpak run md.obsidian.Obsidian
+bindsym $mod+Control+u exec --no-startup-id ~/.local/bin/starship-theme-cycle
 bindsym $mod+i exec --no-startup-id "pkill -x open-whispr; open-whispr"
 bindsym $mod+Shift+i exec --no-startup-id pkill -x open-whispr
 bindsym $mod+Control+i exec ~/.local/bin/webapp "iCloud-Drive" "https://www.icloud.com/iclouddrive/" "1400x900"

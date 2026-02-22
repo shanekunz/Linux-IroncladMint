@@ -86,6 +86,8 @@ stow */      # All configs (skip scripts and .git)
 - Neovim (latest via PPA)
 - Visual Studio Code
 - Ghostty terminal
+- Starship prompt
+- eza, bat, zoxide, btop
 - **mise** - Universal version manager (Node.js, .NET, Rust, Python, Go, and 100+ tools)
 - Claude CLI
 
@@ -152,6 +154,7 @@ Created using custom webapp script (via install-webapps.sh):
 ├── i3/.config/i3/          # Complete i3 setup + keybinds.md
 ├── nvim/.config/nvim/      # LazyVim configuration
 ├── ghostty/.config/ghostty/
+├── starship/.config/starship.toml
 ├── rofi/.config/rofi/
 ├── picom/.config/picom/
 ├── i3blocks/.config/i3blocks/
@@ -259,14 +262,14 @@ All scripts are idempotent and can be run independently:
 
 ```bash
 cd ~/dotfiles
-stow bash git x11 i3 nvim ghostty rofi picom i3blocks
+stow bash git x11 i3 nvim ghostty starship rofi picom i3blocks
 ```
 
 ### Undeploy Dotfiles
 
 ```bash
 cd ~/dotfiles
-stow -D bash git x11 i3 nvim ghostty rofi picom i3blocks
+stow -D bash git x11 i3 nvim ghostty starship rofi picom i3blocks
 ```
 
 ### Deploy Individual Package

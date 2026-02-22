@@ -42,6 +42,10 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 font-size = 10
+font-family = Caskaydia Cove Nerd Font
+window-padding-x = 10
+window-padding-y = 8
+cursor-style = block
 
 # Use server-side decorations (let i3 handle borders)
 window-decoration = server

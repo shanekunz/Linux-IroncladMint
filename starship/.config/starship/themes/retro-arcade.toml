@@ -1,0 +1,92 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+command_timeout = 1200
+scan_timeout = 25
+
+format = """
+[░▒▓](#c084fc)\
+[ ⚡ ](bg:#c084fc fg:#241734)\
+[](fg:#c084fc bg:#ff9f43)\
+$directory\
+[](fg:#ff9f43 bg:#4a2f65)\
+$git_branch$git_status\
+[](fg:#4a2f65 bg:#35214d)\
+$nodejs$python$rust$golang$dotnet$java$php\
+[](fg:#35214d bg:#2a1b3d)\
+$cmd_duration$time\
+[ ](fg:#2a1b3d)\
+\n$character"""
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
+
+[directory]
+style = "fg:#241734 bg:#ff9f43"
+format = "[ $path ]($style)"
+truncation_length = 4
+truncate_to_repo = false
+truncation_symbol = ".../"
+
+[git_branch]
+symbol = ""
+style = "bg:#4a2f65"
+format = "[[ $symbol $branch ](fg:#f5d0fe bg:#4a2f65)]($style)"
+
+[git_status]
+style = "bg:#4a2f65"
+format = "[[($all_status$ahead_behind )](fg:#fda4cf bg:#4a2f65)]($style)"
+
+[nodejs]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[python]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[rust]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[golang]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[dotnet]
+symbol = ".NET"
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[java]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[php]
+symbol = ""
+style = "bg:#35214d"
+format = "[[ $symbol ($version) ](fg:#f5e9ff bg:#35214d)]($style)"
+
+[cmd_duration]
+min_time = 500
+style = "bg:#2a1b3d"
+format = "[[ took $duration ](fg:#7ddc6f bg:#2a1b3d)]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bg:#2a1b3d"
+format = "[[  $time ](fg:#f5e9ff bg:#2a1b3d)]($style)"
+
+[character]
+success_symbol = "[>](bold fg:#7ddc6f)"
+error_symbol = "[>](bold fg:#ff7a90)"
+vimcmd_symbol = "[<](bold fg:#ffb454)"

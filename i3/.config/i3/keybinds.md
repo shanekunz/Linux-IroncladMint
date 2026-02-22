@@ -25,6 +25,7 @@
 **AI / Productivity:**
 - `Mod+c` - Claude
 - `Mod+o` - Obsidian
+- `Mod+Control+u` - Cycle Starship prompt theme (5 presets)
 - `Mod+i` - Voice input (OpenWhispr)
 - `Mod+Shift+i` - Kill OpenWhispr
 - `Mod+Control+i` - iCloud Drive

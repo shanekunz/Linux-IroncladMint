@@ -87,6 +87,8 @@ CORE=(
   "install-ripgrep.sh"
   "install-fd.sh"
   "install-fzf.sh"
+  "install-terminal-utils.sh"
+  "install-starship.sh"
   "install-vim.sh"
   "install-neovim.sh"
   "install-tmux.sh"
@@ -123,6 +125,7 @@ STOW_PKGS=(
   "git"
   "nvim"
   "lazygit"
+  "starship"
   "claude"
 )
 

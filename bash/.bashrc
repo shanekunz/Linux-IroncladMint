@@ -81,25 +81,41 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
+# enable color support for GNU tools
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
+# modern file listing (eza preferred, exa fallback)
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --icons --group-directories-first'
+    alias ll='eza -lah --icons --group-directories-first'
+    alias la='eza -a --icons --group-directories-first'
+    alias l='eza -1 --icons --group-directories-first'
+elif command -v exa >/dev/null 2>&1; then
+    alias ls='exa --icons --group-directories-first'
+    alias ll='exa -lah --icons --group-directories-first'
+    alias la='exa -a --icons --group-directories-first'
+    alias l='exa -1 --icons --group-directories-first'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
+fi
+
+# better cat output (bat preferred, batcat fallback)
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat --style=plain --paging=never'
+elif command -v batcat >/dev/null 2>&1; then
+    alias cat='batcat --style=plain --paging=never'
+fi
+
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -140,6 +156,14 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 source <(openclaw completion --shell bash)
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
+
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init bash)"
+fi
+
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init bash)"
+fi
 
 # Load secrets (API keys, tokens) from separate untracked file
 # To edit: nano ~/.secrets (or copy from ~/.secrets.template)

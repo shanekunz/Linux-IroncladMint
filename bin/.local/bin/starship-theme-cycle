@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+theme_dir="$HOME/.config/starship/themes"
+target_file="$HOME/.config/starship.toml"
+active_file="$theme_dir/.active-theme"
+
+themes=(
+  "current-contrast"
+  "sunset-terminal"
+  "cyber-grove"
+  "retro-arcade"
+  "forest-ember"
+)
+
+label_for_theme() {
+  case "$1" in
+    current-contrast) printf "Current Contrast" ;;
+    sunset-terminal) printf "Sunset Terminal" ;;
+    cyber-grove) printf "Cyber Grove" ;;
+    retro-arcade) printf "Retro Arcade" ;;
+    forest-ember) printf "Forest Ember" ;;
+    *) printf "%s" "$1" ;;
+  esac
+}
+
+if [ ! -d "$theme_dir" ]; then
+  printf "Theme directory not found: %s\n" "$theme_dir" >&2
+  exit 1
+fi
+
+pick_next_theme() {
+  local current=""
+  if [ -f "$active_file" ]; then
+    current="$(<"$active_file")"
+  fi
+
+  local i
+  for i in "${!themes[@]}"; do
+    if [ "${themes[$i]}" = "$current" ]; then
+      local next_index=$(( (i + 1) % ${#themes[@]} ))
+      printf "%s" "${themes[$next_index]}"
+      return
+    fi
+  done
+
+  printf "%s" "${themes[0]}"
+}
+
+apply_theme() {
+  local theme="$1"
+  local source_file="$theme_dir/$theme.toml"
+
+  if [ ! -f "$source_file" ]; then
+    printf "Theme file not found: %s\n" "$source_file" >&2
+    exit 1
+  fi
+
+  cp "$source_file" "$target_file"
+  printf "%s\n" "$theme" > "$active_file"
+
+  if command -v notify-send >/dev/null 2>&1; then
+    notify-send "Starship Theme" "$(label_for_theme "$theme")"
+  fi
+}
+
+if [ "${1:-}" != "" ]; then
+  requested="$1"
+  apply_theme "$requested"
+else
+  next_theme="$(pick_next_theme)"
+  apply_theme "$next_theme"
+fi
