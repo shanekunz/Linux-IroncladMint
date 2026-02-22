@@ -5,17 +5,17 @@ command_timeout = 1200
 scan_timeout = 25
 
 format = """
-[░▒▓](#a78bfa)\
-[ ⚡ ](bg:#a78bfa fg:#1a1325)\
-[](fg:#a78bfa bg:#f59e0b)\
+[░▒▓](#ff5ea8)\
+[ ⚡ ](bg:#ff5ea8 fg:#2a0a1f)\
+[](fg:#ff5ea8 bg:#ff9f1c)\
 $directory\
-[](fg:#f59e0b bg:#3c2f5a)\
+[](fg:#ff9f1c bg:#a855f7)\
 $git_branch$git_status\
-[](fg:#3c2f5a bg:#2b223f)\
+[](fg:#a855f7 bg:#9333ea)\
 $nodejs$python$rust$golang$dotnet$java$php\
-[](fg:#2b223f bg:#1f1a30)\
+[](fg:#9333ea bg:#7e22ce)\
 $cmd_duration$time\
-[ ](fg:#1f1a30)\
+[ ](fg:#7e22ce)\
 \n$character"""
 
 [username]
@@ -25,7 +25,7 @@ disabled = true
 disabled = true
 
 [directory]
-style = "fg:#1a1325 bg:#f59e0b"
+style = "fg:#2a1400 bg:#ff9f1c"
 format = "[ $path ]($style)"
 truncation_length = 4
 truncate_to_repo = false
@@ -33,60 +33,60 @@ truncation_symbol = ".../"
 
 [git_branch]
 symbol = ""
-style = "bg:#3c2f5a"
-format = "[[ $symbol $branch ](fg:#e9d5ff bg:#3c2f5a)]($style)"
+style = "bg:#a855f7"
+format = "[[ $symbol $branch ](fg:#ffffff bg:#a855f7)]($style)"
 
 [git_status]
-style = "bg:#3c2f5a"
-format = "[[($all_status$ahead_behind )](fg:#fda4af bg:#3c2f5a)]($style)"
+style = "bg:#a855f7"
+format = "[[($all_status$ahead_behind )](fg:#fde68a bg:#a855f7)]($style)"
 
 [nodejs]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [python]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [rust]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [golang]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [dotnet]
 symbol = ".NET"
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [java]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [php]
 symbol = ""
-style = "bg:#2b223f"
-format = "[[ $symbol ($version) ](fg:#ddd6fe bg:#2b223f)]($style)"
+style = "bg:#9333ea"
+format = "[[ $symbol ($version) ](fg:#f3e8ff bg:#9333ea)]($style)"
 
 [cmd_duration]
 min_time = 500
-style = "bg:#1f1a30"
-format = "[[ took $duration ](fg:#34d399 bg:#1f1a30)]($style)"
+style = "bg:#7e22ce"
+format = "[[ took $duration ](fg:#ffb454 bg:#7e22ce)]($style)"
 
 [time]
 disabled = false
 time_format = "%H:%M"
-style = "bg:#1f1a30"
-format = "[[  $time ](fg:#e9d5ff bg:#1f1a30)]($style)"
+style = "bg:#7e22ce"
+format = "[[  $time ](fg:#ffe4a3 bg:#7e22ce)]($style)"
 
 [character]
-success_symbol = "[>](bold fg:#34d399)"
-error_symbol = "[>](bold fg:#fda4af)"
-vimcmd_symbol = "[<](bold fg:#f59e0b)"
+success_symbol = "[>](bold fg:#ffd166)"
+error_symbol = "[>](bold fg:#ff5ea8)"
+vimcmd_symbol = "[<](bold fg:#ff9f1c)"

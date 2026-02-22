@@ -9,17 +9,13 @@ themes=(
   "current-contrast"
   "sunset-terminal"
   "cyber-grove"
-  "retro-arcade"
-  "forest-ember"
 )
 
 label_for_theme() {
   case "$1" in
-    current-contrast) printf "Current Contrast" ;;
-    sunset-terminal) printf "Sunset Terminal" ;;
-    cyber-grove) printf "Cyber Grove" ;;
-    retro-arcade) printf "Retro Arcade" ;;
-    forest-ember) printf "Forest Ember" ;;
+    current-contrast) printf "Neon Drift" ;;
+    sunset-terminal) printf "Vice Dusk" ;;
+    cyber-grove) printf "Palm Circuit" ;;
     *) printf "%s" "$1" ;;
   esac
 }
@@ -58,10 +54,44 @@ apply_theme() {
 
   cp "$source_file" "$target_file"
   printf "%s\n" "$theme" > "$active_file"
+  apply_ghostty_background "$theme"
 
   if command -v notify-send >/dev/null 2>&1; then
     notify-send "Starship Theme" "$(label_for_theme "$theme")"
   fi
+}
+
+apply_ghostty_background() {
+  local theme="$1"
+  local ghostty_config="$HOME/.config/ghostty/config"
+  local background="#11121a"
+
+  case "$theme" in
+    current-contrast) background="#0b1022" ;;
+    sunset-terminal) background="#2a1530" ;;
+    cyber-grove) background="#15231c" ;;
+  esac
+
+  if [ ! -f "$ghostty_config" ]; then
+    return
+  fi
+
+  local tmp_file
+  tmp_file="$(mktemp)"
+
+  awk '
+    $0 == "# >>> opencode starship-theme-cycle >>>" { skip = 1; next }
+    $0 == "# <<< opencode starship-theme-cycle <<<" { skip = 0; next }
+    skip != 1 { print }
+  ' "$ghostty_config" > "$tmp_file"
+
+  {
+    printf "\n# >>> opencode starship-theme-cycle >>>\n"
+    printf "background = %s\n" "$background"
+    printf "# <<< opencode starship-theme-cycle <<<\n"
+  } >> "$tmp_file"
+
+  mv "$tmp_file" "$ghostty_config"
 }
 
 if [ "${1:-}" != "" ]; then
