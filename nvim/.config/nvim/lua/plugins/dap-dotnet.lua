@@ -7,6 +7,21 @@ return {
         "<cmd>DotnetDebugProject<cr>",
         desc = "Debug .NET Project (pick)",
       },
+      {
+        "<leader>dN",
+        function()
+          local dap = require("dap")
+          if dap.session() then
+            dap.terminate()
+            vim.defer_fn(function()
+              dap.run_last()
+            end, 200)
+            return
+          end
+          dap.run_last()
+        end,
+        desc = "Restart Debug Session",
+      },
     },
     opts = function(_, opts)
       local dap = require("dap")
