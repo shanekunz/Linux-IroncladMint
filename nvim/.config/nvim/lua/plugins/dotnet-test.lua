@@ -10,7 +10,7 @@ return {
       desc = "Debug .NET Test (pick)",
     },
     {
-      "<leader>dt",
+      "<leader>dR",
       function()
         require("utils.dotnet-test").pick_test(false)
       end,
