@@ -111,11 +111,11 @@ echo -e "${BLUE}==>${NC} Stowing WSL-safe dotfiles subset"
 mkdir -p "$HOME/.config"
 
 # Pre-backup known conflict-prone files so stow can run cleanly
-backup_conflict_target ".bashrc" "bash/.bashrc"
-backup_conflict_target ".profile" "bash/.profile"
-backup_conflict_target ".gitconfig" "git/.gitconfig"
-backup_conflict_target ".claude/settings.json" "claude/.claude/settings.json"
-backup_conflict_target ".claude/statusline.sh" "claude/.claude/statusline.sh"
+backup_conflict_target ".bashrc"
+backup_conflict_target ".profile"
+backup_conflict_target ".gitconfig"
+backup_conflict_target ".claude/settings.json"
+backup_conflict_target ".claude/statusline.sh"
 
 pushd "$REPO_DIR" >/dev/null || exit 1
 
@@ -123,6 +123,7 @@ pushd "$REPO_DIR" >/dev/null || exit 1
 STOW_PKGS=(
   "bash"
   "git"
+  "bin"
   "nvim"
   "lazygit"
   "starship"

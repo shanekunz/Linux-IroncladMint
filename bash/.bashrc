@@ -153,7 +153,9 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # OpenClaw Completion
-source <(openclaw completion --shell bash)
+if command -v openclaw >/dev/null 2>&1; then
+    source <(openclaw completion --shell bash)
+fi
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 
