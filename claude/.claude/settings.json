@@ -6,10 +6,11 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
+    "serena@claude-plugins-official": false,
     "learning-output-style@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "model": "opus"
 }

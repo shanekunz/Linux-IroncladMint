@@ -168,3 +168,8 @@ fi
 # Load secrets (API keys, tokens) from separate untracked file
 # To edit: nano ~/.secrets (or copy from ~/.secrets.template)
 [ -f ~/.secrets ] && source ~/.secrets
+
+# local machine-only secrets (not tracked in dotfiles repo)
+if [ -f "$HOME/.bashrc.local" ]; then
+    . "$HOME/.bashrc.local"
+fi
