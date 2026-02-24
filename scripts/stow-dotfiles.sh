@@ -55,6 +55,7 @@ declare -a to_backup=(
     ".config/mise"
     ".config/gh"
     ".config/copyq"
+    ".config/opencode"
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
@@ -108,6 +109,7 @@ declare -a packages=(
     "mise"
     "gh"
     "copyq"
+    "opencode"
 )
 
 for package in "${packages[@]}"; do

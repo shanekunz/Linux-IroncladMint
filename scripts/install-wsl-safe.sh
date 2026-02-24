@@ -127,6 +127,7 @@ STOW_PKGS=(
   "nvim"
   "lazygit"
   "starship"
+  "opencode"
   "claude"
 )
 
