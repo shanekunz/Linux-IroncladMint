@@ -21,16 +21,19 @@ if ! command -v npm &> /dev/null; then
     exit 1
 fi
 
-# Check if already installed
+# Check if already installed and working
 if command -v openspec &> /dev/null; then
-    OPENSPEC_VERSION=$(openspec --version 2>/dev/null || echo "installed")
-    echo -e "${GREEN}[install-openspec]${NC} openspec is already installed: $OPENSPEC_VERSION"
-    exit 0
+    if OPENSPEC_VERSION=$(openspec --version 2>/dev/null); then
+        echo -e "${GREEN}[install-openspec]${NC} openspec is already installed: $OPENSPEC_VERSION"
+        exit 0
+    fi
+
+    echo -e "${YELLOW}[install-openspec]${NC} openspec is on PATH but not working. Reinstalling..."
 fi
 
 echo -e "${YELLOW}[install-openspec]${NC} Installing openspec via npm..."
 
-npm install -g @fission-ai/openspec
+npm install -g @fission-ai/openspec@latest
 
 # Refresh shims for mise-managed Node installations
 if command -v mise &> /dev/null; then
@@ -38,11 +41,11 @@ if command -v mise &> /dev/null; then
 fi
 
 # Verify installation
-if command -v openspec &> /dev/null; then
-    OPENSPEC_VERSION=$(openspec --version 2>/dev/null || echo "installed")
+if command -v openspec &> /dev/null && OPENSPEC_VERSION=$(openspec --version 2>/dev/null); then
     echo -e "${GREEN}[install-openspec]${NC} openspec installed successfully: $OPENSPEC_VERSION"
     echo -e "${YELLOW}[install-openspec]${NC} Run 'openspec init' in your project to get started"
 else
     echo -e "${RED}[install-openspec]${NC} Installation failed"
+    echo -e "${YELLOW}[install-openspec]${NC} npm prefix: $(npm config get prefix 2>/dev/null || echo unknown)"
     exit 1
 fi
