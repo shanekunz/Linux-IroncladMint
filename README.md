@@ -89,6 +89,7 @@ stow */      # All configs (skip scripts and .git)
 - Starship prompt
 - eza, bat, zoxide, btop
 - **mise** - Universal version manager (Node.js, .NET, Rust, Python, Go, and 100+ tools)
+- OpenCode
 - Claude CLI
 
 ### Browsers
@@ -170,11 +171,24 @@ Created using custom webapp script (via install-webapps.sh):
 ├── environment.d/          # HiDPI env vars (GDK_SCALE, QT_SCALE_FACTOR)
 ├── gh/.config/gh/          # GitHub CLI preferences
 ├── mise/.config/mise/      # Tool version manager config
+├── claude/.claude/         # Claude settings, statusline, commands, agents, skills
+├── opencode/.config/opencode/ # OpenCode config, theme, commands, agents, skills
 ├── bin/.local/bin/         # webapp script, lazygit, sunsama
 ├── home-scripts/           # .secrets.template for API keys
 ├── obsbot/.local/          # Obsbot source and binary
 └── scripts/                # 55+ installation scripts
 ```
+
+## AI Tooling
+
+This repo now carries your personal Claude/OpenCode setup plus the shared AI workflow assets you use day to day.
+
+- Claude keeps personal settings in `claude/.claude/settings.json` and `claude/.claude/statusline.sh`.
+- OpenCode keeps personal UI config in `opencode/.config/opencode/themes/` and `tui.json` in your home config.
+- Shared slash commands, agents, and skills now live directly in this repo under `claude/.claude/` and `opencode/.config/opencode/`.
+- OpenCode MCP defaults are stored in `opencode/.config/opencode/opencode.json`.
+
+This keeps your machine self-contained in one dotfiles repo while preserving the reusable AI tooling you were previously sourcing from a separate repository.
 
 ## Kanata Layout Documentation
 

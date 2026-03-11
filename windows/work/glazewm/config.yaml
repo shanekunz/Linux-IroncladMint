@@ -79,6 +79,8 @@ window_rules:
         window_title: { regex: '.*? - Peek' }
       - window_process: { equals: 'Lively' }
         window_class: { regex: 'HwndWrapper' }
+      - window_process: { regex: '(?i)open[- ]?whispr' }
+      - window_title: { regex: '(?i)(open[- ]?whispr|voice recorder|dictation|transcription)' }
       - window_process: { equals: 'EXCEL' }
         window_class: { not_regex: 'XLMAIN' }
       - window_process: { equals: 'WINWORD' }
