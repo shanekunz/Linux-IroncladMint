@@ -121,6 +121,11 @@ fi
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# shorthand commands
+alias g='lazygit'
+alias o='opencode'
+alias n='nvim'
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -152,10 +157,6 @@ export PATH=/home/shane/.opencode/bin:$PATH
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# OpenClaw Completion
-if command -v openclaw >/dev/null 2>&1; then
-    source <(openclaw completion --shell bash)
-fi
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 
@@ -176,3 +177,6 @@ if [ -f "$HOME/.bashrc.local" ]; then
     . "$HOME/.bashrc.local"
 fi
 export PATH="/home/shane/.local/share/mise/installs/dotnet/8.0.418:/home/shane/.local/share/mise/installs/node/24.13.1/bin:/home/shane/.cargo/bin:/home/shane/.local/bin:/home/shane/.local/bin:/home/shane/.local/share/mise/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/glzr.io/GlazeWM/cli:/mnt/c/Program Files/Volta/:/mnt/c/Program Files/Alacritty/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Microsoft SQL Server/170/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/Tailscale/:/mnt/c/Program Files (x86)/GitHub CLI/:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/glzr.io/Zebar/:/mnt/c/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/:/mnt/c/Users/skunz/AppData/Roaming/npm:/mnt/c/Users/skunz/AppData/Local/Volta/bin:/mnt/c/Users/skunz/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/skunz/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/skunz/AppData/Local/Programs/Git/cmd:/mnt/c/Users/skunz/.dotnet/tools:/mnt/c/Users/skunz/AppData/Roaming/npm:/mnt/c/Users/skunz/AppData/Local/PowerToys/DSCModules/:/snap/bin:/home/linuxbrew/.linuxbrew/bin:/home/shane/.bun/bin:/home/shane/.opencode/bin:/home/shane/go/bin:/home/shane/bin"
+
+# OpenClaw Completion
+source "/home/shane/.openclaw/completions/openclaw.bash"
