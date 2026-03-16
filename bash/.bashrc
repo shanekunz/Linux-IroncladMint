@@ -124,6 +124,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # shorthand commands
 alias g='lazygit'
 alias o='opencode'
+alias c='codex --dangerously-bypass-approvals-and-sandbox'
 alias n='nvim'
 
 # Alias definitions.

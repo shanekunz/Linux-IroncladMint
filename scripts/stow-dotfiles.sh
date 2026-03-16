@@ -1,7 +1,7 @@
 #!/bin/bash
 # Deploy dotfiles using GNU Stow
 
-set -e
+set -euo pipefail
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -34,6 +34,7 @@ declare -a to_backup=(
     ".bashrc"
     ".profile"
     ".gitconfig"
+    ".tmux.conf"
     ".Xresources"
     ".config/i3"
     ".config/nvim"
@@ -45,9 +46,6 @@ declare -a to_backup=(
     ".config/lazygit"
     ".config/flameshot"
     ".config/nitrogen"
-    ".config/Signal"
-    ".config/sunshine"
-    ".config/retroarch"
     ".config/gtk-3.0"
     ".config/gtk-4.0"
     ".config/kanata"
@@ -74,6 +72,94 @@ done
 echo -e "${GREEN}Backup created at:${NC} $BACKUP_DIR"
 echo ""
 
+backup_conflicting_path() {
+    local relative_path="$1"
+    local target_path="$HOME/$relative_path"
+    local backup_path="$BACKUP_DIR/$relative_path"
+
+    if [ ! -e "$target_path" ] && [ ! -L "$target_path" ]; then
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$backup_path")"
+
+    if [ -e "$backup_path" ] || [ -L "$backup_path" ]; then
+        if [ -d "$target_path" ] && [ ! -L "$target_path" ]; then
+            rm -rf "$target_path"
+        else
+            rm -f "$target_path"
+        fi
+        return 0
+    fi
+
+    mv "$target_path" "$backup_path"
+}
+
+print_stow_output() {
+    local output="$1"
+    local line
+
+    while IFS= read -r line; do
+        if [[ "$line" == BUG* ]]; then
+            continue
+        fi
+        printf '%s\n' "$line"
+    done <<< "$output"
+}
+
+collect_conflicts() {
+    local output="$1"
+    local line
+
+    CONFLICT_PATHS=()
+
+    while IFS= read -r line; do
+        if [[ "$line" == *"existing target is neither a link nor a directory: "* ]]; then
+            CONFLICT_PATHS+=("${line##*: }")
+        fi
+    done <<< "$output"
+}
+
+stow_package() {
+    local package="$1"
+    shift
+    local -a extra_args=("$@")
+    local output
+
+    echo -e "  Stowing: ${BLUE}$package${NC}"
+
+    if output=$(stow -v 1 -t "$HOME" "${extra_args[@]}" "$package" 2>&1); then
+        print_stow_output "$output"
+        STOWED_PACKAGES+=("$package")
+        return 0
+    fi
+
+    print_stow_output "$output"
+    collect_conflicts "$output"
+
+    if [ ${#CONFLICT_PATHS[@]} -eq 0 ]; then
+        FAILED_PACKAGES+=("$package")
+        return 0
+    fi
+
+    echo -e "    ${YELLOW}Resolving conflicts by moving existing files into backup...${NC}"
+
+    local relative_path
+    for relative_path in "${CONFLICT_PATHS[@]}"; do
+        echo -e "    Backing up conflict: $relative_path"
+        backup_conflicting_path "$relative_path"
+    done
+
+    if output=$(stow -v 1 -t "$HOME" "${extra_args[@]}" "$package" 2>&1); then
+        print_stow_output "$output"
+        RESOLVED_PACKAGES+=("$package")
+        return 0
+    fi
+
+    print_stow_output "$output"
+    FAILED_PACKAGES+=("$package")
+}
+
 # Change to dotfiles directory
 cd "$DOTFILES_DIR"
 
@@ -95,9 +181,6 @@ declare -a packages=(
     "lazygit"
     "flameshot"
     "nitrogen"
-    "signal"
-    "sunshine"
-    "retroarch"
     "bin"
     "obsbot"
     "gtk-3.0"
@@ -110,31 +193,73 @@ declare -a packages=(
     "gh"
     "copyq"
     "opencode"
+    "tmux"
 )
+
+declare -a STOWED_PACKAGES=()
+declare -a RESOLVED_PACKAGES=()
+declare -a FAILED_PACKAGES=()
+declare -a MISSING_PACKAGES=()
+declare -a CONFLICT_PATHS=()
 
 for package in "${packages[@]}"; do
     if [ -d "$package" ]; then
-        echo -e "  Stowing: ${BLUE}$package${NC}"
-        stow -v 1 -t "$HOME" "$package" 2>&1 | grep -v "^BUG" || true
+        case "$package" in
+            x11)
+                stow_package "$package" "--ignore=^etc$"
+                ;;
+            *)
+                stow_package "$package"
+                ;;
+        esac
     else
         echo -e "  ${YELLOW}Skipping:${NC} $package (directory not found)"
+        MISSING_PACKAGES+=("$package")
     fi
 done
 
 echo ""
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}   Dotfiles Deployed Successfully!${NC}"
-echo -e "${GREEN}========================================${NC}"
+if [ ${#FAILED_PACKAGES[@]} -eq 0 ] && [ ${#MISSING_PACKAGES[@]} -eq 0 ]; then
+    echo -e "${GREEN}========================================${NC}"
+    echo -e "${GREEN}   Dotfiles Deployed Successfully!${NC}"
+    echo -e "${GREEN}========================================${NC}"
+else
+    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}   Dotfiles Deployment Incomplete${NC}"
+    echo -e "${RED}========================================${NC}"
+fi
+
 echo ""
 echo -e "${YELLOW}What was done:${NC}"
 echo -e "  • Backed up existing dotfiles to: $BACKUP_DIR"
-echo -e "  • Created symlinks from ~/ to $DOTFILES_DIR/"
+echo -e "  • Stowed packages: ${#STOWED_PACKAGES[@]}"
+echo -e "  • Resolved package conflicts automatically: ${#RESOLVED_PACKAGES[@]}"
+echo -e "  • Failed packages: ${#FAILED_PACKAGES[@]}"
+echo -e "  • Missing package directories: ${#MISSING_PACKAGES[@]}"
+
+if [ ${#RESOLVED_PACKAGES[@]} -gt 0 ]; then
+    echo -e "  • Conflict resolution applied to: ${RESOLVED_PACKAGES[*]}"
+fi
+
+if [ ${#FAILED_PACKAGES[@]} -gt 0 ]; then
+    echo -e "  • Packages still failing: ${FAILED_PACKAGES[*]}"
+fi
+
+if [ ${#MISSING_PACKAGES[@]} -gt 0 ]; then
+    echo -e "  • Missing directories: ${MISSING_PACKAGES[*]}"
+fi
+
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
-echo -e "  1. Review the symlinks: ${BLUE}ls -la ~/.bashrc ~/.gitconfig ~/.config/i3${NC}"
+echo -e "  1. Review the symlinks: ${BLUE}ls -la ~/.bashrc ~/.gitconfig ~/.tmux.conf ~/.config/i3${NC}"
 echo -e "  2. Source your bash config: ${BLUE}source ~/.bashrc${NC}"
-echo -e "  3. Log out and log back in for all changes to take effect"
+echo -e "  3. Start tmux or reload it: ${BLUE}tmux source-file ~/.tmux.conf${NC}"
+echo -e "  4. Log out and log back in for all changes to take effect"
 echo ""
 echo -e "${YELLOW}To undo:${NC}"
 echo -e "  Run: ${BLUE}cd $DOTFILES_DIR && stow -D -t ~ bash git x11 i3 nvim ...${NC}"
 echo ""
+
+if [ ${#FAILED_PACKAGES[@]} -gt 0 ] || [ ${#MISSING_PACKAGES[@]} -gt 0 ]; then
+    exit 1
+fi

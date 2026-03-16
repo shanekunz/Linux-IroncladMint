@@ -76,47 +76,7 @@ echo ""
 # Phase 2: Deploy dotfiles with Stow
 log_step "Phase 2: Deploying dotfiles with GNU Stow..."
 cd "$DOTFILES_DIR"
-
-# Backup existing configs
-BACKUP_DIR="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
-if [ -d "$HOME/.config" ]; then
-    log_info "Backing up existing configs to $BACKUP_DIR..."
-    mkdir -p "$BACKUP_DIR"
-
-    for package in */; do
-        package_name=${package%/}
-        # Skip non-stow directories and system directories (handled separately)
-        if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]] || [[ "$package_name" == "grub" ]]; then
-            continue
-        fi
-
-        # Check if any conflicts exist
-        if [ -d "$package_name/.config" ]; then
-            for config in "$package_name/.config"/*; do
-                config_name=$(basename "$config")
-                if [ -e "$HOME/.config/$config_name" ] && [ ! -L "$HOME/.config/$config_name" ]; then
-                    log_info "Backing up ~/.config/$config_name"
-                    mv "$HOME/.config/$config_name" "$BACKUP_DIR/" 2>/dev/null || true
-                fi
-            done
-        fi
-    done
-fi
-
-# Stow all packages
-for package in */; do
-    package_name=${package%/}
-    # Skip non-stow directories and system directories (handled separately)
-    if [[ "$package_name" == "scripts" ]] || [[ "$package_name" == ".git" ]] || [[ "$package_name" == "grub" ]]; then
-        continue
-    fi
-
-    log_info "Stowing $package_name..."
-    stow -t "$HOME" "$package_name" 2>/dev/null || log_warn "Issues stowing $package_name (may already be linked)"
-done
-
-# GRUB is handled separately by install-grub.sh (already ran in Phase 1)
-# It requires sudo stow -t / instead of stow -t $HOME
+bash "$SCRIPTS_DIR/stow-dotfiles.sh"
 
 # Phase 3: Web Applications
 log_step "Phase 3: Creating web application shortcuts..."
@@ -140,7 +100,6 @@ echo "  1. Review any scripts that were skipped above"
 echo "  2. Log out and log back in for all changes to take effect"
 echo "  3. Select i3 as your window manager at login"
 echo "  4. Launch nvim to complete plugin installation"
-echo "  5. Review your backed up configs in: $BACKUP_DIR"
 echo ""
 log_info "To install additional packages, run individual scripts from:"
 echo "  $SCRIPTS_DIR"

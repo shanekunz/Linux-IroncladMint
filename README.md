@@ -56,9 +56,9 @@ The bootstrap script will:
 
 # Deploy dotfiles with stow (from the dotfiles directory)
 cd ~/dotfiles
-stow nvim    # Just neovim config
-stow i3      # Just i3 config
-stow */      # All configs (skip scripts and .git)
+./scripts/stow-dotfiles.sh  # Recommended: deploy managed packages with backups
+stow nvim                   # Just neovim config
+stow i3                     # Just i3 config
 ```
 
 ## What Gets Installed
@@ -166,9 +166,6 @@ Created using custom webapp script (via install-webapps.sh):
 ├── kanata/.config/kanata/  # Enthium v13 keyboard layout
 ├── kanata/docs/             # Kanata layer diagrams + KLE JSON sources
 ├── nitrogen/.config/nitrogen/
-├── signal/.config/Signal/
-├── sunshine/.config/sunshine/
-├── retroarch/.config/retroarch/
 ├── copyq/.config/copyq/    # Clipboard manager commands
 ├── environment.d/          # HiDPI env vars (GDK_SCALE, QT_SCALE_FACTOR)
 ├── gh/.config/gh/          # GitHub CLI preferences
