@@ -9,7 +9,7 @@ This repository contains my complete Linux Mint system configuration, including:
 - **52+ modular installation scripts** for automated setup
 - **i3 window manager** configuration with custom keybindings and scripts
 - **Neovim** setup with LazyVim and custom plugins
-- **Development environment** (Git, Node.js, Rust, Python, VS Code)
+- **Development environment** (Git, Node.js, Rust, Python, VS Code, tmux)
 - **Productivity tools** (Obsidian, Todoist, Teams, Sunsama, etc.)
 - **Web applications** as PWAs using custom webapp script
 - **All dotfiles** managed with GNU Stow for easy deployment
@@ -86,6 +86,7 @@ stow */      # All configs (skip scripts and .git)
 - Neovim (latest via PPA)
 - Visual Studio Code
 - Ghostty terminal
+- tmux
 - Starship prompt
 - eza, bat, zoxide, btop
 - **mise** - Universal version manager (Node.js, .NET, Rust, Python, Go, and 100+ tools)
@@ -156,6 +157,7 @@ Created using custom webapp script (via install-webapps.sh):
 ├── nvim/.config/nvim/      # LazyVim configuration
 ├── ghostty/.config/ghostty/
 ├── starship/.config/starship.toml
+├── tmux/.tmux.conf
 ├── rofi/.config/rofi/
 ├── picom/.config/picom/
 ├── i3blocks/.config/i3blocks/
