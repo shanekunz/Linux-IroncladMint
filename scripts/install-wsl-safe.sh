@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# WSL-safe installer: CLI/dev tools only (no desktop/i3/media/system services)
+# WSL-safe installer: CLI/dev tools plus WSLg-friendly apps (no desktop/i3/media/system services)
 # Usage:
 #   ./scripts/install-wsl-safe.sh
 set -u
@@ -78,7 +78,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 OK=()
 FAIL=()
 
-# Core CLI/dev tools (WSL-safe)
+# Core CLI/dev tools and WSLg-friendly apps
 CORE=(
   "install-essentials.sh"
   "install-stow.sh"
@@ -97,7 +97,9 @@ CORE=(
   "install-lazygit.sh"
   "install-glow.sh"
   "install-commitizen.sh"
+  "install-codex.sh"
   "install-opencode.sh"
+  "install-superset.sh"
   "install-claude-cli.sh"
   "install-openspec.sh"
 )
@@ -128,7 +130,8 @@ STOW_PKGS=(
   "lazygit"
   "starship"
   "tmux"
-  "opencode"
+  "opencode-common"
+  "opencode-wsl"
   "claude"
 )
 

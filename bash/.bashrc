@@ -157,6 +157,7 @@ export PATH=/home/shane/.opencode/bin:$PATH
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+export OLLAMA_CONTEXT_LENGTH=196608
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"

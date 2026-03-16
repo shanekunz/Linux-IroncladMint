@@ -107,6 +107,10 @@ print_stow_output() {
     done <<< "$output"
 }
 
+is_wsl() {
+    grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
+}
+
 collect_conflicts() {
     local output="$1"
     local line
@@ -192,9 +196,15 @@ declare -a packages=(
     "mise"
     "gh"
     "copyq"
-    "opencode"
+    "opencode-common"
     "tmux"
 )
+
+if is_wsl; then
+    packages+=("opencode-wsl")
+else
+    packages+=("opencode-linux")
+fi
 
 declare -a STOWED_PACKAGES=()
 declare -a RESOLVED_PACKAGES=()

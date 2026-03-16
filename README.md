@@ -38,6 +38,7 @@ chmod +x bootstrap.sh
 ```
 
 The bootstrap script will:
+
 1. Install essential prerequisites (git, stow, flatpak)
 2. Install core packages (i3, neovim, terminal tools, dev tools)
 3. Install common applications (browsers, discord, obsidian, vscode)
@@ -64,11 +65,13 @@ stow i3                     # Just i3 config
 ## What Gets Installed
 
 ### Core System
+
 - GNU Stow (dotfiles management)
 - Build essentials, curl, wget, git
 - Caskaydia Cove Nerd Font
 
 ### i3 Window Manager Stack
+
 - i3-wm, i3blocks, i3lock
 - rofi (application launcher)
 - picom (compositor)
@@ -80,6 +83,7 @@ stow i3                     # Just i3 config
 - feh, arandr
 
 ### Development Tools
+
 - Git (latest via PPA)
 - GitHub CLI
 - Lazygit (TUI)
@@ -94,11 +98,13 @@ stow i3                     # Just i3 config
 - Claude CLI
 
 ### Browsers
+
 - Firefox (Mozilla PPA)
 - Chromium (snap)
 - Microsoft Edge
 
 ### Communication
+
 - Discord (Flatpak)
 - Zoom
 - Signal (official repo)
@@ -108,18 +114,21 @@ stow i3                     # Just i3 config
 - Telegram (Flatpak)
 
 ### Productivity
+
 - Obsidian (Flatpak)
 - Todoist (Flatpak)
 - Sunsama (AppImage)
 - Emote (emoji picker)
 
 ### Media & Gaming
+
 - OBS Studio (latest PPA)
 - Steam
 - RetroArch
 - Sunshine (game streaming)
 
 ### Utilities
+
 - accountable2you (snap)
 - glow (markdown renderer)
 - Flatpak + Flathub
@@ -127,14 +136,18 @@ stow i3                     # Just i3 config
 - CopyQ (clipboard manager)
 
 ### Smart Home (Optional)
+
 - Home Assistant (Docker)
 - Matter Server (Docker) - for Apple Home / Matter device integration
 
 ### Custom Builds
+
 - Obsbot Tiny 2 controller (Rust)
 
 ### Web Applications (PWAs)
+
 Created using custom webapp script (via install-webapps.sh):
+
 - ChatGPT
 - Claude
 - Gmail
@@ -171,7 +184,9 @@ Created using custom webapp script (via install-webapps.sh):
 ├── gh/.config/gh/          # GitHub CLI preferences
 ├── mise/.config/mise/      # Tool version manager config
 ├── claude/.claude/         # Claude settings, statusline, commands, agents, skills
-├── opencode/.config/opencode/ # OpenCode config, theme, commands, agents, skills
+├── opencode-common/.config/opencode/ # Shared OpenCode commands, agents, themes, tui
+├── opencode-linux/.config/opencode/ # Linux-specific OpenCode config
+├── opencode-wsl/.config/opencode/ # WSL-specific OpenCode config and skills
 ├── bin/.local/bin/         # webapp script, lazygit, sunsama
 ├── home-scripts/           # .secrets.template for API keys
 ├── obsbot/.local/          # Obsbot source and binary
@@ -183,9 +198,9 @@ Created using custom webapp script (via install-webapps.sh):
 This repo now carries your personal Claude/OpenCode setup plus the shared AI workflow assets you use day to day.
 
 - Claude keeps personal settings in `claude/.claude/settings.json` and `claude/.claude/statusline.sh`.
-- OpenCode keeps personal UI config in `opencode/.config/opencode/themes/` and `tui.json` in your home config.
-- Shared slash commands, agents, and skills now live directly in this repo under `claude/.claude/` and `opencode/.config/opencode/`.
-- OpenCode MCP defaults are stored in `opencode/.config/opencode/opencode.json`.
+- OpenCode keeps shared UI config in `opencode-common/.config/opencode/themes/` and `tui.json`.
+- Shared OpenCode slash commands and agents live in `opencode-common/.config/opencode/`.
+- OpenCode host-specific MCP defaults and skills live in `opencode-linux/.config/opencode/` and `opencode-wsl/.config/opencode/`.
 
 This keeps your machine self-contained in one dotfiles repo while preserving the reusable AI tooling you were previously sourcing from a separate repository.
 
@@ -207,6 +222,7 @@ The Neovim setup uses LazyVim as a base with your custom plugins tracked directl
 ### Custom Plugins
 
 Your custom plugins are in `~/dotfiles/nvim/.config/nvim/lua/plugins/`:
+
 - `alpha.lua` - Dashboard
 - `dap-dotnet.lua` - .NET debugging
 - `sql.lua` - SQL tools
@@ -335,11 +351,13 @@ The `.local.conf` file is gitignored and won't be committed to your repository.
 ### Key Bindings
 
 **App Launchers** (Mod+letter for quick access):
+
 - 20+ app hotkeys for instant launching
 - Organized by category: Development, Productivity, Work Tools, Communication
 - See `~/.config/i3/keybinds.md` for complete reference or press **Mod+Shift+?**
 
 **Window Management**:
+
 - Mod+Escape - Focus parent container (manipulate groups of windows)
 - Vim-style navigation (hjkl)
 - Split controls for 2x2 grids and complex layouts
@@ -356,6 +374,7 @@ nano ~/.secrets
 ```
 
 The `.bashrc` automatically sources this file. Keys included:
+
 - `JIRA_API_TOKEN` - Atlassian API token
 - `LINEAR_API_KEY` - Linear project management
 - `OPENAI_API_KEY` - OpenAI API
@@ -374,6 +393,7 @@ For data NOT in dotfiles (OpenClaw, HomeAssistant, etc.), use the backup script:
 ```
 
 This creates an **encrypted archive** in `~/system-backup/` containing:
+
 - OpenClaw (memory, credentials, agent auth, skills config)
 - HomeAssistant config and token
 - Matter server device pairings
@@ -430,20 +450,24 @@ This setup prioritizes **latest versions** over Ubuntu's stable (often outdated)
 ### Bootstrap Script Issues
 
 **PPA not available for your version:**
+
 - Edit the script to use a different PPA or install from apt
 - Or skip that package (scripts are modular)
 
 **Package not found:**
+
 - Check if the package name changed
 - Update the script with the new package name
 
 **Permission denied:**
+
 ```bash
 chmod +x bootstrap.sh
 chmod +x scripts/*.sh
 ```
 
 **Script fails partway through:**
+
 - Check the error message for the specific package
 - Fix that individual install script
 - Re-run bootstrap (scripts are idempotent, safe to re-run)
@@ -517,6 +541,7 @@ sudo usermod -aG docker $USER
 Access Home Assistant at http://localhost:8123
 
 Data is stored in:
+
 - `~/homeassistant/` - HA config, automations, database
 - `~/matter-server/` - Matter device pairings
 
