@@ -45,6 +45,26 @@ log_step() {
     echo -e "${BLUE}==>${NC} $1"
 }
 
+is_wsl() {
+    grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
+}
+
+confirm_wsl_linux_path() {
+    local reply
+
+    if ! is_wsl; then
+        return 0
+    fi
+
+    log_warn "WSL detected. bootstrap.sh is the full Linux Mint bootstrap and will install desktop/i3 packages that are not intended for a normal WSL environment."
+    log_warn "Recommended on WSL: ./scripts/install-wsl-safe.sh"
+    read -r -p "Type 'y' to continue with the full Linux bootstrap anyway: " reply
+    if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+        log_warn "Bootstrap cancelled before any Linux Mint packages were installed."
+        exit 0
+    fi
+}
+
 run_script() {
     local script=$1
     if [ -f "$SCRIPTS_DIR/$script" ]; then
@@ -57,6 +77,8 @@ run_script() {
 echo ""
 log_step "Starting dotfiles bootstrap..."
 echo ""
+
+confirm_wsl_linux_path
 
 # Check prerequisites
 log_info "Checking prerequisites..."

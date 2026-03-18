@@ -37,6 +37,7 @@ run_script() {
 backup_conflict_target() {
   local rel_path="$1"
   local target_path="$HOME/$rel_path"
+  local backup_parent
 
   # Nothing to do if target doesn't exist
   if [ ! -e "$target_path" ] && [ ! -L "$target_path" ]; then
@@ -49,9 +50,115 @@ backup_conflict_target() {
     echo -e "${YELLOW}Created backup dir:${NC} $BACKUP_DIR"
   fi
 
-  mkdir -p "$BACKUP_DIR/$(dirname "$rel_path")"
+  if [ -e "$BACKUP_DIR/$rel_path" ] || [ -L "$BACKUP_DIR/$rel_path" ]; then
+    if [ -d "$target_path" ] && [ ! -L "$target_path" ]; then
+      rm -rf "$target_path"
+    else
+      rm -f "$target_path"
+    fi
+    return 0
+  fi
+
+  backup_parent="$BACKUP_DIR/$(dirname "$rel_path")"
+  if [ -L "$backup_parent" ] || { [ -e "$backup_parent" ] && [ ! -d "$backup_parent" ]; }; then
+    if [ -d "$target_path" ] && [ ! -L "$target_path" ]; then
+      rm -rf "$target_path"
+    else
+      rm -f "$target_path"
+    fi
+    return 0
+  fi
+
+  mkdir -p "$backup_parent"
   mv "$target_path" "$BACKUP_DIR/$rel_path"
   echo -e "${YELLOW}Backed up:${NC} ~/$rel_path -> $BACKUP_DIR/$rel_path"
+}
+
+is_repo_symlink() {
+  local target_path="$1"
+  local resolved_path
+
+  if [ ! -L "$target_path" ]; then
+    return 1
+  fi
+
+  resolved_path="$(readlink -f "$target_path" 2>/dev/null || true)"
+  [ -n "$resolved_path" ] && [[ "$resolved_path" == "$REPO_DIR/"* ]]
+}
+
+remove_repo_symlink_conflict() {
+  local rel_path="$1"
+  local current_path="$HOME/$rel_path"
+
+  while [[ "$current_path" == "$HOME"/* ]]; do
+    if is_repo_symlink "$current_path"; then
+      echo -e "${YELLOW}Removing old repo symlink:${NC} ~/${current_path#$HOME/}"
+      rm -f "$current_path"
+      return 0
+    fi
+
+    if [ "$current_path" = "$HOME" ]; then
+      break
+    fi
+
+    current_path="$(dirname "$current_path")"
+  done
+
+  return 1
+}
+
+collect_conflict_paths() {
+  local output="$1"
+  local line
+  local conflict_path
+
+  CONFLICT_PATHS=()
+
+  while IFS= read -r line; do
+    conflict_path=""
+
+    if [[ "$line" == *"existing target is neither a link nor a directory: "* ]]; then
+      conflict_path="${line##*: }"
+    elif [[ "$line" == *"existing target is not owned by stow: "* ]]; then
+      conflict_path="${line##*: }"
+    elif [[ "$line" == *"existing target is stowed to a different package: "* ]]; then
+      conflict_path="${line##*: }"
+      conflict_path="${conflict_path%% => *}"
+    fi
+
+    if [ -n "$conflict_path" ]; then
+      CONFLICT_PATHS+=("$conflict_path")
+    fi
+  done <<< "$output"
+}
+
+stow_wsl_package() {
+  local pkg="$1"
+  local output
+  local rel_path
+
+  echo "Stowing: $pkg"
+
+  if output=$(stow -v 1 -t "$HOME" "$pkg" 2>&1); then
+    OK+=("stow:$pkg")
+    return 0
+  fi
+
+  collect_conflict_paths "$output"
+
+  for rel_path in "${CONFLICT_PATHS[@]}"; do
+    if remove_repo_symlink_conflict "$rel_path"; then
+      :
+    else
+      backup_conflict_target "$rel_path"
+    fi
+  done
+
+  if stow -t "$HOME" "$pkg"; then
+    OK+=("stow:$pkg")
+  else
+    FAIL+=("stow:$pkg")
+  fi
 }
 
 echo -e "${BLUE}========================================${NC}"
@@ -137,12 +244,7 @@ STOW_PKGS=(
 
 for pkg in "${STOW_PKGS[@]}"; do
   if [ -d "$pkg" ]; then
-    echo "Stowing: $pkg"
-    if stow -t "$HOME" "$pkg"; then
-      OK+=("stow:$pkg")
-    else
-      FAIL+=("stow:$pkg")
-    fi
+    stow_wsl_package "$pkg"
   else
     echo -e "${YELLOW}Skipping missing package:${NC} $pkg"
   fi

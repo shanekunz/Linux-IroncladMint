@@ -76,12 +76,11 @@ backup_conflicting_path() {
     local relative_path="$1"
     local target_path="$HOME/$relative_path"
     local backup_path="$BACKUP_DIR/$relative_path"
+    local backup_parent
 
     if [ ! -e "$target_path" ] && [ ! -L "$target_path" ]; then
         return 0
     fi
-
-    mkdir -p "$(dirname "$backup_path")"
 
     if [ -e "$backup_path" ] || [ -L "$backup_path" ]; then
         if [ -d "$target_path" ] && [ ! -L "$target_path" ]; then
@@ -91,6 +90,18 @@ backup_conflicting_path() {
         fi
         return 0
     fi
+
+    backup_parent="$(dirname "$backup_path")"
+    if [ -L "$backup_parent" ] || { [ -e "$backup_parent" ] && [ ! -d "$backup_parent" ]; }; then
+        if [ -d "$target_path" ] && [ ! -L "$target_path" ]; then
+            rm -rf "$target_path"
+        else
+            rm -f "$target_path"
+        fi
+        return 0
+    fi
+
+    mkdir -p "$backup_parent"
 
     mv "$target_path" "$backup_path"
 }
@@ -111,17 +122,81 @@ is_wsl() {
     grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
 }
 
+detect_host_variant() {
+    case "${DOTFILES_HOST:-auto}" in
+        wsl|linux)
+            printf '%s\n' "$DOTFILES_HOST"
+            ;;
+        auto|"")
+            if is_wsl; then
+                printf 'wsl\n'
+            else
+                printf 'linux\n'
+            fi
+            ;;
+        *)
+            echo -e "${RED}Error:${NC} DOTFILES_HOST must be 'auto', 'wsl', or 'linux'"
+            exit 1
+            ;;
+    esac
+}
+
 collect_conflicts() {
     local output="$1"
     local line
+    local conflict_path
 
     CONFLICT_PATHS=()
 
     while IFS= read -r line; do
+        conflict_path=""
+
         if [[ "$line" == *"existing target is neither a link nor a directory: "* ]]; then
-            CONFLICT_PATHS+=("${line##*: }")
+            conflict_path="${line##*: }"
+        elif [[ "$line" == *"existing target is not owned by stow: "* ]]; then
+            conflict_path="${line##*: }"
+        elif [[ "$line" == *"existing target is stowed to a different package: "* ]]; then
+            conflict_path="${line##*: }"
+            conflict_path="${conflict_path%% => *}"
+        fi
+
+        if [ -n "$conflict_path" ]; then
+            CONFLICT_PATHS+=("$conflict_path")
         fi
     done <<< "$output"
+}
+
+is_repo_symlink() {
+    local target_path="$1"
+    local resolved_path
+
+    if [ ! -L "$target_path" ]; then
+        return 1
+    fi
+
+    resolved_path="$(readlink -f "$target_path" 2>/dev/null || true)"
+    [ -n "$resolved_path" ] && [[ "$resolved_path" == "$DOTFILES_DIR/"* ]]
+}
+
+remove_repo_symlink_conflict() {
+    local relative_path="$1"
+    local current_path="$HOME/$relative_path"
+
+    while [[ "$current_path" == "$HOME"/* ]]; do
+        if is_repo_symlink "$current_path"; then
+            echo -e "    Removing old repo symlink: ${current_path#$HOME/}"
+            rm -f "$current_path"
+            return 0
+        fi
+
+        if [ "$current_path" = "$HOME" ]; then
+            break
+        fi
+
+        current_path="$(dirname "$current_path")"
+    done
+
+    return 1
 }
 
 stow_package() {
@@ -150,8 +225,12 @@ stow_package() {
 
     local relative_path
     for relative_path in "${CONFLICT_PATHS[@]}"; do
-        echo -e "    Backing up conflict: $relative_path"
-        backup_conflicting_path "$relative_path"
+        if remove_repo_symlink_conflict "$relative_path"; then
+            :
+        else
+            echo -e "    Backing up conflict: $relative_path"
+            backup_conflicting_path "$relative_path"
+        fi
     done
 
     if output=$(stow -v 1 -t "$HOME" "${extra_args[@]}" "$package" 2>&1); then
@@ -169,6 +248,13 @@ cd "$DOTFILES_DIR"
 
 # Deploy dotfiles with stow
 echo -e "${YELLOW}Deploying dotfiles with stow...${NC}"
+
+HOST_VARIANT="$(detect_host_variant)"
+echo -e "${YELLOW}Host profile:${NC} $HOST_VARIANT"
+
+if [ "$HOST_VARIANT" = "wsl" ]; then
+    echo -e "${YELLOW}WSL note:${NC} For a fresh WSL setup, ${BLUE}./scripts/install-wsl-safe.sh${NC} is the recommended no-surprises entrypoint."
+fi
 
 # List of packages to stow
 declare -a packages=(
@@ -200,7 +286,7 @@ declare -a packages=(
     "tmux"
 )
 
-if is_wsl; then
+if [ "$HOST_VARIANT" = "wsl" ]; then
     packages+=("opencode-wsl")
 else
     packages+=("opencode-linux")

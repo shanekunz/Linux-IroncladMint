@@ -12,11 +12,34 @@ NC='\033[0m'
 # Get the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+is_wsl() {
+    grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
+}
+
+confirm_wsl_linux_path() {
+    local reply
+
+    if ! is_wsl; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}WSL detected.${NC} ${BLUE}bootstrap.sh${NC} is the full Linux Mint bootstrap and installs desktop/window-manager packages that are not intended for a normal WSL setup."
+    echo -e "${YELLOW}Recommended:${NC} run ${BLUE}./scripts/install-wsl-safe.sh${NC} instead on WSL."
+    read -r -p "Type 'y' to continue with the full Linux bootstrap anyway: " reply
+    if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}Bootstrap cancelled${NC}"
+        exit 0
+    fi
+    echo ""
+}
+
 echo -e "${BLUE}========================================"${NC}
 echo -e "${BLUE}   Dotfiles Bootstrap${NC}"
 echo -e "${BLUE}   Complete System Setup${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
+confirm_wsl_linux_path
+
 echo -e "${YELLOW}This script will:${NC}"
 echo -e "  1. Install all programs and tools"
 echo -e "  2. Deploy all dotfiles using stow"

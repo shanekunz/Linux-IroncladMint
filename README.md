@@ -290,15 +290,27 @@ All scripts are idempotent and can be run independently:
 ### Deploy Dotfiles
 
 ```bash
-cd ~/dotfiles
-stow bash git x11 i3 nvim ghostty starship rofi picom i3blocks
+./scripts/stow-dotfiles.sh
+```
+
+This script auto-detects WSL vs native Linux and stows the matching OpenCode host package:
+
+- `opencode-common` on every machine
+- `opencode-wsl` on WSL
+- `opencode-linux` on native Linux
+
+If you need to force the host profile for testing, use:
+
+```bash
+DOTFILES_HOST=wsl ./scripts/stow-dotfiles.sh
+DOTFILES_HOST=linux ./scripts/stow-dotfiles.sh
 ```
 
 ### Undeploy Dotfiles
 
 ```bash
 cd ~/dotfiles
-stow -D bash git x11 i3 nvim ghostty starship rofi picom i3blocks
+stow -D -t ~ bash git x11 i3 nvim ghostty starship rofi picom i3blocks lazygit flameshot nitrogen bin obsbot gtk-3.0 gtk-4.0 home-scripts kanata claude environment.d mise gh copyq opencode-common tmux opencode-linux opencode-wsl
 ```
 
 ### Deploy Individual Package
@@ -307,6 +319,20 @@ stow -D bash git x11 i3 nvim ghostty starship rofi picom i3blocks
 cd ~/dotfiles
 stow nvim  # Just deploy Neovim config
 ```
+
+Do not manually stow both `opencode-linux` and `opencode-wsl` into the same home directory. The helper script above picks the correct one and also migrates old repo-owned symlinks if you switch layouts later.
+
+### WSL-Only Install Path
+
+For a terminal-focused WSL setup, use the narrower installer instead of `master-install.sh`:
+
+```bash
+./scripts/install-wsl-safe.sh
+```
+
+That installs a CLI-safe package set, stows only the WSL-friendly dotfiles subset, and avoids desktop/i3/media services that do not belong in WSL.
+
+If you accidentally run `./scripts/master-install.sh`, `./bootstrap.sh`, or `./scripts/bootstrap.sh` inside WSL, they now stop and require an explicit `y` confirmation before continuing with the full Linux Mint path.
 
 ## Web Apps
 

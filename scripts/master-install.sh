@@ -11,10 +11,33 @@ NC='\033[0m'
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+is_wsl() {
+    grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
+}
+
+confirm_wsl_linux_path() {
+    local reply
+
+    if ! is_wsl; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}WSL detected.${NC} ${BLUE}master-install.sh${NC} is the full Linux Mint path and installs desktop/window-manager packages that do not belong in a normal WSL setup."
+    echo -e "${YELLOW}Recommended:${NC} run ${BLUE}./scripts/install-wsl-safe.sh${NC} instead on WSL."
+    read -r -p "Type 'y' to continue with the full Linux install anyway: " reply
+    if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}Cancelled.${NC} No full Linux packages were installed."
+        exit 0
+    fi
+    echo ""
+}
+
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}   Dotfiles Master Installation${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
+
+confirm_wsl_linux_path
 
 # Function to run a script
 run_script() {
