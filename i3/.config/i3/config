@@ -335,7 +335,7 @@ bindsym $mod+Shift+c exec ~/.local/bin/webapp "Confluence" "https://upstreamimpa
 
 # Communication
 bindsym $mod+Control+s exec signal-desktop
-bindsym $mod+Mod1+t exec ~/.local/bin/webapp "Telegram" "https://web.telegram.org/k/" "1200x900"
+bindsym $mod+Mod1+t exec ~/.local/bin/webapp "Telegram" "https://web.telegram.org/a/" "1200x900"
 bindsym $mod+Shift+w exec flatpak run com.ktechpit.whatsie
 bindsym $mod+Shift+t exec flatpak run com.github.IsmaelMartinez.teams_for_linux
 bindsym $mod+Control+Mod1+s exec flatpak run org.localsend.localsend_app
