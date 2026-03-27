@@ -110,7 +110,6 @@ run_script "install-discord.sh"
 run_script "install-zoom.sh"
 run_script "install-signal.sh"
 run_script "install-whatsie.sh"
-run_script "install-telegram.sh"
 
 # Productivity
 echo -e "${BLUE}=== Productivity ===${NC}"

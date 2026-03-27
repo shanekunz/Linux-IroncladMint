@@ -40,6 +40,7 @@
 
 **Communication:**
 - `Mod+Control+s` - Signal
+- `Mod+Alt+t` - Telegram Web
 - `Mod+Control+Alt+s` - LocalSend
 - `Mod+Shift+w` - Whatsie (WhatsApp)
 - `Mod+Shift+t` - Teams

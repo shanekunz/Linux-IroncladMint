@@ -69,6 +69,7 @@ create_webapp "Outlook" "https://outlook.office.com/mail/" "1400x900" "Microsoft
 create_webapp "Linear" "https://linear.app" "1400x900" "Linear issue tracker" "applications-development" "Office;Development;"
 create_webapp "Jira" "$JIRA_URL" "1400x900" "Jira issue tracker" "applications-development" "Office;Development;"
 create_webapp "Confluence" "$CONFLUENCE_URL" "1400x900" "Confluence wiki" "applications-office" "Office;Documentation;"
+create_webapp "Telegram" "https://web.telegram.org/k/" "1200x900" "Telegram Web" "telegram" "Network;InstantMessaging;"
 create_webapp "Limitless" "https://app.limitless.ai" "1200x800" "Limitless AI meetings" "applications-office" "Office;AudioVideo;"
 create_webapp "Apple-Music" "https://music.apple.com" "1400x800" "Apple Music streaming" "applications-multimedia" "AudioVideo;Audio;"
 create_webapp "BrainFM" "https://brain.fm" "1000x700" "Brain.fm focus music" "applications-multimedia" "AudioVideo;Audio;"

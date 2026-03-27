@@ -105,7 +105,7 @@ All 52 scripts are **idempotent** - safe to run multiple times.
 - Window Manager Stack (i3, rofi, picom, etc.)
 - Development Tools (git, neovim, vscode, mise, etc.)
 - Browsers (firefox, chromium, edge)
-- Communication (discord, zoom, signal, whatsie, telegram)
+- Communication (discord, zoom, signal, whatsie)
 - Productivity (obsidian, todoist, teams, etc.)
 - Media & Gaming (obs, steam, retroarch, sunshine)
 - Networking (tailscale)
