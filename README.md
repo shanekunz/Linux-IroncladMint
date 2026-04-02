@@ -13,6 +13,7 @@ This repository contains my complete Linux Mint system configuration, including:
 - **Productivity tools** (Obsidian, Todoist, Teams, Sunsama, etc.)
 - **Web applications** as PWAs using custom webapp script
 - **All dotfiles** managed with GNU Stow for easy deployment
+- **User services** for persistent background apps via `systemd --user`
 
 ## Philosophy
 
@@ -181,6 +182,7 @@ Created using custom webapp script (via install-webapps.sh):
 ├── nitrogen/.config/nitrogen/
 ├── copyq/.config/copyq/    # Clipboard manager commands
 ├── environment.d/          # HiDPI env vars (GDK_SCALE, QT_SCALE_FACTOR)
+├── systemd-user/           # User-level systemd services
 ├── gh/.config/gh/          # GitHub CLI preferences
 ├── mise/.config/mise/      # Tool version manager config
 ├── claude/.claude/         # Claude settings, statusline, commands, agents, skills
@@ -203,6 +205,62 @@ This repo now carries your personal Claude/OpenCode setup plus the shared AI wor
 - OpenCode host-specific MCP defaults and skills live in `opencode-linux/.config/opencode/` and `opencode-wsl/.config/opencode/`.
 
 This keeps your machine self-contained in one dotfiles repo while preserving the reusable AI tooling you were previously sourcing from a separate repository.
+
+## User Services
+
+The repo can also manage long-running background apps with `systemd --user`.
+
+### OpenCode Telegram Bot Autostart
+
+This repo includes `systemd-user/.config/systemd/user/opencode-telegram-group-topics-bot.service` plus the helper command `~/.local/bin/opencode-telegram-group-topics-bot-service`.
+
+Why this setup:
+
+- Starts automatically when your user session starts
+- Stops cleanly with one command when you want to run the bot manually for debugging
+- Uses the same `.env` that already lives in your bot repo
+
+One-time setup:
+
+```bash
+cd ~/projects/opencode-telegram-group-topics-bot
+npm install
+npm run build
+cd ~/dotfiles
+./scripts/stow-dotfiles.sh
+systemctl --user daemon-reload
+systemctl --user enable --now opencode-telegram-group-topics-bot.service
+```
+
+Useful commands:
+
+```bash
+opencode-telegram-group-topics-bot-service status
+opencode-telegram-group-topics-bot-service logs
+opencode-telegram-group-topics-bot-service stop
+opencode-telegram-group-topics-bot-service start
+opencode-telegram-group-topics-bot-service restart
+```
+
+Local development handoff:
+
+```bash
+opencode-telegram-group-topics-bot-service stop
+cd ~/projects/opencode-telegram-group-topics-bot
+npm run dev
+```
+
+That uses the same repo-local config as the service. When you are done testing, stop your manual process and start the service again:
+
+```bash
+opencode-telegram-group-topics-bot-service start
+```
+
+Optional: if you want it to keep running even before you log into the desktop session, enable user lingering:
+
+```bash
+sudo loginctl enable-linger "$USER"
+```
 
 ## Kanata Layout Documentation
 

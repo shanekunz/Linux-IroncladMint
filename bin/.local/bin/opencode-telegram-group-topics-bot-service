@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SERVICE_NAME="opencode-telegram-group-topics-bot.service"
+PROJECT_DIR="$HOME/projects/opencode-telegram-group-topics-bot"
+MISE_BIN="$HOME/.local/bin/mise"
+BASE_PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin"
+
+ensure_project_ready() {
+    if [ ! -d "$PROJECT_DIR" ]; then
+        printf 'Project directory not found: %s\n' "$PROJECT_DIR" >&2
+        exit 1
+    fi
+
+    if [ ! -x "$MISE_BIN" ]; then
+        printf 'mise not found at %s\n' "$MISE_BIN" >&2
+        exit 1
+    fi
+}
+
+run_with_repo_mode() {
+    local cli_command="$1"
+    shift || true
+
+    export PATH="$BASE_PATH"
+    ensure_project_ready
+
+    cd "$PROJECT_DIR"
+    exec "$MISE_BIN" exec node@lts -- node dist/cli.js "$cli_command" --mode sources "$@"
+}
+
+run_bot() {
+    ensure_project_ready
+
+    if [ ! -f "$PROJECT_DIR/dist/cli.js" ]; then
+        printf 'Built CLI not found at %s/dist/cli.js\n' "$PROJECT_DIR" >&2
+        printf 'Run: cd %s && npm install && npm run build\n' "$PROJECT_DIR" >&2
+        exit 1
+    fi
+
+    run_with_repo_mode start
+}
+
+show_usage() {
+    cat <<'EOF'
+Usage:
+  opencode-telegram-group-topics-bot-service run
+  opencode-telegram-group-topics-bot-service configure
+  opencode-telegram-group-topics-bot-service start
+  opencode-telegram-group-topics-bot-service stop
+  opencode-telegram-group-topics-bot-service restart
+  opencode-telegram-group-topics-bot-service status
+  opencode-telegram-group-topics-bot-service logs
+EOF
+}
+
+case "${1:-status}" in
+    run)
+        run_bot
+        ;;
+    configure)
+        run_with_repo_mode config
+        ;;
+    start|stop|restart|status)
+        exec systemctl --user "$1" "$SERVICE_NAME"
+        ;;
+    logs)
+        exec journalctl --user -u "$SERVICE_NAME" -f
+        ;;
+    *)
+        show_usage >&2
+        exit 2
+        ;;
+esac

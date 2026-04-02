@@ -50,6 +50,7 @@ declare -a to_backup=(
     ".config/gtk-4.0"
     ".config/kanata"
     ".config/environment.d"
+    ".config/systemd/user/opencode-telegram-group-topics-bot.service"
     ".config/mise"
     ".config/gh"
     ".config/copyq"
@@ -57,6 +58,7 @@ declare -a to_backup=(
     ".local/bin/webapp"
     ".local/bin/lazygit"
     ".local/bin/sunsama"
+    ".local/bin/opencode-telegram-group-topics-bot-service"
     ".claude"
     "scripts"
 )
@@ -272,6 +274,7 @@ declare -a packages=(
     "flameshot"
     "nitrogen"
     "bin"
+    "systemd-user"
     "obsbot"
     "gtk-3.0"
     "gtk-4.0"

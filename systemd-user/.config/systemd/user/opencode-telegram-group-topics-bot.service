@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenCode Telegram Group Topics Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/opencode-telegram-group-topics-bot
+ExecStartPre=/bin/sleep 10
+ExecStart=%h/.local/bin/opencode-telegram-group-topics-bot-service run
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target
