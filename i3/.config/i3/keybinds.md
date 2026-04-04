@@ -100,7 +100,7 @@
 ## Monitor Modes
 
 - `Mod+m` - Main monitor only (4K OLED @ 165Hz, 150% DPI)
-- `Mod+Shift+m` - Both monitors (4K @ 165Hz/144Hz, 150% DPI)
+- `Mod+Shift+m` - Both monitors, both landscape (4K @ 165Hz/144Hz, 150% DPI)
 - `Mod+Control+m` - Streaming mode (1680x1050 LED @ 60Hz, no scaling, 16:10 ratio)
 
 ## Keyboard Layout

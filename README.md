@@ -499,6 +499,22 @@ The `stow-dotfiles.sh` script automatically backs up existing dotfiles before de
 
 ### Update All System Packages
 
+For the full repo-specific update flow, run:
+
+```bash
+./scripts/update-system.sh
+```
+
+This script safely:
+
+- Pulls the latest dotfiles changes with `git pull --ff-only` when the repo is clean
+- Runs `apt`, `flatpak`, and `snap` updates where available
+- Updates `mise` itself and installed `mise`-managed tools
+- Re-runs the dotfiles install scripts (`master-install.sh` on Linux, `install-wsl-safe.sh` on WSL)
+- Re-deploys dotfiles with `stow-dotfiles.sh`
+
+Manual equivalent:
+
 ```bash
 sudo apt update && sudo apt upgrade
 flatpak update
@@ -515,7 +531,7 @@ See the [Neovim Configuration](#neovim-configuration) section above for instruct
 mise upgrade           # Upgrade mise itself
 mise up                # Update all installed tools
 mise use --global node@lts    # Update Node.js
-mise use --global dotnet@latest  # Update .NET
+mise use --global dotnet@8       # Update .NET
 mise use --global rust@latest    # Update Rust
 ```
 
@@ -648,5 +664,4 @@ MIT License - Feel free to use and modify for your own setup!
 ---
 
 **Author**: Shane Kunz
-**Email**: shanemkunz@gmail.com
-**Last Updated**: February 2026
+**Last Updated**: April 2026
