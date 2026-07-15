@@ -544,6 +544,7 @@ This setup prioritizes **latest versions** over Ubuntu's stable (often outdated)
 - **Official repos** for VS Code, Signal, Edge, GitHub CLI
 - **Direct downloads** for Discord, Zoom
 - **mise** - Universal version manager for Node.js, .NET, Rust, Python, Go, and more
+- **Beads** - Agent task tracker installed via official CLI installer
 
 ## Troubleshooting
 

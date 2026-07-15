@@ -64,6 +64,11 @@ keybind = ctrl+shift+p=scroll_page_lines:-5
 keybind = alt+shift+n=scroll_page_fractional:0.5
 keybind = alt+shift+p=scroll_page_fractional:-0.5
 
+
+
+
+
+
 # >>> opencode starship-theme-cycle >>>
-background = #2a1530
+background = #0b1022
 # <<< opencode starship-theme-cycle <<<

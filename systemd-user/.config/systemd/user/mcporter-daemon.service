@@ -1,0 +1,17 @@
+[Unit]
+Description=mcporter keep-alive daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.openclaw/workspace
+Environment=HOME=%h
+ExecStart=%h/.local/bin/mcporter-daemon-service run
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target

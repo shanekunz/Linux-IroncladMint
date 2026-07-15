@@ -50,6 +50,7 @@ declare -a to_backup=(
     ".config/gtk-4.0"
     ".config/kanata"
     ".config/environment.d"
+    ".config/systemd/user/ollama.service"
     ".config/systemd/user/opencode-telegram-group-topics-bot.service"
     ".config/mise"
     ".config/gh"

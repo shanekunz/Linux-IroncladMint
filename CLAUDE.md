@@ -246,7 +246,7 @@ The help file is shown with `Mod+Shift+/` - users rely on it being accurate.
 - **Launcher**: Rofi
 - **Screenshots**: Flameshot
 - **Screen Recording**: VokoscreenNG
-- **Voice Input**: OpenWhispr (local or cloud Whisper transcription)
+- **Voice Input**: Handy (local speech-to-text dictation)
 - **Config Management**: GNU Stow
 
 ## Important Notes

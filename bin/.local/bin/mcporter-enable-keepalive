@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -euo pipefail
+
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+paths = [
+    Path.home() / '.mcporter' / 'mcporter.json',
+    Path.home() / '.openclaw' / 'workspace' / 'config' / 'mcporter.json',
+]
+servers = ('linear', 'atlassian', 'sunsama')
+
+for path in paths:
+    if not path.exists():
+        print(f'skip missing {path}')
+        continue
+    data = json.loads(path.read_text())
+    changed = False
+    mcp = data.setdefault('mcpServers', {})
+    for name in servers:
+        server = mcp.get(name)
+        if not isinstance(server, dict):
+            continue
+        if server.get('lifecycle') != 'keep-alive':
+            server['lifecycle'] = 'keep-alive'
+            changed = True
+    if changed:
+        path.write_text(json.dumps(data, indent=2) + '\n')
+        print(f'updated {path}')
+    else:
+        print(f'no change {path}')
+PY

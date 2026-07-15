@@ -26,8 +26,6 @@
 - `Mod+c` - Claude
 - `Mod+o` - Obsidian
 - `Mod+Control+u` - Cycle Starship prompt theme (3 presets)
-- `Mod+i` - Voice input (OpenWhispr)
-- `Mod+Shift+i` - Kill OpenWhispr
 - `Mod+Control+i` - iCloud Drive
 - `Mod+Shift+s` - Sunsama
 - `Mod+Shift+o` - Outlook
@@ -100,8 +98,8 @@
 ## Monitor Modes
 
 - `Mod+m` - Main monitor only (4K OLED @ 165Hz, 150% DPI)
-- `Mod+Shift+m` - Both monitors, both landscape (4K @ 165Hz/144Hz, 150% DPI)
-- `Mod+Control+m` - Streaming mode (1680x1050 LED @ 60Hz, no scaling, 16:10 ratio)
+- `Mod+Shift+m` - Both monitors with second monitor rotation picker (4K @ 165Hz/144Hz, 150% DPI)
+- `Mod+Control+m` - Streaming mode dropdown: 4 DP-4 resolutions plus `2560x1600` on the HDMI dummy plug
 
 ## Keyboard Layout
 
@@ -118,6 +116,7 @@
 - `Mod+Shift+q` - Shutdown computer
 - `Mod+Shift+Control+Alt+s` - Sleep/suspend
 - `Mod+Control+r` - Boot menu (select OS to reboot into: one-time or set as default)
+- `F11` - Reboot once into Windows immediately
 - `Mod+Control+b` - Backup system state (OpenClaw, HA, secrets → encrypted archive)
 - `Mod+Shift+/` - Show this help file
 
@@ -138,4 +137,4 @@
 - Custom keyboard layout: Engrammer variant
 - Mouse buttons swapped: left/right buttons are swapped
 - Streaming mode uses LED monitor to protect OLED from burn-in
-- **Voice input**: OpenWhispr uses its own global hotkey (default: backtick, configurable in app) to start/stop dictation. `Mod+i` just opens the settings panel.
+- **Voice input**: Configure Handy's launch-at-login behavior and global dictation hotkey in its settings.

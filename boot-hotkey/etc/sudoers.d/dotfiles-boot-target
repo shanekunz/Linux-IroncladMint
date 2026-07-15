@@ -1,0 +1,4 @@
+%sudo ALL=(root) NOPASSWD: /bin/sh /usr/local/lib/dotfiles/boot-target.sh list
+%sudo ALL=(root) NOPASSWD: /bin/sh /usr/local/lib/dotfiles/boot-target.sh once *
+%sudo ALL=(root) NOPASSWD: /bin/sh /usr/local/lib/dotfiles/boot-target.sh default *
+%sudo ALL=(root) NOPASSWD: /bin/sh /usr/local/lib/dotfiles/boot-target.sh windows-once

@@ -206,7 +206,6 @@ CORE=(
   "install-commitizen.sh"
   "install-codex.sh"
   "install-opencode.sh"
-  "install-superset.sh"
   "install-claude-cli.sh"
   "install-openspec.sh"
 )

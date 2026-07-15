@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SERVICE_NAME="mcporter-daemon.service"
+WORKSPACE_DIR="$HOME/.openclaw/workspace"
+CONFIG_PATH="$WORKSPACE_DIR/config/mcporter.json"
+BASE_PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin"
+
+run_daemon() {
+    export PATH="$BASE_PATH"
+    mkdir -p "$HOME/.mcporter/daemon"
+    cd "$WORKSPACE_DIR"
+    exec npx mcporter --config "$CONFIG_PATH" daemon start --foreground --log
+}
+
+show_usage() {
+    cat <<'EOF'
+Usage:
+  mcporter-daemon-service run
+  mcporter-daemon-service start
+  mcporter-daemon-service stop
+  mcporter-daemon-service restart
+  mcporter-daemon-service status
+  mcporter-daemon-service logs
+EOF
+}
+
+case "${1:-status}" in
+    run)
+        run_daemon
+        ;;
+    start|stop|restart|status)
+        exec systemctl --user "$1" "$SERVICE_NAME"
+        ;;
+    logs)
+        exec journalctl --user -u "$SERVICE_NAME" -f
+        ;;
+    *)
+        show_usage >&2
+        exit 2
+        ;;
+esac
