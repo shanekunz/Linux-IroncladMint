@@ -13,17 +13,14 @@ echo -e "${YELLOW}[install-beads]${NC} Checking for Beads CLI..."
 # Ensure user-local bins are available in non-login shells.
 export PATH="$HOME/.local/bin:$PATH"
 
-if command -v bd &> /dev/null; then
-    if BEADS_VERSION=$(bd version 2>/dev/null); then
-        echo -e "${GREEN}[install-beads]${NC} Beads is already installed: $BEADS_VERSION"
-        exit 0
-    fi
-
+if command -v bd &> /dev/null && BEADS_VERSION=$(bd version 2>/dev/null); then
+    echo -e "${YELLOW}[install-beads]${NC} Updating Beads from: $BEADS_VERSION"
+elif command -v bd &> /dev/null; then
     echo -e "${YELLOW}[install-beads]${NC} Found 'bd' on PATH, but it is not working. Reinstalling..."
 fi
 
-echo -e "${YELLOW}[install-beads]${NC} Installing Beads via official installer..."
-curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+echo -e "${YELLOW}[install-beads]${NC} Installing the latest Beads release..."
+curl -fsSL https://raw.githubusercontent.com/gastownhall/beads/main/scripts/install.sh | bash
 
 if command -v bd &> /dev/null && BEADS_VERSION=$(bd version 2>/dev/null); then
     echo -e "${GREEN}[install-beads]${NC} Beads installed successfully: $BEADS_VERSION"

@@ -510,8 +510,10 @@ This script safely:
 - Pulls the latest dotfiles changes with `git pull --ff-only` when the repo is clean
 - Runs `apt`, `flatpak`, and `snap` updates where available
 - Updates `mise` itself and installed `mise`-managed tools
-- Re-runs the dotfiles install scripts (`master-install.sh` on Linux, `install-wsl-safe.sh` on WSL)
+- Re-runs the dotfiles install scripts (`master-install.sh` on Linux, `install-wsl-safe.sh` on WSL), including managed direct installs such as Beads, Claude Code, OpenCode, fzf, Kanata, LazyGit, Starship, and Sunshine
 - Re-deploys dotfiles with `stow-dotfiles.sh`
+
+Some desktop applications use their own built-in updater and are intentionally not replaced by this script.
 
 Manual equivalent:
 

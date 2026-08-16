@@ -10,8 +10,14 @@ NC='\033[0m'
 
 echo -e "${YELLOW}[install-starship]${NC} Checking for starship..."
 
+LATEST_VERSION=$(curl -fsSL https://api.github.com/repos/starship/starship/releases/latest | grep -Po '"tag_name": "v\K[^"]*')
+INSTALLED_VERSION=""
 if command -v starship >/dev/null 2>&1; then
-    echo -e "${GREEN}[install-starship]${NC} starship is already installed ($(starship --version))"
+    INSTALLED_VERSION=$(starship --version 2>/dev/null | awk '{print $2}')
+fi
+
+if [ "$INSTALLED_VERSION" = "$LATEST_VERSION" ]; then
+    echo -e "${GREEN}[install-starship]${NC} starship is already current: $INSTALLED_VERSION"
     exit 0
 fi
 
@@ -29,7 +35,7 @@ case "$ARCH" in
         ;;
 esac
 
-URL="https://github.com/starship/starship/releases/latest/download/starship-${TARGET}.tar.gz"
+URL="https://github.com/starship/starship/releases/download/v${LATEST_VERSION}/starship-${TARGET}.tar.gz"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
@@ -41,5 +47,5 @@ tar -xzf "$TMP_DIR/starship.tar.gz" -C "$TMP_DIR"
 mkdir -p "$HOME/.local/bin"
 install -m 0755 "$TMP_DIR/starship" "$HOME/.local/bin/starship"
 
-echo -e "${GREEN}[install-starship]${NC} starship installed successfully!"
+echo -e "${GREEN}[install-starship]${NC} starship ${LATEST_VERSION} installed successfully!"
 echo -e "${YELLOW}Note:${NC} Re-source your shell: source ~/.bashrc"

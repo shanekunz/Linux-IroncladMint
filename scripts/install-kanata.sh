@@ -7,33 +7,35 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-echo -e "${YELLOW}[install-kanata]${NC} Checking for Kanata..."
+echo -e "${YELLOW}[install-kanata]${NC} Checking for the latest Kanata release..."
 
+# Install dependencies
+sudo apt install -y jq libudev-dev unzip
+
+# Get the current release asset instead of constructing a version-specific filename.
+RELEASE_JSON=$(curl -fsSL https://api.github.com/repos/jtroo/kanata/releases/latest)
+LATEST_VERSION=$(printf '%s' "$RELEASE_JSON" | jq -r '.tag_name')
+DOWNLOAD_URL=$(printf '%s' "$RELEASE_JSON" | jq -r '.assets[] | select(.name == "linux-binaries-x64.zip") | .browser_download_url')
+INSTALLED_VERSION=""
 if command -v kanata &> /dev/null; then
-    echo -e "${GREEN}[install-kanata]${NC} Kanata is already installed"
+    INSTALLED_VERSION=$(kanata --version 2>/dev/null | grep -Po 'v?\K[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+fi
+
+if [ "$INSTALLED_VERSION" = "${LATEST_VERSION#v}" ]; then
+    echo -e "${GREEN}[install-kanata]${NC} Kanata is already current: $INSTALLED_VERSION"
     exit 0
 fi
 
-echo -e "${YELLOW}[install-kanata]${NC} Installing Kanata..."
-
-# Install dependencies
-sudo apt install -y libudev-dev unzip
-
-# Get latest release from GitHub
-LATEST_VERSION=$(curl -s https://api.github.com/repos/jtroo/kanata/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-
-if [ -z "$LATEST_VERSION" ]; then
-    echo -e "${YELLOW}[install-kanata]${NC} Could not determine latest version, using v1.10.1"
-    LATEST_VERSION="v1.10.1"
+if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+    echo -e "${YELLOW}[install-kanata]${NC} Could not find the Linux x64 release asset"
+    exit 1
 fi
 
 echo -e "${YELLOW}[install-kanata]${NC} Downloading Kanata ${LATEST_VERSION}..."
 
-# Download the Linux x64 zip file
-DOWNLOAD_URL="https://github.com/jtroo/kanata/releases/download/${LATEST_VERSION}/kanata-linux-binaries-${LATEST_VERSION}-x64.zip"
-
 # Create temp directory
 TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
 cd "$TEMP_DIR"
 
 # Download and extract
@@ -43,10 +45,6 @@ unzip kanata.zip
 # Install the standard binary (not the cmd_allowed variant)
 chmod +x kanata_linux_x64
 sudo mv kanata_linux_x64 /usr/local/bin/kanata
-
-# Clean up
-cd - > /dev/null
-rm -rf "$TEMP_DIR"
 
 # Set up udev rules for non-root access
 echo -e "${YELLOW}[install-kanata]${NC} Setting up udev rules..."

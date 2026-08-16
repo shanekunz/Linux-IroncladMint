@@ -11,9 +11,13 @@ NC='\033[0m'
 
 echo -e "${YELLOW}[install-opencode]${NC} Checking for opencode..."
 
+export PATH="$HOME/.opencode/bin:$HOME/.local/bin:$PATH"
+
 if command -v opencode &> /dev/null; then
     OPENCODE_VERSION=$(opencode --version 2>/dev/null || echo "installed")
-    echo -e "${GREEN}[install-opencode]${NC} opencode is already installed: $OPENCODE_VERSION"
+    echo -e "${YELLOW}[install-opencode]${NC} Updating opencode from: $OPENCODE_VERSION"
+    opencode upgrade --method curl
+    echo -e "${GREEN}[install-opencode]${NC} opencode is now: $(opencode --version 2>/dev/null || echo "installed")"
     exit 0
 fi
 

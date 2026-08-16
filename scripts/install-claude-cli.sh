@@ -13,13 +13,11 @@ echo -e "${YELLOW}[install-claude-cli]${NC} Checking for Claude CLI..."
 # Ensure user-local bins and mise shims are available
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 
-# Check if claude is already installed
 if command -v claude &> /dev/null; then
-    echo -e "${GREEN}[install-claude-cli]${NC} Claude CLI is already installed"
-    exit 0
+    echo -e "${YELLOW}[install-claude-cli]${NC} Updating Claude CLI from: $(claude --version 2>/dev/null || echo "installed")"
 fi
 
-echo -e "${YELLOW}[install-claude-cli]${NC} Installing Claude CLI via official installer..."
+echo -e "${YELLOW}[install-claude-cli]${NC} Installing the latest Claude CLI via the official installer..."
 curl -fsSL https://claude.ai/install.sh | bash
 
 # Refresh shims for mise-managed Node installations

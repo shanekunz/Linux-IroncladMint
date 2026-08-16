@@ -8,6 +8,10 @@ This repository contains configuration files and automated installation scripts 
 
 **Note**: i3 keybinds are optimized for the Engrammer keyboard layout.
 
+## Reproducibility Default
+
+Assume requests to install software, configure the machine, or change the desktop environment should also be captured in this repository as a reproducible, idempotent dotfiles change. Do not make a machine-only change unless the user explicitly asks for one. If the intended scope is unclear, ask the user to confirm whether the change should be machine-only or reproducible.
+
 ## Quick Reference
 
 Essential commands and files:

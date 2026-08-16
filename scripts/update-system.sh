@@ -52,7 +52,7 @@ echo ""
 
 echo -e "${BLUE}Step 3:${NC} Updating mise-managed tools"
 if command -v mise > /dev/null 2>&1; then
-    mise upgrade
+    mise self-update
     mise up
 else
     echo -e "${YELLOW}Skipping:${NC} mise is not installed"
