@@ -434,6 +434,9 @@ bindsym $mod+Control+Shift+e exec --no-startup-id "pkill kanata; setxkbmap -layo
 # Monitor setup (explicit no scaling) - only on initial startup, not on restart
 exec --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --primary --output DP-4 --off --output HDMI-0 --off
 
+# Autostart windows can claim focus; always begin the session on workspace 1.
+exec --no-startup-id sh -c 'sleep 2; i3-msg "workspace 1"'
+
 # Monitor modes (complete states, usable from any current state)
 # Mod+m: Main monitor only at 4K 165Hz with 150% DPI
 bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/monitor-main-only.sh

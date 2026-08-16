@@ -11,7 +11,24 @@ echo -e "${YELLOW}[install-sunshine]${NC} Checking for the latest Sunshine relea
 
 RELEASE_JSON=$(curl -fsSL https://api.github.com/repos/LizardByte/Sunshine/releases/latest)
 SUNSHINE_VERSION=$(printf '%s' "$RELEASE_JSON" | jq -r '.tag_name | ltrimstr("v")')
-DOWNLOAD_URL=$(printf '%s' "$RELEASE_JSON" | jq -r '.assets[] | select(.name == "sunshine-ubuntu-22.04-amd64.deb") | .browser_download_url')
+
+# Linux Mint inherits Ubuntu package ABI compatibility from its base codename.
+. /etc/os-release
+case "${UBUNTU_CODENAME:-$VERSION_CODENAME}" in
+    jammy)
+        UBUNTU_VERSION="22.04"
+        ;;
+    noble)
+        UBUNTU_VERSION="24.04"
+        ;;
+    *)
+        echo -e "${YELLOW}[install-sunshine]${NC} Unsupported Ubuntu base: ${UBUNTU_CODENAME:-${VERSION_CODENAME:-unknown}}"
+        exit 1
+        ;;
+esac
+
+PACKAGE_NAME="sunshine-ubuntu-${UBUNTU_VERSION}-amd64.deb"
+DOWNLOAD_URL=$(printf '%s' "$RELEASE_JSON" | jq -r --arg package "$PACKAGE_NAME" '.assets[] | select(.name == $package) | .browser_download_url')
 INSTALLED_VERSION=$(dpkg-query -W -f='${Version}' sunshine 2>/dev/null || true)
 
 if [ -n "$INSTALLED_VERSION" ] && dpkg --compare-versions "$INSTALLED_VERSION" ge "$SUNSHINE_VERSION"; then
@@ -20,7 +37,7 @@ if [ -n "$INSTALLED_VERSION" ] && dpkg --compare-versions "$INSTALLED_VERSION" g
 fi
 
 if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-    echo -e "${YELLOW}[install-sunshine]${NC} Could not find the Ubuntu 22.04 amd64 release package"
+    echo -e "${YELLOW}[install-sunshine]${NC} Could not find the ${PACKAGE_NAME} release package"
     exit 1
 fi
 
