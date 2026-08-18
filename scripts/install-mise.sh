@@ -41,6 +41,10 @@ if command -v mise &> /dev/null; then
     mise use --global node@lts
     echo -e "${GREEN}[install-mise]${NC} Node.js LTS installed"
 
+    # Enable Corepack so project-pinned package managers such as pnpm are available.
+    corepack enable
+    echo -e "${GREEN}[install-mise]${NC} Corepack package-manager shims enabled"
+
     # Generate shims so Node/npm are available to all programs (not just shells)
     # This fixes editor LSP issues (e.g., Neovim's Vue/TypeScript language servers)
     mise reshim
