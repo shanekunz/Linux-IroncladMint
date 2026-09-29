@@ -89,4 +89,4 @@ The function receives a Zod error and returns a user-facing message object.
 
 ## Project Context
 
-When explaining, connect new concepts to the existing patterns in the project's CLAUDE.md or LLMs.md file.
+When explaining, connect new concepts to the existing patterns in the project's AGENTS.md (or CLAUDE.md) file.

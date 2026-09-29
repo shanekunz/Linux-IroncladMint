@@ -1,0 +1,115 @@
+model = "gpt-6-sol"
+personality = "pragmatic"
+model_reasoning_effort = "medium"
+[projects."/home/shane"]
+trust_level = "trusted"
+
+[projects."/home/shane/projects/culinary-commander"]
+trust_level = "trusted"
+
+[projects."/home/shane/projects/dotfiles"]
+trust_level = "trusted"
+
+[projects."/home/shane/Documents/Codex/2026-08-24/referenced-chatgpt-conversation-this-is-an"]
+trust_level = "trusted"
+
+[projects."/home/shane/projects/culinary-commander-v1"]
+trust_level = "trusted"
+
+[projects."/home/shane/projects/low-lantern"]
+trust_level = "trusted"
+
+[projects."/home/shane/Documents/handmade-ball-vid"]
+trust_level = "trusted"
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+"gpt-5.4" = "gpt-5.6-terra"
+
+[features]
+hooks = true
+js_repl = false
+multi_agent = true
+
+[tui]
+status_line = ["model-with-reasoning", "context-remaining", "current-dir", "project-root", "git-branch", "context-used", "five-hour-limit", "weekly-limit", "context-window-size"]
+screen_reader_detection_done = true
+
+[tui.model_availability_nux]
+gpt-6-astra = 2
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.context7]
+command = "sh"
+args = ["-c", "CONTEXT7_API_KEY=\"$(cat \"$HOME/.config/context7/api-key\")\" exec npx -y @upstash/context7-mcp"]
+enabled = true
+
+[mcp_servers.node_repl]
+args = []
+command = "/usr/lib/chatgpt/resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/usr/lib/chatgpt/resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/home/shane/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
+CODEX_HOME = "/home/shane/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "0"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.818.61809"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/shane/.codex/plugins/cache/openai-bundled/browser/26.818.61809/scripts/browser-service.mjs"}'
+CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
+
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/home/shane/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/home/shane/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[desktop]
+conversationDetailMode = "STEPS_PROSE"
+followUpQueueMode = "queue"
+
+[hooks.state]
+
+[hooks.state."/home/shane/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:c22a583c36f780ed445438f7375801d2e706377eaf3c10059b1338c1789c760e"
+
+
+
+

@@ -282,6 +282,8 @@ declare -a packages=(
     "home-scripts"
     "kanata"
     "claude"
+    "agents"
+    "codex"
     "environment.d"
     "mise"
     "gh"

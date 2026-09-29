@@ -1,6 +1,6 @@
-# Dotfiles - Claude Documentation
+# Dotfiles - Agent Documentation
 
-This file provides context for Claude Code when working with this dotfiles repository.
+This file provides context for coding agents (Claude Code, Codex, OpenCode) working in this dotfiles repository. It is `AGENTS.md` so every harness reads it; do not add a `CLAUDE.md`, because Claude Code then skips `AGENTS.md`.
 
 ## Purpose
 
@@ -143,13 +143,25 @@ When adding/changing i3 keybinds or features:
 
 ### Other Important Docs
 - **Main README**: `README.md` - General overview and setup instructions
-- **This File**: `CLAUDE.md` - Claude-specific context
+- **This File**: `AGENTS.md` - Agent context for every coding harness
 
 ### Secrets Management
 - **Template**: `home-scripts/.secrets.template` - API keys template (tracked)
 - **User file**: `~/.secrets` - Actual API keys (NOT tracked, user creates from template)
 - **Bashrc**: Sources `~/.secrets` automatically
 - Keys: JIRA_API_TOKEN, LINEAR_API_KEY, OPENAI_API_KEY, BRAVE_API_KEY, etc.
+
+### AI Coding Harnesses (Claude Code, Codex, OpenCode)
+All three harnesses share one set of global skills. Codex is the primary OpenAI harness; OpenCode stays supported but has an unfixed stalled-stream bug.
+- **Global skills**: canonical copies live in `agents/.agents/skills/<name>/SKILL.md` and stow to `~/.agents/skills` (Codex user scope). `claude/.claude/skills/<name>` is a relative symlink to the same folder for Claude Code; OpenCode reads `~/.claude/skills`.
+- **Add a global skill**: create `agents/.agents/skills/<name>/SKILL.md`, add `ln -s ../../../agents/.agents/skills/<name> claude/.claude/skills/<name>`, then `stow -t ~ agents claude`.
+- **Prefer skills over slash commands**: skills work in every harness, and Codex has no custom commands. Keep a skill user-invoked only when running it unprompted would be wrong.
+- **`~/.claude/skills` must stay a real directory** because Claude Code keeps its own `synced/` folder there, so stow links each skill individually.
+- **Codex config**: `codex/.codex/config.toml` stows to `~/.codex/config.toml`. Codex writes through the symlink when it saves trust prompts or app settings, so expect some churn in this file. Keep secrets out of it: the Context7 MCP reads its key from `~/.config/context7/api-key` (untracked, shared with OpenCode).
+- **Codex hooks**: `~/.codex/hooks.json` and `~/.codex/herdr-agent-state.sh` are managed by herdr and are not tracked here. Codex trusts each hook by its position (`hooks.state` in `config.toml`), so re-check trust after reordering hooks.
+- **Claude Code**: `claude/.claude/` holds `settings.json`, `agents/`, `commands/` (OpenSpec only), and the skill symlinks.
+- **OpenCode**: `opencode-common/` plus `opencode-linux/` or `opencode-wsl/` per host. Its `skill-tracker` plugin and `skill-audit`/`skill-verify` commands are OpenCode-only.
+- **Project agents** (subagents) belong in each repository, not here. culinary-commander generates Claude Code, Codex, and OpenCode agent files from `.agents/roles/` with `pnpm agents:sync`.
 
 ### Utility Scripts (not install scripts)
 These scripts are for system maintenance, not package installation:

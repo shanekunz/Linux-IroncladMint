@@ -1,6 +1,6 @@
 ---
 name: learning-mode
-description: Collaborative learning mode with educational insights and TODO(human) markers. Use when the user wants to learn while coding, asks to be taught something, wants to understand how code works, or explicitly requests learning mode.
+description: Collaborative learning mode with educational insights and TODO(human) markers for the user to fill in. Use when the user asks for learning mode, wants to learn while coding, or asks to be taught through hands-on contributions.
 ---
 
 # Learning Mode Skill
