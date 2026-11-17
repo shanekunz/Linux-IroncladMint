@@ -1,4 +1,6 @@
 {
+  "syncClaudeAiSkills": false,
+  "syncClaudeAiPlugins": false,
   "permissions": {
     "allow": [
       "Bash(pnpm add:*)",
@@ -80,6 +82,7 @@
       }
     ]
   },
+  "enableArtifact": false,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
@@ -90,11 +93,17 @@
     "linear@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "learning-output-style@claude-plugins-official": false,
-    "serena@claude-plugins-official": false
+    "serena@claude-plugins-official": false,
+    "document-skills@anthropic-agent-skills": true
   },
-  "syncClaudeAiPlugins": false,
-  "syncClaudeAiSkills": false,
-  "enableArtifact": false,
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
+  },
   "effortLevel": "medium",
   "tui": "fullscreen",
   "editorMode": "vim",
@@ -103,26 +112,26 @@
   "autoMode": {
     "soft_deny": [
       "$defaults",
-      "Bash(wrangler d1 execute:*) \u2014 writes against production D1 in this repo",
+      "Bash(wrangler d1 execute:*) — writes against production D1 in this repo",
       "Bash(pnpm db:studio:prod)"
     ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
-      "**Cloud provider(s)**: Cloudflare (Workers, D1/NuxtHub) \u2014 per wrangler.jsonc and pnpm db:studio:prod usage",
-      "**Repository visibility**: Private \u2014 shanekunz/culinary-commander-pos (confirmed via gh)",
-      "**Internal sharing / snippet hosting**: None configured \u2014 treat public paste/gist services as outside the trust boundary",
+      "**Cloud provider(s)**: Cloudflare (Workers, D1/NuxtHub) — per wrangler.jsonc and pnpm db:studio:prod usage",
+      "**Repository visibility**: Private — shanekunz/culinary-commander-pos (confirmed via gh)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
       "**Secrets management**: Environment variables via .env (gitignored), CI secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN; local key file .beads/.beads-credential-key is gitignored",
-      "**Default / protected branches**: main (default); no rulesets or protected branches listed via gh, but AGENTS.md and README state production/staging deploy mutations require defined approvals \u2014 treat main and deploy workflows as protected in practice",
+      "**Default / protected branches**: main (default); no rulesets or protected branches listed via gh, but AGENTS.md and README state production/staging deploy mutations require defined approvals — treat main and deploy workflows as protected in practice",
       "**CI/CD deploy targets**: Cloudflare Workers via manual GitHub Actions workflows (see .github/workflows and pnpm cf:deploy); production Square merchant is scoped to one Company",
       "**Network posture**: None configured",
-      "**Host containment**: None configured \u2014 assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
       "**Source control**: The trusted repo (shanekunz/culinary-commander-pos) and its origin remote only (no additional orgs configured)",
       "**Trusted internal domains**: culinarycommander.com (Square webhook notification URL, VAPID subject support@culinarycommander.com); api.kitchenhub.app (KitchenHub API base)",
       "**Trusted cloud buckets**: None configured",
       "**Key internal services**: KitchenHub API (api.kitchenhub.app/v2), Square (payments/terminal/webhooks), Resend (email), Telnyx (SMS), Google OAuth, Google Maps API, Cloudflare D1/NuxtHub",
       "**Internal package registry**: None configured",
-      "**Sensitive data locations & audiences**: .env / .env.production.local (KitchenHub, Square, Resend, Telnyx, OAuth, VAPID, bootstrap/session secrets), .beads/.beads-credential-key, CI secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, drizzle.prod.config.ts (production DB config) \u2014 share only with maintainers of shanekunz/culinary-commander-pos",
+      "**Sensitive data locations & audiences**: .env / .env.production.local (KitchenHub, Square, Resend, Telnyx, OAuth, VAPID, bootstrap/session secrets), .beads/.beads-credential-key, CI secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, drizzle.prod.config.ts (production DB config) — share only with maintainers of shanekunz/culinary-commander-pos",
       "**Data retention / declassification**: None configured",
       "**Sensitive remote targets**: any namespace/host/service containing 'prod' or 'production' as a whole word/segment (e.g. .env.production.local, drizzle.prod.config.ts, production D1 database, production Square merchant/webhook)",
       "**Protected deployment namespaces / environments**: Cloudflare Workers production deployment; production Square merchant (company ID 1); production D1 database (accessed via pnpm db:studio:prod)",
