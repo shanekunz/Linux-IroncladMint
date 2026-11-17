@@ -48,6 +48,11 @@ To edit a diagram:
 
 ## Current diagram files
 
+> **Outdated PNGs:** `Enthium Elegant Keymap - Base.json` is on Enthium v15,
+> but `Enthium Elegant Keymap - Base.png` and
+> `Enthium Elegant Keymap - All Layers.png` (and `.pdf`) still show the v14
+> base layer. Re-export them from KLE and delete this note.
+
 - `Enthium Elegant Keymap.json` / `Enthium Elegant Keymap.png`
 - `Enthium Elegant Keymap - Symbol.json` / `Enthium Elegant Keymap - Symbol.png`
 - `Enthium Elegant Keymap - Nav.json` / `Enthium Elegant Keymap - Nav.png`

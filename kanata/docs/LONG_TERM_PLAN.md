@@ -11,7 +11,7 @@ This document tracks a stable, low-churn path for evolving this layout.
 
 ## Current Baseline
 
-- Base layer tracks Enthium v14 punctuation order (`;` then `/`).
+- Base layer tracks Enthium v15 (YUO/IEA/-=.). Home row mods stay on the same finger: middle=Ctrl (E), index=Shift (A).
 - Symbol layer is focused on rows 2-4 with low redundancy and coding coverage.
 - Nav layer is simplified (rows 1/5 mostly disabled to reduce noise/reach).
 - Num layer has `0` on pinky.

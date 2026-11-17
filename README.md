@@ -212,7 +212,7 @@ See the [Shotcut shortcuts](https://shotcut.org/howtos/keyboard-shortcuts/).
 - accountable2you (snap)
 - glow (markdown renderer)
 - Flatpak + Flathub
-- Kanata (keyboard remapper with Enthium v13 layout)
+- Kanata (keyboard remapper with Enthium v15 layout)
 - CopyQ (clipboard manager)
 
 ### Smart Home (Optional)
@@ -255,7 +255,7 @@ Created using custom webapp script (via install-webapps.sh):
 ├── i3blocks/.config/i3blocks/
 ├── lazygit/.config/lazygit/
 ├── flameshot/.config/flameshot/
-├── kanata/.config/kanata/  # Enthium v13 keyboard layout
+├── kanata/.config/kanata/  # Enthium v15 keyboard layout
 ├── kanata/docs/             # Kanata layer diagrams + KLE JSON sources
 ├── nitrogen/.config/nitrogen/
 ├── copyq/.config/copyq/    # Clipboard manager commands

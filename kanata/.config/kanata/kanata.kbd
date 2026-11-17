@@ -2,7 +2,7 @@
 ;; Kanata Configuration: Enthium Layout with Home Row Mods
 ;; ============================================================================
 ;;
-;; This config implements the Enthium v13 keyboard layout with 4 layers:
+;; This config implements the Enthium v15 keyboard layout with 4 layers:
 ;;   - Base:   Enthium alphas (R on right-space tap) + HOME ROW MODS
 ;;   - Symbol: Programming symbols (hold right space)
 ;;   - Nav:    Navigation + clipboard (hold left space)
@@ -11,11 +11,15 @@
 ;; HOME ROW MODS (Miryoku-style):
 ;;   Your home row keys now do double duty - tap for letter, hold for modifier:
 ;;
-;;   Left hand:   C=Win  I=Alt  A=Ctrl  E=Shift
+;;   Left hand:   C=Win  I=Alt  E=Ctrl  A=Shift
 ;;   Right hand:  H=Shift  T=Ctrl  N=Alt  S=Win
 ;;
+;;   Mods stay on the same FINGER across Enthium versions: middle=Ctrl,
+;;   index=Shift. v15 moved E to the middle finger and A to the index finger,
+;;   so E now holds Ctrl and A holds Shift.
+;;
 ;;   Usage: Use OPPOSITE hand for shortcuts. Examples:
-;;     - Ctrl+C (copy): Hold A (left Ctrl) + tap C (just tap, don't hold)
+;;     - Ctrl+C (copy): Hold E (left Ctrl) + tap C (just tap, don't hold)
 ;;     - Ctrl+S (save): Hold T (right Ctrl) + tap S (just tap, don't hold)
 ;;     - Alt+Tab: Hold I (left Alt) + tap Tab
 ;;     - Win+E (file explorer): Hold C (left Win) or S (right Win) + tap E
@@ -99,8 +103,8 @@
   ;; Left hand (pinky→index): Win, Alt, Ctrl, Shift
   c_hr (tap-hold-release 200 200 c lmet)    ;; C → tap=c, hold=Win
   i_hr (tap-hold-release 200 200 i lalt)    ;; I → tap=i, hold=Alt
-  a_hr (tap-hold-release 200 200 a lctl)    ;; A → tap=a, hold=Ctrl
-  e_hr (tap-hold-release 200 200 e lsft)    ;; E → tap=e, hold=Shift
+  e_hr (tap-hold-release 200 200 e lctl)    ;; E → tap=e, hold=Ctrl (middle finger)
+  a_hr (tap-hold-release 200 200 a lsft)    ;; A → tap=a, hold=Shift (index finger)
 
   ;; Right hand (index→pinky): Shift, Ctrl, Alt, Win (mirrored)
   h_hr (tap-hold-release 200 200 h rsft)    ;; H → tap=h, hold=Shift
@@ -148,12 +152,12 @@
 )
 
 ;; ----------------------------------------------------------------------------
-;; Base Layer: Enthium (v14 punctuation swap: ; and /)
+;; Base Layer: Enthium v15 (YUO/IEA/-=.)
 ;; ----------------------------------------------------------------------------
-;; Layout reference (Enthium current):
-;;   q  y  o  u  =    x  l  d  p  z
-;;   b  c  i  a  e    -  k  h  t  n  s  w
-;;      '  ,  .  ;  /    j  m  g  f  v
+;; Layout reference (Enthium v15):
+;;      q  y  u  o  ;    x  l  d  p  z
+;;   b  c  i  e  a  ,    k  h  t  n  s  w
+;;      '  -  =  .  /    j  m  g  f  v
 ;;                 R (right space tap)
 ;;
 ;; Physical QWERTY -> Enthium mapping:
@@ -163,9 +167,9 @@
 ;;
 (deflayer base
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
-  b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
-  lsft '    ,    .    ;    /    j    m    g    f    v    rsft
+  tab  q    y    u    o    ;    x    l    d    p    z    [    ]    \
+  b    @c_hr @i_hr @e_hr @a_hr ,  k  @h_hr @t_hr @n_hr @s_hr w    ret
+  lsft '    -    =    .    /    j    m    g    f    v    rsft
   ;; rmet mapped to @rspc for macOS (Right Cmd = right space behavior)
   lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
 )

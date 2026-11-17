@@ -6,7 +6,7 @@
 ;;   Left hand home row: C=Alt, I=Win (swapped so physical 'c' works for GlazeWM)
 ;;   Right hand home row: N=Win, S=Alt (swapped for symmetry)
 ;;
-;; This config implements the Enthium keyboard layout with 4 layers:
+;; This config implements the Enthium v15 keyboard layout with 4 layers:
 ;;   - Base:   Enthium alphas (R on right-space tap) + HOME ROW MODS
 ;;   - Symbol: Programming symbols (hold right space)
 ;;   - Nav:    Navigation + clipboard (hold left space)
@@ -15,8 +15,12 @@
 ;; HOME ROW MODS - WINDOWS VERSION (swapped for GlazeWM):
 ;;   Your home row keys now do double duty - tap for letter, hold for modifier:
 ;;
-;;   Left hand:   C=Alt  I=Win  A=Ctrl  E=Shift  (C/I swapped from Linux!)
+;;   Left hand:   C=Alt  I=Win  E=Ctrl  A=Shift  (C/I swapped from Linux!)
 ;;   Right hand:  H=Shift  T=Ctrl  N=Win  S=Alt   (N/S swapped for symmetry)
+;;
+;;   Mods stay on the same FINGER across Enthium versions: middle=Ctrl,
+;;   index=Shift. v15 moved E to the middle finger and A to the index finger,
+;;   so E now holds Ctrl and A holds Shift.
 ;;
 ;;   WHY SWAPPED: GlazeWM uses Alt instead of i3's Win. Swapping makes the same
 ;;   PHYSICAL KEYS work for WM on both systems:
@@ -24,7 +28,7 @@
 ;;     Windows (GlazeWM): Hold C (Alt) for window management <- Same finger!
 ;;
 ;;   Usage: Use OPPOSITE hand for shortcuts. Examples:
-;;     - Ctrl+C (copy): Hold A (left Ctrl) + tap C (just tap, don't hold)
+;;     - Ctrl+C (copy): Hold E (left Ctrl) + tap C (just tap, don't hold)
 ;;     - Ctrl+S (save): Hold T (right Ctrl) + tap S (just tap, don't hold)
 ;;     - Alt+Tab: Hold C (left Alt) + tap Tab  <- Changed from I to C!
 ;;     - Win+Tab: Hold I (left Win) + tap Tab  <- Changed from C to I!
@@ -88,8 +92,8 @@
   ;; This makes physical 'c' give Alt (for GlazeWM) and 'i' give Win
   c_hr (tap-hold-release 200 200 c lalt)    ;; C → tap=c, hold=Alt (was Win on Linux)
   i_hr (tap-hold-release 200 200 i lmet)    ;; I → tap=i, hold=Win (was Alt on Linux)
-  a_hr (tap-hold-release 200 200 a lctl)    ;; A → tap=a, hold=Ctrl
-  e_hr (tap-hold-release 200 200 e lsft)    ;; E → tap=e, hold=Shift
+  e_hr (tap-hold-release 200 200 e lctl)    ;; E → tap=e, hold=Ctrl (middle finger)
+  a_hr (tap-hold-release 200 200 a lsft)    ;; A → tap=a, hold=Shift (index finger)
 
   ;; Right hand (index→pinky): Shift, Ctrl, Win, Alt (SWAPPED for symmetry!)
   ;; Swapped n/s so outer pinky keys (c/s) give WM mod, inner (i/n) give other mod
@@ -137,13 +141,13 @@
 )
 
 ;; ----------------------------------------------------------------------------
-;; Base Layer: Enthium (v14 punctuation swap: ; and /)
+;; Base Layer: Enthium v15 (YUO/IEA/-=.)
 ;; ----------------------------------------------------------------------------
 (deflayer base
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
-  b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
-  lsft '    ,    .    ;    /    j    m    g    f    v    rsft
+  tab  q    y    u    o    ;    x    l    d    p    z    [    ]    \
+  b    @c_hr @i_hr @e_hr @a_hr ,  k  @h_hr @t_hr @n_hr @s_hr w    ret
+  lsft '    -    =    .    /    j    m    g    f    v    rsft
   lctl lmet lalt           @lspc          @rspc @rspc @rspc rctl
 )
 
