@@ -116,3 +116,9 @@ trusted_hash = "sha256:c22a583c36f780ed445438f7375801d2e706377eaf3c10059b1338c17
 [mcp_servers.posthog]
 url = "https://mcp.posthog.com/mcp"
 startup_timeout_sec = 30
+
+# Codex's built-in skill-creator collides with the skill-creator in project catalogs.
+# skills.config only works in this user file, not in a project .codex/config.toml.
+[[skills.config]]
+path = "/home/shane/.codex/skills/.system/skill-creator/SKILL.md"
+enabled = false
