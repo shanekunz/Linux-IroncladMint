@@ -1,12 +1,24 @@
 {
   "$comment": "Provenance for every skill in agents/.agents/skills. Check with: python3 scripts/check-agent-skills.py. Update procedure: AGENTS.md > Agent Harnesses > Updating skills.",
   "skills": {
-    "commit-msg": { "kind": "custom" },
-    "jira-implement": { "kind": "custom" },
-    "learning-mode": { "kind": "custom" },
-    "pr": { "kind": "custom" },
-    "read-aloud": { "kind": "custom" },
-    "typecheck": { "kind": "custom" },
+    "commit-msg": {
+      "kind": "custom"
+    },
+    "jira-implement": {
+      "kind": "custom"
+    },
+    "learning-mode": {
+      "kind": "custom"
+    },
+    "pr": {
+      "kind": "custom"
+    },
+    "read-aloud": {
+      "kind": "custom"
+    },
+    "typecheck": {
+      "kind": "custom"
+    },
     "frontend-design": {
       "kind": "upstream",
       "source": "anthropics/skills",
@@ -69,6 +81,13 @@
       "path": "skills/search",
       "revision": "cac338357d596415773874f06a6c16e862c195e4",
       "modifications": "Mobbin rename (see mobbin-best-practices)."
+    },
+    "ux-copy": {
+      "kind": "upstream",
+      "source": "anthropics/knowledge-work-plugins",
+      "path": "design/skills/ux-copy",
+      "revision": "e91a134584eb798bac7fb0379358006a2b63b965",
+      "modifications": "Removed the CONNECTORS.md pointer and the 'If Connectors Available' section, which only work inside Anthropic's design plugin. Repo LICENSE copied in."
     }
   }
 }
