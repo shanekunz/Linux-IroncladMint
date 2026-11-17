@@ -144,7 +144,7 @@
   tab  q    y    o    u    =    x    l    d    p    z    [    ]    \
   b    @c_hr @i_hr @a_hr @e_hr -  k  @h_hr @t_hr @n_hr @s_hr w    ret
   lsft '    ,    .    ;    /    j    m    g    f    v    rsft
-  lctl lmet lalt           @lspc          @rspc ralt @rspc rctl
+  lctl lmet lalt           @lspc          @rspc @rspc @rspc rctl
 )
 
 ;; ----------------------------------------------------------------------------
