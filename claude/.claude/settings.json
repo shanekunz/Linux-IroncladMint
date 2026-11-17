@@ -94,6 +94,7 @@
   },
   "syncClaudeAiPlugins": false,
   "syncClaudeAiSkills": false,
+  "enableArtifact": false,
   "effortLevel": "medium",
   "tui": "fullscreen",
   "editorMode": "vim",
