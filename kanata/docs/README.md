@@ -9,6 +9,21 @@ This folder stores the visual documentation for the Kanata layout in
 - Visual layer diagrams: files in this folder (`*.png`)
 - Diagram source files: Keyboard Layout Editor JSON files (`*.json`)
 
+## Linux layout switching
+
+The two selectable typing layouts are **Enthium** (Kanata, default) and
+**QWERTY with thumb remaps** (Caps Lock → `b`, right space/Scroll Lock → `r`).
+Press **physical left Win+Ctrl+Q**, then release, to toggle either way.
+Q and M are the only letters that retain their physical positions in both layouts;
+Q is used as the mnemonic for QWERTY. Use physical modifiers, since home-row
+modifiers are only available in Enthium.
+
+The toggle lives in `i3/.config/i3/scripts/toggle-keyboard-layout.sh`.
+The symbol, navigation, and number layers remain part of Enthium.
+Engrammer is no longer a selectable layout; mentions in diagram credits and
+the layout's history refer to its ancestry.
+See `i3/.config/i3/keybinds.md` for the full shared-key list and recovery commands.
+
 ## Edit workflow
 
 When you change Kanata layers, update both the config and diagrams.

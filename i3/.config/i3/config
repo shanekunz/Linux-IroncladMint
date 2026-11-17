@@ -97,6 +97,9 @@ bindsym $mod+Shift+q exec --no-startup-id ~/.config/i3/scripts/shutdown-delayed.
 # Lock screen
 bindsym $mod+Shift+x exec i3lock -c 000000
 
+# Turn displays off without locking or suspending; delay avoids waking on key release
+bindsym --release $mod+Shift+d exec --no-startup-id "sleep 0.5 && xset dpms force off"
+
 # Sleep/suspend
 bindsym $mod+Shift+Control+Mod1+s exec systemctl suspend
 
@@ -108,6 +111,9 @@ bindsym F11 exec --no-startup-id bash ~/projects/dotfiles/scripts/boot-windows-o
 
 # System state backup (OpenClaw, HomeAssistant, secrets - encrypted to ~/system-backup/)
 bindsym $mod+Control+b exec --no-startup-id ghostty -e ~/projects/dotfiles/scripts/backup-system-state.sh
+
+# Full system update (confirm before opening a terminal)
+bindsym $mod+u exec --no-startup-id ~/.config/i3/scripts/update-system-confirm.sh
 
 #####################
 # WINDOW NAVIGATION
@@ -416,33 +422,29 @@ client.urgent           #ff5555 #900000 #ffffff #ff5555   #ff5555
 
 # keyboard layout and mouse click swap
 exec_always --no-startup-id ~/.config/i3/scripts/toggle-mouse-buttons.sh
-# Enthium v13 via Kanata is the default layout
-exec_always --no-startup-id "setxkbmap -layout us -option ''; pkill -x kanata; kanata -c ~/.config/kanata/kanata.kbd &"
+# Enthium via Kanata is the default layout
+exec_always --no-startup-id ~/.config/i3/scripts/toggle-keyboard-layout.sh enthium
 
 # Keyboard layout reference image (floating)
 bindsym $mod+Control+k exec --no-startup-id feh --title "Keyboard Layout" ~/projects/dotfiles/kanata/docs/Enthium\ Elegant\ Keymap\ -\ All\ Layers.png
 
-# Keyboard layout switching
-# Mod+Control+e: Switch to Engrammer (XKB fallback)
-bindsym $mod+Control+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -variant engrammer -option caps:escape; notify-send 'Keyboard' 'Engrammer (XKB)'"
-# Mod+Alt+e: Switch to QWERTY + thumb keys (for typefu Enthium practice)
-# CapsLock (66) → b, Scroll Lock (78) → r, clear Lock modifier
-bindsym $mod+Mod1+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -option ''; xmodmap -e 'clear Lock' -e 'keycode 66 = b B b B' -e 'keycode 78 = r R r R'; notify-send 'Keyboard' 'QWERTY + thumb (typefu)'"
-# Mod+Control+Shift+e: Switch to Enthium (Kanata) - full layout with symbol layers
-bindsym $mod+Control+Shift+e exec --no-startup-id "pkill kanata; setxkbmap -layout us -option ''; kanata -c ~/.config/kanata/kanata.kbd & notify-send 'Keyboard' 'Enthium (Kanata)'"
+# Q stays in the same physical position in both layouts (Q for QWERTY).
+# Use physical Win/Ctrl keys; release before switching the remapper.
+bindsym --release $mod+Control+q exec --no-startup-id ~/.config/i3/scripts/toggle-keyboard-layout.sh
 
-# Monitor setup (explicit no scaling) - only on initial startup, not on restart
-exec --no-startup-id xrandr --output DP-0 --mode 3840x2160 --rate 164.99 --primary --output DP-4 --off --output HDMI-0 --off
+# Monitor setup - only on initial startup, not on restart. Uses the single real monitor
+# (OLED 4K 165Hz, else the preferred mode of whatever is connected); stays on the HDMI-0 dummy if none.
+exec --no-startup-id ~/.config/i3/scripts/monitor-main-only.sh --no-restart
 
 # Autostart windows can claim focus; always begin the session on workspace 1.
 exec --no-startup-id sh -c 'sleep 2; i3-msg "workspace 1"'
 
 # Monitor modes (complete states, usable from any current state)
-# Mod+m: Main monitor only at 4K 165Hz with 150% DPI
+# Mod+m: Single real monitor, 150% DPI (OLED 4K 165Hz on DP-0, else the preferred mode of whatever is connected)
 bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/monitor-main-only.sh
-# Mod+Shift+m: Both monitors at full resolution with 150% DPI and rotation picker
+# Mod+Shift+m: Both monitors at full resolution with 150% DPI and orientation picker
 bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/scripts/monitor-both.sh
-# Mod+Ctrl+m: Streaming mode - LED monitor at 1080p, no scaling (protects OLED)
+# Mod+Ctrl+m: Streaming resolution/orientation pickers, HDMI fallback if DP-4 disconnected (protects OLED)
 bindsym $mod+Control+m exec --no-startup-id ~/.config/i3/scripts/monitor-streaming.sh
 # Mod+Ctrl+Shift+m: Toggle Mac microphone streaming
 bindsym $mod+Control+Shift+m exec --no-startup-id ~/scripts/mac-mic-toggle.sh

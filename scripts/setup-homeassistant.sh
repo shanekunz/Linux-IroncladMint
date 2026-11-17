@@ -1,6 +1,7 @@
 #!/bin/bash
 # Setup Home Assistant and Matter Server via Docker
-# This script recreates the Docker containers if they don't exist
+# This script recreates the Docker containers if they don't exist.
+# Containers remain manual-start so an idle Docker install stays idle.
 set -e
 
 GREEN='\033[0;32m'
@@ -37,7 +38,7 @@ if [ -z "$MATTER_EXISTS" ]; then
     echo -e "${YELLOW}Creating Matter Server container...${NC}"
     docker run -d \
         --name matter-server \
-        --restart unless-stopped \
+        --restart no \
         --security-opt apparmor=unconfined \
         -v "$MATTER_DIR:/data" \
         -v /run/dbus:/run/dbus:ro \
@@ -48,7 +49,8 @@ if [ -z "$MATTER_EXISTS" ]; then
     echo -e "${GREEN}Matter Server created!${NC}"
 else
     echo -e "${YELLOW}Matter Server container already exists${NC}"
-    # Start if not running
+    docker update --restart no matter-server >/dev/null
+    # This setup command intentionally starts the service for immediate use.
     docker start matter-server 2>/dev/null || true
 fi
 
@@ -57,7 +59,7 @@ if [ -z "$HA_EXISTS" ]; then
     echo -e "${YELLOW}Creating Home Assistant container...${NC}"
     docker run -d \
         --name homeassistant \
-        --restart unless-stopped \
+        --restart no \
         --privileged \
         --network host \
         -e TZ=America/Denver \
@@ -67,7 +69,8 @@ if [ -z "$HA_EXISTS" ]; then
     echo -e "${GREEN}Home Assistant created!${NC}"
 else
     echo -e "${YELLOW}Home Assistant container already exists${NC}"
-    # Start if not running
+    docker update --restart no homeassistant >/dev/null
+    # This setup command intentionally starts the service for immediate use.
     docker start homeassistant 2>/dev/null || true
 fi
 
@@ -90,4 +93,6 @@ echo -e "${YELLOW}Useful commands:${NC}"
 echo -e "  View logs:      ${BLUE}docker logs homeassistant -f${NC}"
 echo -e "  Restart HA:     ${BLUE}docker restart homeassistant${NC}"
 echo -e "  Stop all:       ${BLUE}docker stop homeassistant matter-server${NC}"
+echo -e "  Start all:      ${BLUE}docker start matter-server homeassistant${NC}"
+echo -e "  Autostart:      disabled (restart policy: no)"
 echo ""

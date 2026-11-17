@@ -1,0 +1,199 @@
+model:
+  provider: openai-codex
+  default: gpt-6.1-sol
+  base_url: https://chatgpt.com/backend-api/codex
+agent:
+  max_turns: unlimited
+  disabled_toolsets:
+    - computer_use
+    - cronjob
+    - code_execution
+    - delegation
+    - homeassistant
+    - image_gen
+    - kanban
+    - messaging
+    - spotify
+    - tts
+    - video
+    - video_gen
+    - x_search
+  reasoning_effort: medium
+terminal:
+  backend: docker
+  cwd: /workspace
+  timeout: 180
+  home_mode: auto
+  docker_forward_env:
+    - GITHUB_TOKEN
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_volumes:
+    - /home/shane/.hermes/cache/documents:/output
+  docker_mount_cwd_to_workspace: false
+  docker_network: true
+web:
+  backend: ddgs
+browser:
+  backend: browser-use
+  inactivity_timeout: 120
+  headed: false
+  restrict_evaluate: true
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: true
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  progress_notices: false
+auxiliary:
+  background_review:
+    enabled: true
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: true
+  memory_char_limit: 3500
+  user_char_limit: 2200
+  nudge_interval: 10
+  flush_min_turns: 0
+skills:
+  external_dirs:
+    - ~/.hermes/hermes-agent/skills/github
+    - ~/.hermes/hermes-agent/skills/email/email-inbox-triage
+    - ~/.hermes/hermes-agent/skills/media/youtube-content
+    - ~/.hermes/hermes-agent/skills/productivity/document-to-action-items
+    - ~/.hermes/hermes-agent/skills/productivity/google-workspace
+    - ~/.hermes/hermes-agent/skills/productivity/nano-pdf
+    - ~/.hermes/hermes-agent/skills/productivity/ocr-and-documents
+    - ~/.hermes/hermes-agent/skills/productivity/pdf
+    - ~/.hermes/hermes-agent/skills/productivity/weekly-review-planning
+    - ~/.hermes/hermes-agent/skills/research/blocked-page-recovery
+    - ~/.hermes/hermes-agent/skills/research/grounded-citations
+    - ~/.hermes/hermes-agent/skills/software-development/plan
+    - ~/.hermes/hermes-agent/skills/software-development/spike
+    - ~/.hermes/hermes-agent/skills/software-development/systematic-debugging
+    - /home/shane/projects/culinary-commander-marketing-skills/.agents/skills
+    - /home/shane/projects/culinary-commander/.agents/skills/data-visualization
+    - /home/shane/projects/culinary-commander/.agents/skills/deep-research
+    - /home/shane/projects/culinary-commander/.agents/skills/domain-modeling
+    - ~/.agents/skills/frontend-design
+    - /home/shane/projects/culinary-commander/.agents/skills/grilling
+    - /home/shane/projects/culinary-commander/.agents/skills/grug-brained-dev
+    - /home/shane/projects/culinary-commander/.agents/skills/prototype
+    - /home/shane/projects/culinary-commander/.agents/skills/research
+    - /home/shane/projects/culinary-commander/.agents/skills/teach
+    - /home/shane/projects/culinary-commander/.agents/skills/verification-before-completion
+  guard_agent_created: true
+  write_approval: true
+  creation_nudge_interval: 15
+onboarding:
+  seen:
+    openclaw_residue_cleanup: true
+_config_version: 49
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - connections
+    - file
+    - mcp-linear
+    - mcp-sunsama
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - vision
+    - web
+  telegram:
+    - browser
+    - clarify
+    - connections
+    - file
+    - mcp-linear
+    - mcp-sunsama
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - vision
+    - web
+platforms:
+  telegram:
+    enabled: true
+    guest_mode: false
+    extra:
+      disable_link_previews: true
+      rich_messages: false
+mcp_servers:
+  sunsama:
+    url: https://api.sunsama.com/mcp
+    auth: oauth
+    enabled: true
+    tools:
+      resources: false
+      prompts: false
+  linear:
+    url: https://mcp.linear.app/mcp
+    auth: oauth
+    enabled: true
+    tools:
+      resources: false
+      prompts: false
+session_reset:
+  mode: none
+group_sessions_per_user: true
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
+plugins:
+  enabled:
+    - herdr-agent-state
+gateway:
+  multiplex_profiles: true

@@ -97,6 +97,58 @@ stow i3                     # Just i3 config
 - **mise** - Universal version manager (Node.js, .NET, Rust, Python, Go, and 100+ tools)
 - OpenCode
 - Claude CLI
+- Hermes Agent
+- Herdr + Collie, with opt-in authenticated Cloudflare sharing
+
+#### Low Lantern: temporary browser access
+
+Minimal Linux setup for [Low Lantern](https://github.com/shanekunz/low-lantern):
+
+```bash
+git clone https://github.com/shanekunz/low-lantern.git ~/projects/low-lantern
+./scripts/install-herdr-collie.sh
+python3 scripts/low-lantern-share.py start
+```
+
+The installer uses mise for Herdr/Caddy (and cloudflared if missing) and Collie's
+checksum-verified binary installer. It is also included in `master-install.sh`.
+Sharing starts only with the explicit `start` command. This requires a running
+systemd user manager, Python 3, and an existing authenticated agent CLI.
+
+The sharing helper prints an HTTPS URL and generated browser-login credentials.
+It runs Herdr, a loopback-only Caddy password gate, and a Cloudflare quick tunnel
+as user services; Collie connects to Herdr and trusts only the proxy's overwritten
+device header for writes. Both the UI and API require the password. Credentials
+and generated config stay in `~/.local/state/low-lantern-share/` (private permissions).
+It checks public authentication and backend connectivity before reporting success.
+
+Start a workspace and your already-authenticated agent if this is the first run:
+
+```bash
+herdr workspace create --cwd ~/projects/low-lantern --label Low-Lantern
+# Use the root_pane.pane_id returned above:
+herdr agent start friend --kind opencode --pane w1:p1
+# Or open `herdr` locally and launch your preferred agent in its shell.
+```
+
+Open the URL, enter the username/password, select the agent, and type a reply.
+The friend operates your real terminal and existing agent account. A browser tab
+is sufficient; Collie also offers PWA installation in Settings.
+The September 20 Linux smoke test used OpenCode with `openai/gpt-6-astra` and
+verified a reply through Collie's browser UI. Codex's saved ChatGPT credentials
+were expired; it needs a fresh `codex login` before use. Collie's terminal view
+works without an agent session-history integration.
+
+```bash
+python3 scripts/low-lantern-share.py status  # URL, credentials, process status
+python3 scripts/low-lantern-share.py stop    # close public access; keep agents alive
+```
+
+The temporary URL lasts while its tunnel process runs; restarting the tunnel
+changes it. Rerun `start` to obtain/configure the new address after a stop, crash,
+or reboot. Quick-tunnel services are session-only, not boot-enabled. The host
+must stay awake and online. Logs: `journalctl --user -u low-lantern-tunnel.service`
+(also `low-lantern-herdr.service`, `low-lantern-proxy.service`, and `collie.service`).
 
 ### Browsers
 
@@ -120,13 +172,40 @@ stow i3                     # Just i3 config
 - Todoist (Flatpak)
 - Sunsama (AppImage)
 - Emote (emoji picker)
+- ChatGPT (official Linux desktop app)
 
 ### Media & Gaming
 
 - OBS Studio (latest PPA)
+- Shotcut (video editor for quick trims and short-form edits, stable Flathub release)
 - Steam
 - RetroArch
 - Sunshine (game streaming)
+
+Install or update Shotcut independently with `./scripts/install-shotcut.sh`
+(requires `./scripts/install-flatpak.sh` first). Uses the system-wide stable
+Flathub package [recommended by Shotcut](https://shotcut.org/download/), with
+dependencies, app-menu integration, and updates managed by Flatpak.
+Launch from the app menu or with `flatpak run org.shotcut.Shotcut`.
+
+On NVIDIA systems, the installer also ensures Flatpak has a graphics driver
+matching the running kernel driver and any newer driver installed by APT for
+the next boot. If Shotcut stops launching after an NVIDIA
+update with `Could not initialize GLX`, rerun `./scripts/install-shotcut.sh`.
+
+The installer applies personal timeline shortcuts: **`,`** splits at the playhead,
+and **`.`** ripple-deletes the selected clip (closes the gap). **S/X** also work;
+the default comma/period Nudge shortcuts are cleared to prevent conflicts.
+Reapply with `python3 scripts/configure-shotcut.py`, then save your project and
+restart Shotcut. Further changes are available under **Help > Actions and Shortcuts**.
+
+For quick TikTok cuts: add your clip to the timeline, press **`,`** at the start
+and end of the unwanted section, select that segment, and press **`.`**.
+**Settings > Timeline > Rectangle Selection** lets you drag-select whole clips;
+it does not select a time slice inside an unsplit clip. Drag a clip's left/right
+edge to trim its beginning/end instead.
+Export as H.264/MP4, retaining the source's vertical dimensions for portrait footage.
+See the [Shotcut shortcuts](https://shotcut.org/howtos/keyboard-shortcuts/).
 
 ### Utilities
 
@@ -149,7 +228,6 @@ stow i3                     # Just i3 config
 
 Created using custom webapp script (via install-webapps.sh):
 
-- ChatGPT
 - Claude
 - Gmail
 - Outlook
@@ -186,9 +264,10 @@ Created using custom webapp script (via install-webapps.sh):
 ├── gh/.config/gh/          # GitHub CLI preferences
 ├── mise/.config/mise/      # Tool version manager config
 ├── claude/.claude/         # Claude settings, statusline, commands, agents, skills
-├── opencode-common/.config/opencode/ # Shared OpenCode commands, agents, themes, tui
+├── opencode-common/.config/opencode/ # Shared OpenCode commands, agents, themes, CLI settings
 ├── opencode-linux/.config/opencode/ # Linux-specific OpenCode config
 ├── opencode-wsl/.config/opencode/ # WSL-specific OpenCode config and skills
+├── hermes/.hermes/       # Personal Hermes identity, memory, tools, and curated skills
 ├── bin/.local/bin/         # webapp script, lazygit, sunsama
 ├── home-scripts/           # .secrets.template for API keys
 ├── obsbot/.local/          # Obsbot source and binary
@@ -197,27 +276,41 @@ Created using custom webapp script (via install-webapps.sh):
 
 ## AI Tooling
 
-This repo now carries your personal Claude/OpenCode setup plus the shared AI workflow assets you use day to day.
+This repo now carries your personal Claude, OpenCode, and Hermes setup plus the shared AI workflow assets you use day to day.
 
 - Claude keeps personal settings in `claude/.claude/settings.json` and `claude/.claude/statusline.sh`.
-- OpenCode keeps shared UI config in `opencode-common/.config/opencode/themes/` and `tui.json`.
+- OpenCode V2 keeps shared UI config in `opencode-common/.config/opencode/themes/` and `cli.json`; host configs and file-based agents use native V2 fields.
 - Shared OpenCode slash commands and agents live in `opencode-common/.config/opencode/`.
+- The skill tracker uses the V2 plugin API in `plugins/skill-tracker/index.js` and keeps the existing usage/audit files. Run its regression test with `node --test scripts/tests/skill-tracker.test.mjs`.
 - OpenCode host-specific MCP defaults and skills live in `opencode-linux/.config/opencode/` and `opencode-wsl/.config/opencode/`.
+- PostHog MCP uses `https://mcp.posthog.com/mcp`. Codex and Linux OpenCode keep the endpoint in their tracked host configs. Add it to Claude with `claude mcp add --transport http --scope user posthog https://mcp.posthog.com/mcp`. Authenticate each client with `codex mcp login posthog`, `claude mcp login posthog`, and `opencode mcp auth posthog`; OAuth credentials stay machine-local. The PostHog wizard v2.94 writes the old OpenCode MCP shape. For OpenCode V2 use `opencode mcp add posthog --url https://mcp.posthog.com/mcp --global`, which writes `mcp.servers.posthog`. Preserve the Codex config symlink when a CLI atomically replaces it.
+- Hermes uses a curated Claw profile in `hermes/.hermes/`, with Docker-backed tools, approval-gated memory and skill learning, and credential-free integration scaffolding.
 
 This keeps your machine self-contained in one dotfiles repo while preserving the reusable AI tooling you were previously sourcing from a separate repository.
 
 ## User Services
 
-The repo can also manage long-running background apps with `systemd --user`.
+The repo keeps service definitions for long-running background apps without
+requiring all of them to run at boot. The current startup policy, preserved
+data locations, Docker workloads, and recovery commands are documented in
+[`OPTIONAL_SERVICES.md`](OPTIONAL_SERVICES.md).
 
-### OpenCode Telegram Bot Autostart
+Hermes is the active assistant gateway. Ollama, mcporter, OpenClaw, and the
+OpenCode Telegram topics bot are installed but manual-start by default. Restore
+that policy at any time with:
+
+```bash
+./scripts/disable-optional-autostart.sh
+```
+
+### OpenCode Telegram Bot
 
 This repo includes `systemd-user/.config/systemd/user/opencode-telegram-group-topics-bot.service` plus the helper command `~/.local/bin/opencode-telegram-group-topics-bot-service`.
 
-Why this setup:
+Why keep the service definition:
 
-- Starts automatically when your user session starts
-- Stops cleanly with one command when you want to run the bot manually for debugging
+- Starts and stops cleanly without removing the project or its configuration
+- Can be enabled again if the bot returns to regular use
 - Uses the same `.env` that already lives in your bot repo
 
 One-time setup:
@@ -229,7 +322,7 @@ npm run build
 cd ~/dotfiles
 ./scripts/stow-dotfiles.sh
 systemctl --user daemon-reload
-systemctl --user enable --now opencode-telegram-group-topics-bot.service
+systemctl --user start opencode-telegram-group-topics-bot.service
 ```
 
 Useful commands:
@@ -256,10 +349,10 @@ That uses the same repo-local config as the service. When you are done testing, 
 opencode-telegram-group-topics-bot-service start
 ```
 
-Optional: if you want it to keep running even before you log into the desktop session, enable user lingering:
+If it becomes a daily service again, enable autostart explicitly:
 
 ```bash
-sudo loginctl enable-linger "$USER"
+systemctl --user enable --now opencode-telegram-group-topics-bot.service
 ```
 
 ## Kanata Layout Documentation
@@ -467,7 +560,8 @@ The `.bashrc` automatically sources this file. Keys included:
 
 ## System State Backup
 
-For data NOT in dotfiles (OpenClaw, HomeAssistant, etc.), use the backup script:
+For data NOT in dotfiles (retired OpenClaw state, Hermes runtime state,
+HomeAssistant, etc.), use the backup script:
 
 ```bash
 # Run manually
@@ -478,7 +572,9 @@ For data NOT in dotfiles (OpenClaw, HomeAssistant, etc.), use the backup script:
 
 This creates an **encrypted archive** in `~/system-backup/` containing:
 
-- OpenClaw (memory, credentials, agent auth, skills config)
+- OpenClaw (complete retained state, including workspaces and history)
+- Hermes (memory, sessions, authentication, and runtime databases)
+- mcporter configuration and credentials
 - HomeAssistant config and token
 - Matter server device pairings
 - `~/.secrets` file
@@ -509,17 +605,26 @@ This script safely:
 
 - Pulls the latest dotfiles changes with `git pull --ff-only` when the repo is clean
 - Runs `apt`, `flatpak`, and `snap` updates where available
+- Ensures system Flatpaks have NVIDIA graphics drivers matching both the running driver and the installed APT driver before reboot
 - Updates `mise` itself and installed `mise`-managed tools
 - Re-runs the dotfiles install scripts (`master-install.sh` on Linux, `install-wsl-safe.sh` on WSL), including managed direct installs such as Beads, Claude Code, OpenCode, fzf, Kanata, LazyGit, Starship, and Sunshine
 - Re-deploys dotfiles with `stow-dotfiles.sh`
 
 Some desktop applications use their own built-in updater and are intentionally not replaced by this script.
 
+After an NVIDIA driver update, reboot to load the new kernel driver. The update
+script prepares its matching Flatpak driver before reboot; it also retains the
+match for the currently running driver. To run just this check and repair, use
+`./scripts/sync-flatpak-nvidia.sh`. It skips systems without Flatpak or NVIDIA and
+leaves installed matching drivers in place. If a required driver cannot be
+downloaded from Flathub, it reports the failure and stops the update.
+
 Manual equivalent:
 
 ```bash
 sudo apt update && sudo apt upgrade
 flatpak update
+./scripts/sync-flatpak-nvidia.sh
 snap refresh
 ```
 
@@ -643,10 +748,19 @@ sudo usermod -aG docker $USER
 
 Access Home Assistant at http://localhost:8123
 
+The containers are manual-start and use Docker restart policy `no`. Start or
+stop them without changing their saved configuration:
+
+```bash
+docker start matter-server homeassistant
+docker stop homeassistant matter-server
+```
+
 Data is stored in:
 
 - `~/homeassistant/` - HA config, automations, database
 - `~/matter-server/` - Matter device pairings
+- `OPTIONAL_SERVICES.md` - startup policy and recovery commands
 
 ## System Requirements
 

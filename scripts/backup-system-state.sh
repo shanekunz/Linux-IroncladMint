@@ -21,32 +21,41 @@ echo ""
 
 mkdir -p "$BACKUP_PATH"
 
-# 1. OpenClaw (memory, credentials, skills config, agent auth)
+# 1. OpenClaw (complete retired state)
 echo -e "${YELLOW}Backing up OpenClaw...${NC}"
 if [ -d ~/.openclaw ]; then
     mkdir -p "$BACKUP_PATH/openclaw"
-    # Memory database (most important - all learned context)
-    cp -r ~/.openclaw/memory "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Agent auth profiles (OAuth tokens for OpenAI, Anthropic, Google)
-    cp -r ~/.openclaw/agents "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Credentials (WhatsApp session, etc.)
-    cp -r ~/.openclaw/credentials "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Main config
-    cp ~/.openclaw/openclaw.json "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Identity
-    cp -r ~/.openclaw/identity "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Devices
-    cp -r ~/.openclaw/devices "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Cron jobs
-    cp -r ~/.openclaw/cron "$BACKUP_PATH/openclaw/" 2>/dev/null || true
-    # Canvas (if any saved)
-    cp -r ~/.openclaw/canvas "$BACKUP_PATH/openclaw/" 2>/dev/null || true
+    cp -a ~/.openclaw/. "$BACKUP_PATH/openclaw/"
     echo -e "  ${GREEN}OpenClaw backed up${NC}"
 else
     echo -e "  ${YELLOW}OpenClaw not found, skipping${NC}"
 fi
 
-# 2. HomeAssistant config (not the database, just config)
+# 2. Hermes runtime state (config is also managed by dotfiles)
+echo -e "${YELLOW}Backing up Hermes...${NC}"
+if [ -d ~/.hermes ]; then
+    mkdir -p "$BACKUP_PATH/hermes"
+    for path in config.yaml SOUL.md auth.json .env google_client_secret.json google_token.json \
+        state.db state.db-shm state.db-wal projects.db kanban.db kanban.db-shm kanban.db-wal \
+        gateway_state.json channel_directory.json sessions memories mcp-tokens cron; do
+        cp -a "$HOME/.hermes/$path" "$BACKUP_PATH/hermes/" 2>/dev/null || true
+    done
+    echo -e "  ${GREEN}Hermes runtime state backed up${NC}"
+else
+    echo -e "  ${YELLOW}Hermes not found, skipping${NC}"
+fi
+
+# 3. mcporter configuration and credentials
+echo -e "${YELLOW}Backing up mcporter...${NC}"
+if [ -d ~/.mcporter ]; then
+    mkdir -p "$BACKUP_PATH/mcporter"
+    cp -a ~/.mcporter/. "$BACKUP_PATH/mcporter/"
+    echo -e "  ${GREEN}mcporter backed up${NC}"
+else
+    echo -e "  ${YELLOW}mcporter not found, skipping${NC}"
+fi
+
+# 4. HomeAssistant config (not the database, just config)
 echo -e "${YELLOW}Backing up HomeAssistant config...${NC}"
 if [ -d ~/homeassistant ]; then
     mkdir -p "$BACKUP_PATH/homeassistant"
@@ -63,7 +72,7 @@ else
     echo -e "  ${YELLOW}HomeAssistant not found, skipping${NC}"
 fi
 
-# 3. Matter server state (device pairings are critical!)
+# 5. Matter server state (device pairings are critical!)
 echo -e "${YELLOW}Backing up Matter server...${NC}"
 if [ -d ~/matter-server ]; then
     mkdir -p "$BACKUP_PATH/matter-server"
@@ -77,7 +86,7 @@ else
     echo -e "  ${YELLOW}Matter server not found, skipping${NC}"
 fi
 
-# 4. Secrets file
+# 6. Secrets file
 echo -e "${YELLOW}Backing up secrets...${NC}"
 if [ -f ~/.secrets ]; then
     cp ~/.secrets "$BACKUP_PATH/secrets"
@@ -87,7 +96,7 @@ else
     echo -e "  ${YELLOW}~/.secrets not found, skipping${NC}"
 fi
 
-# 5. GOG CLI credentials
+# 7. GOG CLI credentials
 echo -e "${YELLOW}Backing up GOG CLI...${NC}"
 if [ -d ~/.config/gogcli ]; then
     mkdir -p "$BACKUP_PATH/gogcli"
@@ -95,7 +104,7 @@ if [ -d ~/.config/gogcli ]; then
     echo -e "  ${GREEN}GOG CLI backed up${NC}"
 fi
 
-# 6. OpenCode/Antigravity accounts
+# 8. OpenCode/Antigravity accounts
 echo -e "${YELLOW}Backing up OpenCode config...${NC}"
 if [ -d ~/.config/opencode ]; then
     mkdir -p "$BACKUP_PATH/opencode"
@@ -104,7 +113,7 @@ if [ -d ~/.config/opencode ]; then
     echo -e "  ${GREEN}OpenCode backed up${NC}"
 fi
 
-# 7. JIRA CLI config
+# 9. JIRA CLI config
 echo -e "${YELLOW}Backing up JIRA CLI...${NC}"
 if [ -d ~/.config/.jira ]; then
     mkdir -p "$BACKUP_PATH/jira"
@@ -112,7 +121,7 @@ if [ -d ~/.config/.jira ]; then
     echo -e "  ${GREEN}JIRA CLI backed up${NC}"
 fi
 
-# 8. Keyrings (optional - contains encrypted passwords)
+# 10. Keyrings (optional - contains encrypted passwords)
 echo -e "${YELLOW}Backing up keyrings...${NC}"
 if [ -d ~/.local/share/keyrings ]; then
     mkdir -p "$BACKUP_PATH/keyrings"
@@ -120,7 +129,7 @@ if [ -d ~/.local/share/keyrings ]; then
     echo -e "  ${GREEN}Keyrings backed up${NC}"
 fi
 
-# 9. OpenClaw systemd service overrides (contains API keys!)
+# 11. OpenClaw systemd service overrides (contains API keys!)
 echo -e "${YELLOW}Backing up systemd service overrides...${NC}"
 if [ -d ~/.config/systemd/user/openclaw-gateway.service.d ]; then
     mkdir -p "$BACKUP_PATH/systemd"
@@ -155,7 +164,9 @@ echo -e "  $ARCHIVE_PATH"
 echo -e "  Size: $(du -h "$ARCHIVE_PATH" | cut -f1)"
 echo ""
 echo -e "${BLUE}WHAT'S INCLUDED:${NC}"
-echo -e "  • OpenClaw (memory, credentials, auth tokens, skills config)"
+echo -e "  • OpenClaw (complete retired state)"
+echo -e "  • Hermes (memory, sessions, auth, and runtime databases)"
+echo -e "  • mcporter (configuration and credentials)"
 echo -e "  • HomeAssistant (config, automations, token)"
 echo -e "  • Matter server (device pairings)"
 echo -e "  • ~/.secrets (API keys)"
@@ -166,7 +177,9 @@ echo -e "${BLUE}TO RESTORE ON A NEW SYSTEM:${NC}"
 echo -e "  1. Copy backup file to new machine"
 echo -e "  2. Run: ${YELLOW}gpg -d $BACKUP_NAME.tar.gz.gpg | tar -xzf -${NC}"
 echo -e "  3. Move files to their original locations:"
-echo -e "     ${YELLOW}cp -r $BACKUP_NAME/openclaw/* ~/.openclaw/${NC}"
+echo -e "     ${YELLOW}cp -a $BACKUP_NAME/openclaw/. ~/.openclaw/${NC}"
+echo -e "     ${YELLOW}cp -a $BACKUP_NAME/hermes/. ~/.hermes/${NC}"
+echo -e "     ${YELLOW}cp -a $BACKUP_NAME/mcporter/. ~/.mcporter/${NC}"
 echo -e "     ${YELLOW}cp -r $BACKUP_NAME/homeassistant/* ~/homeassistant/${NC}"
 echo -e "     ${YELLOW}cp -r $BACKUP_NAME/matter-server/* ~/matter-server/${NC}"
 echo -e "     ${YELLOW}cp $BACKUP_NAME/secrets ~/.secrets${NC}"

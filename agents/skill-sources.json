@@ -1,0 +1,74 @@
+{
+  "$comment": "Provenance for every skill in agents/.agents/skills. Check with: python3 scripts/check-agent-skills.py. Update procedure: AGENTS.md > Agent Harnesses > Updating skills.",
+  "skills": {
+    "commit-msg": { "kind": "custom" },
+    "jira-implement": { "kind": "custom" },
+    "learning-mode": { "kind": "custom" },
+    "pr": { "kind": "custom" },
+    "read-aloud": { "kind": "custom" },
+    "typecheck": { "kind": "custom" },
+    "frontend-design": {
+      "kind": "upstream",
+      "source": "anthropics/skills",
+      "path": "skills/frontend-design",
+      "revision": "683bc88e56f3e09ba94f7055977f3d3aa499f202",
+      "modifications": null
+    },
+    "web-design-guidelines": {
+      "kind": "upstream",
+      "source": "vercel-labs/agent-skills",
+      "path": "skills/web-design-guidelines",
+      "revision": "ba46938889d4e58635362fb8f618e1178ac3ec46",
+      "modifications": null
+    },
+    "vercel-composition-patterns": {
+      "kind": "upstream",
+      "source": "vercel-labs/agent-skills",
+      "path": "skills/composition-patterns",
+      "revision": "a5343bd997c4cc4d8bf2ca61021bdc74b4d6c9d5",
+      "modifications": "Upstream README.md, metadata.json and rules/_*.md authoring files are not installed."
+    },
+    "vercel-react-best-practices": {
+      "kind": "upstream",
+      "source": "vercel-labs/agent-skills",
+      "path": "skills/react-best-practices",
+      "revision": "dc8367e6f91c022d83361f03c3313fa05e848ee5",
+      "modifications": "Upstream README.md, metadata.json and rules/_*.md authoring files are not installed. AGENTS.md differed from this revision by three lines when provenance was first recorded on Nov 16, 2026; take upstream's copy on the next update."
+    },
+    "vercel-react-native-skills": {
+      "kind": "upstream",
+      "source": "vercel-labs/agent-skills",
+      "path": "skills/react-native-skills",
+      "revision": "485beb804924eb4d96ea99e88a44439039c1ab5e",
+      "modifications": "Upstream README.md, metadata.json and rules/_*.md authoring files are not installed."
+    },
+    "mobbin-best-practices": {
+      "kind": "upstream",
+      "source": "mobbin/skills",
+      "path": "skills/best-practices",
+      "revision": "cac338357d596415773874f06a6c16e862c195e4",
+      "modifications": "Mobbin rename: prefix the folder and frontmatter name with mobbin-, and rewrite backticked references to sibling Mobbin skills. Repo LICENSE copied in."
+    },
+    "mobbin-plain-writing": {
+      "kind": "upstream",
+      "source": "mobbin/skills",
+      "path": "skills/plain-writing",
+      "revision": "cac338357d596415773874f06a6c16e862c195e4",
+      "modifications": "Mobbin rename (see mobbin-best-practices)."
+    },
+    "mobbin-redesign-screen": {
+      "kind": "upstream",
+      "source": "mobbin/skills",
+      "path": "skills/redesign-screen",
+      "revision": "cac338357d596415773874f06a6c16e862c195e4",
+      "modifications": "Mobbin rename (see mobbin-best-practices)."
+    },
+    "mobbin-search": {
+      "kind": "upstream",
+      "source": "mobbin/skills",
+      "path": "skills/search",
+      "revision": "cac338357d596415773874f06a6c16e862c195e4",
+      "modifications": "Mobbin rename (see mobbin-best-practices)."
+    }
+  }
+}

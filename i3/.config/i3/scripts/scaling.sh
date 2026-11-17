@@ -33,7 +33,7 @@
 
 # Current scale factor (user-facing value)
 # This is the ONLY value that should be manually edited
-SCALE=1.5
+SCALE=1.0
 
 # All other values are calculated from SCALE:
 DPI=$(printf "%.0f" $(echo "$SCALE * 96" | bc))           # 1.5 * 96 = 144

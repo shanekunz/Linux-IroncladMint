@@ -47,6 +47,7 @@ echo -e "${BLUE}Step 2:${NC} Updating system packages"
 sudo apt update
 sudo apt upgrade
 run_if_available flatpak flatpak update
+bash "$SCRIPTS_DIR/sync-flatpak-nvidia.sh"
 run_if_available snap snap refresh
 echo ""
 

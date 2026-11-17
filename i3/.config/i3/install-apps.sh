@@ -243,19 +243,6 @@ Terminal=false
 StartupWMClass=Claude
 EOF
 
-# ChatGPT
-cat > ~/.local/share/applications/chatgpt.desktop << 'EOF'
-[Desktop Entry]
-Type=Application
-Name=ChatGPT
-Comment=OpenAI's chatbot
-Exec=/home/shane/.local/bin/webapp "ChatGPT" "https://chatgpt.com" "1200,900"
-Icon=applications-science
-Categories=Office;Utility;
-Terminal=false
-StartupWMClass=ChatGPT
-EOF
-
 # Apple Music
 cat > ~/.local/share/applications/apple-music.desktop << 'EOF'
 [Desktop Entry]
@@ -330,7 +317,6 @@ log_info "  - Outlook"
 log_info "  - Limitless"
 log_info "  - Brain.fm"
 log_info "  - Claude"
-log_info "  - ChatGPT"
 log_info "  - Apple Music"
 log_info ""
 log_info "All apps should now appear in your rofi launcher (Mod+Space)"

@@ -1,12 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "mcp__linear-server__list_teams",
-      "mcp__linear-server__list_projects",
-      "mcp__linear-server__list_issues",
-      "mcp__linear-server__create_comment",
-      "mcp__linear-server__create_issue",
-      "Bash(rm:*)",
       "Bash(pnpm add:*)",
       "Bash(nul)",
       "WebFetch(domain:nuxt.com)",
@@ -18,7 +12,6 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(git config:*)",
-      "mcp__linear-server__get_issue",
       "Bash(echo $env:USERPROFILE)",
       "Bash(mv:*)",
       "Bash(if test -d app/pages/admin)",
@@ -37,7 +30,6 @@
       "Bash(git commit:*)",
       "Bash(git push)",
       "WebFetch(domain:nuxt-security.vercel.app)",
-      "mcp__linear-server__update_issue",
       "Bash(pnpm dev)",
       "Bash(git fetch:*)",
       "Bash(mkdir:*)",
@@ -48,16 +40,10 @@
       "mcp__linear__list_projects",
       "mcp__linear__list_issues",
       "mcp__linear__update_issue",
-      "mcp__nuxt-ui-docs__list-components",
-      "mcp__nuxt-ui-docs__get-component",
-      "mcp__nuxt-docs__get-module",
-      "Bash(xargs:*)",
       "Skill(frontend-design)",
-      "mcp__plugin_context7_context7__resolve-library-id",
       "WebFetch(domain:developers.cloudflare.com)",
       "WebFetch(domain:www.cloudflare.com)",
       "WebFetch(domain:hub.nuxt.com)",
-      "mcp__context7__get-library-docs",
       "mcp__context7__resolve-library-id",
       "Bash(git diff:*)",
       "Bash(head:*)",
@@ -77,21 +63,73 @@
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/shane/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "context7@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "serena@claude-plugins-official": false,
-    "learning-output-style@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "linear@claude-plugins-official": true
+    "context7@claude-plugins-official": false,
+    "linear@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "learning-output-style@claude-plugins-official": false,
+    "serena@claude-plugins-official": false
   },
+  "syncClaudeAiPlugins": false,
+  "syncClaudeAiSkills": false,
   "effortLevel": "medium",
-  "editorMode": "vim"
+  "tui": "fullscreen",
+  "editorMode": "vim",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(wrangler d1 execute:*) \u2014 writes against production D1 in this repo",
+      "Bash(pnpm db:studio:prod)"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: Cloudflare (Workers, D1/NuxtHub) \u2014 per wrangler.jsonc and pnpm db:studio:prod usage",
+      "**Repository visibility**: Private \u2014 shanekunz/culinary-commander-pos (confirmed via gh)",
+      "**Internal sharing / snippet hosting**: None configured \u2014 treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: Environment variables via .env (gitignored), CI secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN; local key file .beads/.beads-credential-key is gitignored",
+      "**Default / protected branches**: main (default); no rulesets or protected branches listed via gh, but AGENTS.md and README state production/staging deploy mutations require defined approvals \u2014 treat main and deploy workflows as protected in practice",
+      "**CI/CD deploy targets**: Cloudflare Workers via manual GitHub Actions workflows (see .github/workflows and pnpm cf:deploy); production Square merchant is scoped to one Company",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured \u2014 assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo (shanekunz/culinary-commander-pos) and its origin remote only (no additional orgs configured)",
+      "**Trusted internal domains**: culinarycommander.com (Square webhook notification URL, VAPID subject support@culinarycommander.com); api.kitchenhub.app (KitchenHub API base)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: KitchenHub API (api.kitchenhub.app/v2), Square (payments/terminal/webhooks), Resend (email), Telnyx (SMS), Google OAuth, Google Maps API, Cloudflare D1/NuxtHub",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: .env / .env.production.local (KitchenHub, Square, Resend, Telnyx, OAuth, VAPID, bootstrap/session secrets), .beads/.beads-credential-key, CI secrets CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, drizzle.prod.config.ts (production DB config) \u2014 share only with maintainers of shanekunz/culinary-commander-pos",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace/host/service containing 'prod' or 'production' as a whole word/segment (e.g. .env.production.local, drizzle.prod.config.ts, production D1 database, production Square merchant/webhook)",
+      "**Protected deployment namespaces / environments**: Cloudflare Workers production deployment; production Square merchant (company ID 1); production D1 database (accessed via pnpm db:studio:prod)",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; wrangler.jsonc production D1 database ID and Cloudflare account/deploy configuration",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (Nuxt/Cloudflare Workers POS and e-commerce platform)",
+      "**Trusted repo**: /home/shane/projects/culinary-commander (origin: https://github.com/shanekunz/culinary-commander-pos.git), private",
+      "**Org-specific CLIs**: None configured"
+    ]
+  }
 }

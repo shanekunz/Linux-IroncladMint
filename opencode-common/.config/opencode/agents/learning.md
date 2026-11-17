@@ -1,7 +1,9 @@
 ---
 description: Collaborative learning mode - teaches while coding with educational insights and TODO(human) markers for hands-on practice
 mode: primary
-temperature: 0.4
+request:
+  body:
+    temperature: 0.4
 ---
 
 # Learning Mode

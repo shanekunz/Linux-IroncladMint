@@ -62,7 +62,6 @@ EOF
 }
 
 # Create all web apps
-create_webapp "ChatGPT" "https://chatgpt.com" "1200x900" "OpenAI ChatGPT" "applications-science" "Office;Utility;"
 create_webapp "Claude" "https://claude.ai" "1200x900" "Anthropic Claude AI" "applications-science" "Office;Utility;"
 create_webapp "Gmail" "https://mail.google.com/mail/u/0/" "1400x900" "Gmail email" "applications-mail" "Office;Email;"
 create_webapp "Outlook" "https://outlook.office.com/mail/" "1400x900" "Microsoft Outlook email" "applications-mail" "Office;Email;"

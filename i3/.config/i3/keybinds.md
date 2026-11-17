@@ -93,21 +93,36 @@
 - `Mod+Shift+Delete` - Nightlight on (3500K)
 - `Mod+Control+Delete` - Nightlight off
 - `Mod+Shift+x` - Lock screen
+- `Mod+Shift+d` - Turn displays off without locking or suspending (any key or mouse movement wakes them)
 - `Mod+Control+Shift+m` - Toggle Mac microphone (stream Mac mic over network)
 
 ## Monitor Modes
 
-- `Mod+m` - Main monitor only (4K OLED @ 165Hz, 150% DPI)
-- `Mod+Shift+m` - Both monitors with second monitor rotation picker (4K @ 165Hz/144Hz, 150% DPI)
-- `Mod+Control+m` - Streaming mode dropdown: 4 DP-4 resolutions plus `2560x1600` on the HDMI dummy plug
+- `Mod+m` - Single real monitor, 150% DPI: 4K OLED @ 165Hz on DP-0, MSI G321CU @ 4K 120Hz (144Hz gives no picture), or the preferred resolution and refresh rate of whatever real monitor is connected (never the HDMI-0 dummy). Turns off the dummy, so Moonlight then streams that monitor
+- `Mod+Shift+m` - Both monitors with second monitor orientation picker (4K @ 165Hz/144Hz, 150% DPI)
+- `Mod+Control+m` - Streaming mode resolution picker followed by orientation picker: 4 DP-4 resolutions (HDMI dummy plug fallback when disconnected) plus `2560x1600` on the HDMI dummy plug
 
 ## Keyboard Layout
 
 - `Mod+Control+k` - Show keyboard layout image (floating)
-- `Mod+Control+e` - Switch to Engrammer (XKB fallback)
-- `Mod+Alt+e` - Switch to QWERTY + thumb keys (for typefu Enthium practice)
-- `Mod+Control+Shift+e` - Switch to Enthium (Kanata, with symbol layers)
+- `Mod+Control+q` - Toggle Enthium ↔ QWERTY + thumb keys (Q for QWERTY; triggers on release)
 - `Ctrl+Space+Escape` - Emergency exit Kanata (physical keys, always works)
+
+Use the **physical left Windows and Ctrl keys** for the toggle, rather than
+Enthium's home-row modifiers. Q has the same physical position in both layouts.
+Enthium is the startup default; QWERTY preserves the practice remaps:
+Caps Lock → `b`, right thumb/Scroll Lock → `r`.
+
+**Same physical keys in both base layouts:**
+- Letters: **Q and M** only. M already has monitor-mode shortcuts.
+- Number row: `1–0`, minus, equals, and grave (including their shifted symbols).
+- Brackets and backslash; Escape, Tab, Enter, Backspace; left Win, Ctrl, Alt,
+  and both Shift keys. Function and arrow keys are also unchanged.
+- Left space still taps Space in Enthium, but holding it activates navigation.
+
+Recovery/explicit selection: run
+`~/.config/i3/scripts/toggle-keyboard-layout.sh enthium` or the same command with
+`qwerty`. Engrammer and the old E-based layout shortcuts have been retired.
 
 ## System
 
@@ -118,6 +133,7 @@
 - `Mod+Control+r` - Boot menu (select OS to reboot into: one-time or set as default)
 - `F11` - Reboot once into Windows immediately
 - `Mod+Control+b` - Backup system state (OpenClaw, HA, secrets → encrypted archive)
+- `Mod+u` - Update entire system (Yes/Cancel prompt, then terminal with output)
 - `Mod+Shift+/` - Show this help file
 
 ## Resize Mode (Mod+r to enter)
@@ -134,7 +150,7 @@
 ## Notes
 
 - Mouse auto-centers on focused window
-- Custom keyboard layout: Engrammer variant
+- Custom keyboard layout: Enthium (Kanata), with a QWERTY toggle
 - Mouse buttons swapped: left/right buttons are swapped
-- Streaming mode uses LED monitor to protect OLED from burn-in
+- Streaming mode uses the LED monitor (or HDMI dummy plug when disconnected) to protect OLED from burn-in; enables the target before disabling other displays
 - **Voice input**: Configure Handy's launch-at-login behavior and global dictation hotkey in its settings.

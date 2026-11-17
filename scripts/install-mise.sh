@@ -42,7 +42,13 @@ if command -v mise &> /dev/null; then
     echo -e "${GREEN}[install-mise]${NC} Node.js LTS installed"
 
     # Enable Corepack so project-pinned package managers such as pnpm are available.
-    corepack enable
+    # Node 25+ no longer bundles Corepack, so install it from npm when missing.
+    if ! mise which corepack > /dev/null 2>&1; then
+        echo -e "${YELLOW}[install-mise]${NC} Corepack not bundled with this Node; installing from npm..."
+        mise exec -- npm install -g corepack
+        mise reshim
+    fi
+    mise exec -- corepack enable
     echo -e "${GREEN}[install-mise]${NC} Corepack package-manager shims enabled"
 
     # Generate shims so Node/npm are available to all programs (not just shells)

@@ -242,7 +242,9 @@ function findRecentInvocationByCallID(entry, callID) {
   return undefined
 }
 
-export const SkillTrackerPlugin = async ({ project, directory, worktree, client }) => {
+async function setup(ctx) {
+  const { project, directory } = ctx.location
+  const worktree = project.directory
   const projectInfo = getProjectInfo({ project, directory, worktree })
   const pendingInvocations = new Map()
 
@@ -257,112 +259,113 @@ export const SkillTrackerPlugin = async ({ project, directory, worktree, client 
     worktree: projectInfo.worktree,
   })
 
-  if (client?.app?.log) {
-    await client.app.log({
-      body: {
-        service: "skill-tracker",
-        level: "info",
-        message: "Skill tracker plugin initialized",
-        extra: {
-          projectKey: projectInfo.projectKey,
-          directory: projectInfo.directory,
-        },
-      },
+  console.info("Skill tracker plugin initialized", {
+    projectKey: projectInfo.projectKey,
+    directory: projectInfo.directory,
+  })
+
+  await ctx.tool.hook("execute.before", async (event) => {
+    if (event.tool !== "skill") return
+
+    const skillName = event.input?.id || "unknown"
+    const now = new Date().toISOString()
+    const invocation = {
+      callID: event.id,
+      sessionID: event.sessionID,
+      skillName,
+      timestamp: now,
+      ...projectInfo,
+    }
+
+    pendingInvocations.set(event.id, invocation)
+
+    await updateData((data) => {
+      const skillEntry = ensureSkillEntry(data, skillName, now)
+      const skillProjectEntry = ensureSkillProjectEntry(skillEntry, invocation)
+      const projectEntry = ensureProjectEntry(data, invocation)
+      const projectSkillEntry = ensureProjectSkillEntry(projectEntry, skillName, now)
+
+      if (!data.firstInvocationAt) data.firstInvocationAt = now
+      data.lastInvocationAt = now
+      data.totalInvocations += 1
+
+      skillEntry.count += 1
+      skillEntry.lastUsed = now
+      skillProjectEntry.count += 1
+      skillProjectEntry.lastUsed = now
+
+      projectEntry.count += 1
+      projectEntry.lastUsed = now
+      projectSkillEntry.count += 1
+      projectSkillEntry.lastUsed = now
+
+      skillEntry.recentInvocations.push({
+        callID: invocation.callID,
+        sessionID: invocation.sessionID,
+        timestamp: invocation.timestamp,
+        projectKey: invocation.projectKey,
+        projectName: invocation.projectName,
+        projectId: invocation.projectId,
+        directory: invocation.directory,
+        worktree: invocation.worktree,
+        host: invocation.host,
+      })
+
+      if (skillEntry.recentInvocations.length > MAX_RECENT_INVOCATIONS) {
+        skillEntry.recentInvocations = skillEntry.recentInvocations.slice(-MAX_RECENT_INVOCATIONS)
+      }
     })
-  }
+  })
 
-  return {
-    "tool.execute.before": async (input, output) => {
-      if (input.tool !== "skill") return
+  await ctx.tool.hook("execute.after", async (event) => {
+    if (event.tool !== "skill") return
 
-      const skillName = output.args?.name || "unknown"
-      const now = new Date().toISOString()
-      const invocation = {
-        callID: input.callID,
-        sessionID: input.sessionID,
-        skillName,
-        timestamp: now,
-        ...projectInfo,
+    const pending = pendingInvocations.get(event.id)
+    const skillName = pending?.skillName || event.input?.id || "unknown"
+    const completedAt = new Date().toISOString()
+    const success = event.status === "completed"
+    const duration = success ? event.result.metadata?.duration : undefined
+    const durationMs = typeof duration === "number"
+      ? duration
+      : pending ? Date.now() - Date.parse(pending.timestamp) : undefined
+    let auditRecord
+
+    await updateData((data) => {
+      const skillEntry = data.skills[skillName]
+      const recentInvocation = skillEntry ? findRecentInvocationByCallID(skillEntry, event.id) : undefined
+
+      if (recentInvocation) {
+        if (durationMs != null) recentInvocation.durationMs = durationMs
+        recentInvocation.success = success
       }
 
-      pendingInvocations.set(input.callID, invocation)
+      auditRecord = {
+        callID: event.id,
+        sessionID: event.sessionID,
+        skill: skillName,
+        timestamp: pending?.timestamp || recentInvocation?.timestamp || completedAt,
+        completedAt,
+        durationMs,
+        success,
+        host: pending?.host || recentInvocation?.host || projectInfo.host,
+        projectKey: pending?.projectKey || recentInvocation?.projectKey || projectInfo.projectKey,
+        projectName: pending?.projectName || recentInvocation?.projectName || projectInfo.projectName,
+        projectId: pending?.projectId || recentInvocation?.projectId || projectInfo.projectId,
+        directory: pending?.directory || recentInvocation?.directory || projectInfo.directory,
+        worktree: pending?.worktree || recentInvocation?.worktree || projectInfo.worktree,
+      }
+    })
 
-      await updateData((data) => {
-        const skillEntry = ensureSkillEntry(data, skillName, now)
-        const skillProjectEntry = ensureSkillProjectEntry(skillEntry, invocation)
-        const projectEntry = ensureProjectEntry(data, invocation)
-        const projectSkillEntry = ensureProjectSkillEntry(projectEntry, skillName, now)
+    appendAuditLog(auditRecord)
 
-        if (!data.firstInvocationAt) data.firstInvocationAt = now
-        data.lastInvocationAt = now
-        data.totalInvocations += 1
+    pendingInvocations.delete(event.id)
+  })
 
-        skillEntry.count += 1
-        skillEntry.lastUsed = now
-        skillProjectEntry.count += 1
-        skillProjectEntry.lastUsed = now
+  return () => pendingInvocations.clear()
+}
 
-        projectEntry.count += 1
-        projectEntry.lastUsed = now
-        projectSkillEntry.count += 1
-        projectSkillEntry.lastUsed = now
-
-        skillEntry.recentInvocations.push({
-          callID: invocation.callID,
-          sessionID: invocation.sessionID,
-          timestamp: invocation.timestamp,
-          projectKey: invocation.projectKey,
-          projectName: invocation.projectName,
-          projectId: invocation.projectId,
-          directory: invocation.directory,
-          worktree: invocation.worktree,
-          host: invocation.host,
-        })
-
-        if (skillEntry.recentInvocations.length > MAX_RECENT_INVOCATIONS) {
-          skillEntry.recentInvocations = skillEntry.recentInvocations.slice(-MAX_RECENT_INVOCATIONS)
-        }
-      })
-    },
-
-    "tool.execute.after": async (input, output) => {
-      if (input.tool !== "skill") return
-
-      const pending = pendingInvocations.get(input.callID)
-      const skillName = pending?.skillName || input.args?.name || "unknown"
-      const completedAt = new Date().toISOString()
-      const durationMs = typeof output.metadata?.duration === "number" ? output.metadata.duration : undefined
-      let auditRecord
-
-      await updateData((data) => {
-        const skillEntry = data.skills[skillName]
-        const recentInvocation = skillEntry ? findRecentInvocationByCallID(skillEntry, input.callID) : undefined
-
-        if (recentInvocation) {
-          if (durationMs != null) recentInvocation.durationMs = durationMs
-          recentInvocation.success = true
-        }
-
-        auditRecord = {
-          callID: input.callID,
-          sessionID: input.sessionID,
-          skill: skillName,
-          timestamp: pending?.timestamp || recentInvocation?.timestamp || completedAt,
-          completedAt,
-          durationMs,
-          success: true,
-          host: pending?.host || recentInvocation?.host || projectInfo.host,
-          projectKey: pending?.projectKey || recentInvocation?.projectKey || projectInfo.projectKey,
-          projectName: pending?.projectName || recentInvocation?.projectName || projectInfo.projectName,
-          projectId: pending?.projectId || recentInvocation?.projectId || projectInfo.projectId,
-          directory: pending?.directory || recentInvocation?.directory || projectInfo.directory,
-          worktree: pending?.worktree || recentInvocation?.worktree || projectInfo.worktree,
-        }
-      })
-
-      appendAuditLog(auditRecord)
-
-      pendingInvocations.delete(input.callID)
-    },
-  }
+// A plain definition keeps this local plugin dependency-free.
+export default {
+  id: "skill-tracker",
+  setup,
 }

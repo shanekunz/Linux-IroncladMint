@@ -27,6 +27,7 @@
 *token*
 *.pem
 *.key
+!home-scripts/.secrets.template
 
 # Local configuration overrides (personal URLs, settings)
 *.local.conf
@@ -48,3 +49,15 @@ target/
 
 # Obsbot is cloned/built by install script, don't track source
 obsbot/.local/src/
+
+# Hermes personal data: agent memories, personal state, and runtime workspace
+# stay local. This repo is public.
+hermes/.hermes/memories/
+hermes/.hermes/skills/gaming-companion/references/state.md
+hermes/.hermes/workspace/*
+!hermes/.hermes/workspace/.gitkeep
+
+# Personal Hermes identity and life skills: kept local, never in this public repo
+hermes/.hermes/SOUL.md
+hermes/.hermes/skills/personal-briefing/
+hermes/.hermes/skills/gaming-companion/

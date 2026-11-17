@@ -6,7 +6,7 @@ This file provides context for coding agents (Claude Code, Codex, OpenCode) work
 
 This repository contains configuration files and automated installation scripts for setting up a complete Linux desktop environment based on i3 window manager. It uses GNU Stow for symlink management to deploy configs from this repo to the home directory.
 
-**Note**: i3 keybinds are optimized for the Engrammer keyboard layout.
+**Note**: The default keyboard layout is Enthium via Kanata. Physical Win+Ctrl+Q toggles Enthium ↔ QWERTY with thumb remaps; Engrammer switching has been retired.
 
 ## Reproducibility Default
 
@@ -154,12 +154,17 @@ When adding/changing i3 keybinds or features:
 ### AI Coding Harnesses (Claude Code, Codex, OpenCode)
 All three harnesses share one set of global skills. Codex is the primary OpenAI harness; OpenCode stays supported but has an unfixed stalled-stream bug.
 - **Global skills**: canonical copies live in `agents/.agents/skills/<name>/SKILL.md` and stow to `~/.agents/skills` (Codex user scope). `claude/.claude/skills/<name>` is a relative symlink to the same folder for Claude Code; OpenCode reads `~/.claude/skills`.
-- **Add a global skill**: create `agents/.agents/skills/<name>/SKILL.md`, add `ln -s ../../../agents/.agents/skills/<name> claude/.claude/skills/<name>`, then `stow -t ~ agents claude`.
+- **Which skills live here**: a skill belongs here when its instructions apply to any repository, such as `pr`, `frontend-design`, or the Mobbin skills. A skill that carries one project's rules (approval gates, trackers, deploy steps) stays in that project's `.agents/skills/`. Never install the same skill name in both places: harnesses either list it twice or pick one silently.
+- **Add a global skill**: create `agents/.agents/skills/<name>/SKILL.md`, add `ln -s ../../../agents/.agents/skills/<name> claude/.claude/skills/<name>`, record it in `agents/skill-sources.json` (`custom`, or `upstream` with source, path, and revision), then `stow -t ~ agents claude`. Prefix a third-party skill's name when it is generic (Mobbin's `search` is installed as `mobbin-search`).
+- **Check the catalog**: `python3 scripts/check-agent-skills.py --live` fails on a missing provenance entry, a frontmatter name that does not match its folder, or a missing Claude or stow link.
+- **Update an upstream skill**: clone the source into a temporary directory. Diff the recorded revision against the new one, then diff the recorded revision against the installed copy, so upstream changes and deliberate local changes stay separate. Apply upstream changes, reapply the `modifications` listed in `agents/skill-sources.json`, set the new revision, and run the check. Updating changes reviewed content; `stow` only refreshes links. Culinary Commander's repo skills follow the same three-way procedure through its `codebase-maintenance` skill.
+- **MCP servers**: project MCP servers belong in each repository's `.mcp.json`, `.codex/config.toml`, and `opencode.json`. User-level entries here are only for servers you want in every project (currently PostHog in all three harnesses, plus Linear and Context7 in Codex). A user entry with the same name as a project entry is overridden by the project, not duplicated.
+- **Claude account sync**: `claude/.claude/settings.json` sets `syncClaudeAiPlugins` and `syncClaudeAiSkills` to `false`, so plugins and skills enabled on the claude.ai account (the data, design, engineering, product-management, and productivity bundles, plus the document skills) stay in claude.ai and do not load into Claude Code. Set them back to `true` to load them again. claude.ai connectors are separate; repositories block the ones they do not need with `deniedMcpServers`.
 - **Prefer skills over slash commands**: skills work in every harness, and Codex has no custom commands. Keep a skill user-invoked only when running it unprompted would be wrong.
 - **`~/.claude/skills` must stay a real directory** because Claude Code keeps its own `synced/` folder there, so stow links each skill individually.
 - **Codex config**: `codex/.codex/config.toml` stows to `~/.codex/config.toml`. Codex writes through the symlink when it saves trust prompts or app settings, so expect some churn in this file. Keep secrets out of it: the Context7 MCP reads its key from `~/.config/context7/api-key` (untracked, shared with OpenCode).
 - **Codex hooks**: `~/.codex/hooks.json` and `~/.codex/herdr-agent-state.sh` are managed by herdr and are not tracked here. Codex trusts each hook by its position (`hooks.state` in `config.toml`), so re-check trust after reordering hooks.
-- **Claude Code**: `claude/.claude/` holds `settings.json`, `agents/`, `commands/` (OpenSpec only), and the skill symlinks.
+- **Claude Code**: `claude/.claude/` holds `settings.json`, `agents/`, `commands/` (OpenSpec only), and the skill symlinks. Only the TypeScript LSP plugin is enabled. The Context7, Linear, and frontend-design plugins are off because claude.ai connectors, project `.mcp.json` files, and this catalog already provide them.
 - **OpenCode**: `opencode-common/` plus `opencode-linux/` or `opencode-wsl/` per host. Its `skill-tracker` plugin and `skill-audit`/`skill-verify` commands are OpenCode-only.
 - **Project agents** (subagents) belong in each repository, not here. culinary-commander generates Claude Code, Codex, and OpenCode agent files from `.agents/roles/` with `pnpm agents:sync`.
 

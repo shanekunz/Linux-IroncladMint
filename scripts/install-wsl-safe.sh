@@ -206,6 +206,7 @@ CORE=(
   "install-commitizen.sh"
   "install-codex.sh"
   "install-opencode.sh"
+  "install-oh-my-pi.sh"
   "install-claude-cli.sh"
   "install-openspec.sh"
 )
@@ -236,6 +237,7 @@ STOW_PKGS=(
   "lazygit"
   "starship"
   "tmux"
+  "omp"
   "opencode-common"
   "opencode-wsl"
   "claude"

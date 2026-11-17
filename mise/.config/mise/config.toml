@@ -1,5 +1,8 @@
 [tools]
+caddy = "latest"
 dotnet = "8"
+"github:can1357/oh-my-pi" = "latest"
+herdr = "latest"
 node = "lts"
 rust = "latest"
 

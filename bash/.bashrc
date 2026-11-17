@@ -182,9 +182,8 @@ export PATH="/home/shane/.local/share/mise/installs/dotnet/8.0.418:/home/shane/.
 # PlatformIO Core installed by the VS Code extension
 export PATH="$HOME/.platformio/penv/bin:$PATH"
 
-# OpenClaw/OpenCode completion
-if command -v opencode >/dev/null 2>&1; then
-    source <(opencode completion bash 2>/dev/null) || true
-elif [ -f "$HOME/.openclaw/completions/openclaw.bash" ]; then
+# OpenClaw completion
+# Don't source `opencode completion bash`: some versions print help instead of shell code.
+if [ -f "$HOME/.openclaw/completions/openclaw.bash" ]; then
     source "$HOME/.openclaw/completions/openclaw.bash"
 fi
